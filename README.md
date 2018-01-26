@@ -12,6 +12,10 @@ A word cloud generator.
 
 Returns bounded words.
 
+## demo
+
+[Try it out!](https://seregpie.github.io/almete.WordCloud/)
+
 ## dependencies
 
 *no dependencies*
