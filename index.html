@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+		/>
+		<title>almete.WordCloud</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.min.js"></script>
+		<style>
+			[v-cloak] {
+				display: none;
+			}
+		</style>
+		<script src="almete.WordCloud.js"></script>
+		<link
+			rel="stylesheet"
+			href="https://use.fontawesome.com/releases/v5.0.6/css/all.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/vuetify/1.0.0-beta.4/vuetify.min.css"
+		/>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/vuetify/1.0.0-beta.4/vuetify.min.js"></script>
+		<script src="https://unpkg.com/vueresizesensor"></script>
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css?family=Abril+Fatface|Annie+Use+Your+Telescope|Anton|Bahiana|Baloo+Bhaijaan|Barrio|Finger+Paint|Fredericka+the+Great|Gloria+Hallelujah|Indie+Flower|Life+Savers|Londrina+Sketch|Lora|Love+Ya+Like+A+Sister|Merienda|Nothing+You+Could+Do|Pacifico|Quicksand|Righteous|Sacramento|Shadows+Into+Light"
+		/>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/chance/1.0.13/chance.min.js"></script>
+	</head>
+	<body>
+		<v-app
+			v-cloak
+			id="App"
+		>
+			<v-navigation-drawer
+				clipped
+				v-model="drawer"
+				app
+			>
+				<div style="padding: 8px;">
+					<v-text-field
+						label="words &amp; weights"
+						v-model="form.words.value"
+						color="deep-orange"
+						multi-line
+						:rows="9"
+						hide-details
+					></v-text-field>
+					<v-btn
+						block
+						color="deep-orange"
+						class="white--text"
+						@click="generateRandomText"
+					>
+						generate randomly
+					</v-btn>
+				</div>
+				<div style="padding: 8px;">
+					<v-select
+						label="font family"
+						:items="form.fontFamily.values"
+						v-model="form.fontFamily.value"
+						color="deep-orange"
+						hide-details
+					>
+						<template slot="item" slot-scope="data">
+							<span :style="{fontFamily: data.item}">
+								{{ data.item }}
+							</span>
+						</template>
+					</v-select>
+				</div>
+				<div style="padding: 8px;">
+					<div class="subheading grey--text text--darken-1">
+						rotation
+					</div>
+					<v-btn-toggle
+						mandatory
+						v-model="form.rotation.value"
+					>
+						<v-btn
+							:value="form.rotation.values[0]"
+							flat
+							color="deep-orange"
+						>
+							<i class="fas fa-minus fa-2x"></i>
+						</v-btn>
+						<v-btn
+							:value="form.rotation.values[1]"
+							flat
+							color="deep-orange"
+						>
+							<i
+								class="fas fa-minus fa-2x"
+								style="transform: rotate(315deg);"
+							></i>
+						</v-btn>
+						<v-btn
+							:value="form.rotation.values[2]"
+							flat
+							color="deep-orange"
+						>
+							<span class="fa-stack">
+								<i class="fas fa-minus fa-stack-2x"></i>
+								<i
+									class="fas fa-minus fa-stack-2x"
+									style="transform: rotate(90deg);"
+								></i>
+							</span>
+						</v-btn>
+						<v-btn
+							:value="form.rotation.values[3]"
+							flat
+							color="deep-orange"
+						>
+						<span class="fa-stack">
+							<i class="fas fa-minus fa-stack-2x"></i>
+							<i
+								class="fas fa-minus fa-stack-2x"
+								style="transform: rotate(45deg);"
+							></i>
+							<i
+								class="fas fa-minus fa-stack-2x"
+								style="transform: rotate(90deg);"
+							></i>
+							<i
+								class="fas fa-minus fa-stack-2x"
+								style="transform: rotate(315deg);"
+							></i>
+						</span>
+						</v-btn>
+						<v-btn
+							:value="form.rotation.values[4]"
+							flat
+							color="deep-orange"
+						>
+							<i class="fas fa-circle fa-2x"></i>
+						</v-btn>
+					</v-btn-toggle>
+				</div>
+				<div style="padding: 8px;">
+					<div style="display: flex; justify-content: space-between; align-items: center;">
+						<div class="subheading grey--text text--darken-1">
+							font size ratio
+						</div>
+						<v-chip
+							small
+							color="deep-orange"
+							text-color="white"
+						>
+							{{ (fontSizeRatio > 0) ? (fontSizeRatio + ' ' + 'x') : 'none' }}
+						</v-chip>
+					</div>
+					<v-slider
+						v-model="form.fontSizeRatio.valueIndex"
+						color="deep-orange"
+						class="px-2 py-0"
+						:min="0"
+						:max="form.fontSizeRatio.values.length - 1"
+						hide-details
+					></v-slider>
+				</div>
+			</v-navigation-drawer>
+			<v-toolbar
+				color="deep-orange darken-3"
+				dark
+				clipped-left
+				app
+			>
+				<v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+				<v-toolbar-title>almete.WordCloud</v-toolbar-title>
+				<v-spacer></v-spacer>
+				<v-btn
+					icon
+					href="https://github.com/SeregPie/almete.WordCloud"
+					target="_blank"
+				>
+					<v-icon>fab fa-github</v-icon>
+				</v-btn>
+			</v-toolbar>
+			<v-content>
+				<v-container
+					fluid
+					fill-height
+				>
+					<vue-resize-sensor
+					 	style="width: 100%; height: 100%;"
+					 	@resize="onCanvasContainerResize"
+					>
+						<canvas
+							style="position: absolute;"
+							ref="canvas"
+						></canvas>
+					</vue-resize-sensor>
+				</v-container>
+			</v-content>
+		</v-app>
+		<script src="demo/index.js"></script>
+	</body>
+</html>

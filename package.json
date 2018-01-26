@@ -7,9 +7,10 @@
 		"build": "rollup -c",
 		"prepublishOnly": "npm run build"
 	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/SeregPie/almete.WordCloud.git"
+	"scripts": {
+		"build": "rollup -c",
+		"dev": "rollup -c -w",
+		"prepublishOnly": "npm run build"
 	},
 	"keywords": [
 		"algorithm",

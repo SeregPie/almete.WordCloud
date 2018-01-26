@@ -1,6 +1,6 @@
 # almete.WordCloud
 
-`almete.WordCloud(words, cloudWidth, cloudHeight, {fontSizeRatio = 0, padding = 1, createCanvas})`
+`almete.WordCloud(words, cloudWidth, cloudHeight, {text = '', weight = 1, rotation = 0, fontFamily = 'serif', fontStyle = 'normal', fontVariant = 'normal', fontWeight = 'normal', fontSizeRatio = 0,fontSizeRatio = 0, createCanvas})`
 
 A word cloud generator.
 
@@ -9,9 +9,6 @@ A word cloud generator.
 | `words` | ... |
 | `cloudWidth` | ... |
 | `cloudHeight` | ... |
-| `fontSizeRatio` | ... |
-| `padding` | ... |
-| `createCanvas` | ... |
 
 Returns bounded words.
 
@@ -51,8 +48,9 @@ The function `WordCloud` will be available under the namespace `almete`.
 
 ```javascript
 let canvas = document.getElementById('canvas');
-let cloudWords = almete.WordCloud(words, canvas.width, canvas.height);
 let ctx = canvas.getContext('2d');
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+let cloudWords = almete.WordCloud(words, canvas.width, canvas.height);
 cloudWords.forEach(({
   text,
   rotation,
@@ -61,15 +59,11 @@ cloudWords.forEach(({
   fontWeight,
   fontSize,
   fontFamily,
-  //textWidth,
-  //textHeight,
-  rectLeft,
-  rectTop,
-  rectWidth,
-  rectHeight,
+  left,
+  top,
 }) => {
   ctx.save();
-  ctx.translate(rectLeft + rectWidth / 2, rectTop + rectHeight / 2);
+  ctx.translate(left, top);
   ctx.rotate(rotation * 2 * Math.PI);
   ctx.font = [fontStyle, fontVariant, fontWeight, `${fontSize}px`, fontFamily].join(' ');
   ctx.textAlign = 'center';
