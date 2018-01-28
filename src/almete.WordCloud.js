@@ -1,11 +1,8 @@
 import Array_sortBy from './helpers/Array/sortBy';
-import Canvas_sortBy from './helpers/Array/sortBy';
-import D2_rotateRect from './helpers/D2/rotateRect';
-import Math_turnToRad from './helpers/Math/turnToRad';
 
 import getPopulatedWords from './members/getPopulatedWords';
 import getWordsFontSizes from './members/getWordsFontSizes';
-import getTextWidth from './members/getTextWidth';
+import getWordCanvasData from './members/getWordCanvasData';
 import scaleCloudWords from './members/scaleCloudWords';
 import shiftCloudWords from './members/shiftCloudWords';
 
@@ -35,7 +32,6 @@ export default function(words, cloudWidth, cloudHeight, {
 		);
 		words = Array_sortBy(words, ({weight}) => -weight);
 		let wordsFontSizes = getWordsFontSizes(words, fontSizeRatio);
-		//let cloud = createInfiniteCloud(cloudWidth / cloudHeight);
 		let cloudWords = words.map(({
 			text,
 			weight,
@@ -46,7 +42,14 @@ export default function(words, cloudWidth, cloudHeight, {
 			fontWeight,
 		}, index) => {
 			let fontSize = wordsFontSizes[index];
-			/*let [image, imageWidth, imageHeight] = getWordImage(
+			let [
+				textWidth,
+				rectWidth,
+				rectHeight,
+				image,
+				imageWidth,
+				imageHeight,
+			] = getWordCanvasData(
 				text,
 				fontStyle,
 				fontVariant,
@@ -54,18 +57,8 @@ export default function(words, cloudWidth, cloudHeight, {
 				fontSize,
 				fontFamily,
 				rotation,
-			);
-			let [left, top] = cloud.placeWordImage(image, imageWidth, imageHeight);*/
-			let textWidth = getTextWidth(
-				text,
-				fontStyle,
-				fontVariant,
-				fontWeight,
-				fontSize,
-				fontFamily,
 				createCanvas,
 			);
-			let [rectWidth, rectHeight] = D2_rotateRect(textWidth, fontSize, rotation);
 			return {
 				text,
 				rotation,
