@@ -3,6 +3,7 @@ import Array_sortBy from './helpers/Array/sortBy';
 import getPopulatedWords from './members/getPopulatedWords';
 import getWordsFontSizes from './members/getWordsFontSizes';
 import getWordCanvasData from './members/getWordCanvasData';
+import createPlaceBitImageFunction from './members/createPlaceBitImageFunction';
 import scaleCloudWords from './members/scaleCloudWords';
 import shiftCloudWords from './members/shiftCloudWords';
 
@@ -32,6 +33,7 @@ export default function(words, cloudWidth, cloudHeight, {
 		);
 		words = Array_sortBy(words, ({weight}) => -weight);
 		let wordsFontSizes = getWordsFontSizes(words, fontSizeRatio);
+		let placeBitImage = createPlaceBitImageFunction(cloudWidth / cloudHeight);
 		let cloudWords = words.map(({
 			text,
 			weight,
@@ -59,6 +61,9 @@ export default function(words, cloudWidth, cloudHeight, {
 				rotation,
 				createCanvas,
 			);
+			let [imageLeft, imageTop] = placeBitImage(image, imageWidth, imageHeight);
+			let left = imageLeft + imageWidth / 2;
+			let top = imageTop + imageHeight / 2;
 			return {
 				text,
 				rotation,
@@ -70,8 +75,8 @@ export default function(words, cloudWidth, cloudHeight, {
 				textWidth,
 				rectWidth,
 				rectHeight,
-				rectLeft: -rectWidth / 2,
-				rectTop: -rectHeight / 2,
+				left,
+				top,
 			};
 		});
 		scaleCloudWords(cloudWords, cloudWidth, cloudHeight);

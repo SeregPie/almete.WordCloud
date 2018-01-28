@@ -129,7 +129,7 @@
 					canvas.height = canvasHeight;
 					cloudWords.forEach(function(cloudWord) {
 						ctx.save();
-						ctx.translate(cloudWord.rectLeft + (cloudWord.rectWidth / 2), cloudWord.rectTop + (cloudWord.rectHeight / 2));
+						ctx.translate(cloudWord.left, cloudWord.top);
 						ctx.rotate(cloudWord.rotation * 2 * Math.PI);
 						ctx.font = [
 							cloudWord.fontStyle,

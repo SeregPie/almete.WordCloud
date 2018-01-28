@@ -64,13 +64,13 @@ cloudWords.forEach(({
   fontSize,
   fontFamily,
   //textWidth,
-  rectWidth,
-  rectHeight,
-  rectLeft,
-  rectTop,
+  //rectWidth,
+  //rectHeight,
+  left,
+  top,
 }) => {
   ctx.save();
-  ctx.translate(rectLeft + (rectWidth / 2), rectTop + (rectHeight / 2));
+  ctx.translate(left, top);
   ctx.rotate(rotation * 2 * Math.PI);
   ctx.font = [fontStyle, fontVariant, fontWeight, `${fontSize}px`, fontFamily].join(' ');
   ctx.textAlign = 'center';

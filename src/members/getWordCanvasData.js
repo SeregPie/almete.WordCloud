@@ -3,7 +3,6 @@ import Math_turnToRad from '../helpers/Math/turnToRad';
 
 import getFont from './getFont';
 import toBitImage from './toBitImage';
-import trimBitImage from './trimBitImage';
 
 export default function(
 	text,
@@ -35,7 +34,6 @@ export default function(
 	ctx.fillText(text, 0, 0);
 	let image = ctx.getImageData(0, 0, imageWidth, imageHeight).data;
 	image = toBitImage(image, imageWidth, imageHeight);
-	//([image, imageWidth, imageHeight] = trimBitImage(image, imageWidth, imageHeight));
 	return [
 		textWidth,
 		rectWidth,
