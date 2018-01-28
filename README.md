@@ -2,7 +2,7 @@
 
 `almete.WordCloud(words, cloudWidth, cloudHeight, {text = '', weight = 1, rotation = 0, fontFamily = 'serif', fontStyle = 'normal', fontVariant = 'normal', fontWeight = 'normal', fontSizeRatio = 0,fontSizeRatio = 0, createCanvas})`
 
-A word cloud generator.
+Generates a cloud out of the words.
 
 | argument | description |
 | ---: | :--- |
@@ -63,11 +63,14 @@ cloudWords.forEach(({
   fontWeight,
   fontSize,
   fontFamily,
-  left,
-  top,
+  //textWidth,
+  rectWidth,
+  rectHeight,
+  rectLeft,
+  rectTop,
 }) => {
   ctx.save();
-  ctx.translate(left, top);
+  ctx.translate(rectLeft + (rectWidth / 2), rectTop + (rectHeight / 2));
   ctx.rotate(rotation * 2 * Math.PI);
   ctx.font = [fontStyle, fontVariant, fontWeight, `${fontSize}px`, fontFamily].join(' ');
   ctx.textAlign = 'center';

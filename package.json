@@ -1,12 +1,8 @@
 {
 	"name": "almete.wordcloud",
 	"version": "18.1.25",
-	"description": "A word cloud generator.",
+	"description": "Generates a cloud out of the words.",
 	"main": "almete.WordCloud.js",
-	"scripts": {
-		"build": "rollup -c",
-		"prepublishOnly": "npm run build"
-	},
 	"scripts": {
 		"build": "rollup -c",
 		"dev": "rollup -c -w",

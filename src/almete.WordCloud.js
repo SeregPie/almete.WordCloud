@@ -2,6 +2,7 @@ import Array_sortBy from './helpers/Array/sortBy';
 
 import getPopulatedWords from './members/getPopulatedWords';
 import getWordsFontSizes from './members/getWordsFontSizes';
+import getWordMeasures from './members/getWordMeasures';
 import scaleCloudWords from './members/scaleCloudWords';
 import shiftCloudWords from './members/shiftCloudWords';
 
@@ -49,6 +50,15 @@ export default function(words, cloudWidth, cloudHeight, {
 				rotation,
 			);
 			let [left, top] = cloud.placeWordImage(image, imageWidth, imageHeight);*/
+			let [textWidth, textHeight, rectWidth, rectHeight] = getWordMeasures(
+				text,
+				fontStyle,
+				fontVariant,
+				fontWeight,
+				fontSize,
+				fontFamily,
+				rotation,
+			);
 			return {
 				text,
 				rotation,
@@ -57,10 +67,11 @@ export default function(words, cloudWidth, cloudHeight, {
 				fontWeight,
 				fontSize,
 				fontFamily,
-				left: 0,
-				top: 0,
-				width: 100,
-				height: 50,
+				textWidth,
+				rectWidth,
+				rectHeight,
+				rectLeft: -rectWidth / 2,
+				rectTop: -rectHeight / 2,
 			};
 		});
 		scaleCloudWords(cloudWords, cloudWidth, cloudHeight);

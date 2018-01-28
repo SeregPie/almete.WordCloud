@@ -1,6 +1,6 @@
 export default function(cloudWords, cloudWidth, cloudHeight) {
 	cloudWords.forEach(cloudWord => {
-		cloudWord.left += cloudWidth / 2;
-		cloudWord.top += cloudHeight / 2;
+		cloudWord.rectLeft += cloudWidth / 2;
+		cloudWord.rectTop += cloudHeight / 2;
 	});
 }
