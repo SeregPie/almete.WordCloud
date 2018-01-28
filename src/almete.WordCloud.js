@@ -1,8 +1,11 @@
 import Array_sortBy from './helpers/Array/sortBy';
+import Canvas_sortBy from './helpers/Array/sortBy';
+import D2_rotateRect from './helpers/D2/rotateRect';
+import Math_turnToRad from './helpers/Math/turnToRad';
 
 import getPopulatedWords from './members/getPopulatedWords';
 import getWordsFontSizes from './members/getWordsFontSizes';
-import getWordMeasures from './members/getWordMeasures';
+import getTextWidth from './members/getTextWidth';
 import scaleCloudWords from './members/scaleCloudWords';
 import shiftCloudWords from './members/shiftCloudWords';
 
@@ -15,6 +18,9 @@ export default function(words, cloudWidth, cloudHeight, {
 	fontVariant = 'normal',
 	fontWeight = 'normal',
 	fontSizeRatio = 0,
+	createCanvas = function() {
+		return document.createElement('canvas');
+	},
 } = {}) {
 	if (words.length > 0 && cloudWidth > 0 && cloudHeight > 0) {
 		words = getPopulatedWords(
@@ -50,15 +56,16 @@ export default function(words, cloudWidth, cloudHeight, {
 				rotation,
 			);
 			let [left, top] = cloud.placeWordImage(image, imageWidth, imageHeight);*/
-			let [textWidth, textHeight, rectWidth, rectHeight] = getWordMeasures(
+			let textWidth = getTextWidth(
 				text,
 				fontStyle,
 				fontVariant,
 				fontWeight,
 				fontSize,
 				fontFamily,
-				rotation,
+				createCanvas,
 			);
+			let [rectWidth, rectHeight] = D2_rotateRect(textWidth, fontSize, rotation);
 			return {
 				text,
 				rotation,
