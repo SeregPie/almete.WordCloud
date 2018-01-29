@@ -5,8 +5,9 @@ almete.WordCloud(words, cloudWidth, cloudHeight, {
   text = '',
   weight = 1,
   rotation = 0,
+  rotationUnit = 'rad',
   fontFamily = 'serif',
-  fontStyle = 'normal', 
+  fontStyle = 'normal',
   fontVariant = 'normal',
   fontWeight = 'normal',
   fontSizeRatio = 0,
@@ -20,12 +21,13 @@ Generates a cloud out of the words.
 
 | argument | description |
 | ---: | :--- |
-| `words` | The words to place into the cloud. Each word will be resolved to `{text, weight, rotation, fontFamily, fontStyle, fontVariant, fontWeight, color}`.<br/>The units for `rotation` must be turns (1 turn is 360 degrees).<br/>Possible values for `fontStyle` are `'normal'`, `'italic'` and `'oblique'`.<br/>Possible values for `fontVariant` are `'normal'` and `'small-caps'`.<br/>Possible values for `fontWeight` are `'normal'`, `'bold'`, `'bolder'`, `'lighter'` and `'100'` to `'900'`. |
+| `words` | The words to place into the cloud. Each word is resolved to `{text, weight, rotation, rotationUnit, fontFamily, fontStyle, fontVariant, fontWeight, color}`.<br/>Possible values for `rotationUnit` are `'rad'`, `'deg'` and `'turn'`.<br/>Possible values for `fontStyle` are `'normal'`, `'italic'` and `'oblique'`.<br/>Possible values for `fontVariant` are `'normal'` and `'small-caps'`.<br/>Possible values for `fontWeight` are `'normal'`, `'bold'`, `'bolder'`, `'lighter'` and `'100'` to `'900'`. |
 | `cloudWidth` | ... |
 | `cloudHeight` | ... |
 | `text` | The default text for each word. |
 | `weight` | The default weight for each word. |
 | `rotation` | The default rotation of each word. |
+| `rotationUnit` | The default rotation unit of each word. |
 | `fontFamily` | The default font family for each word. |
 | `fontStyle` | The default font style for each word. |
 | `fontVariant` | The default font variant for each word. |
@@ -34,6 +36,28 @@ Generates a cloud out of the words.
 | `createCanvas` | ... |
 
 Returns bounded words.
+
+```
+[{
+  text,  
+  rotationRad,
+  rotationDeg,
+  rotationTurn,
+  fontStyle,
+  fontVariant,
+  fontWeight,
+  fontSize,
+  fontFamily,
+  font,
+  textWidth,
+  rectWidth,
+  rectHeight,
+  rectLeft,
+  rectTop,
+  left,
+  top,
+}]
+```
 
 ## demo
 
@@ -78,24 +102,11 @@ let canvas = document.getElementById('canvas');
 let ctx = canvas.getContext('2d');
 ctx.clearRect(0, 0, canvas.width, canvas.height);
 let cloudWords = almete.WordCloud(words, canvas.width, canvas.height);
-cloudWords.forEach(({
-  text,
-  rotation,
-  fontStyle,
-  fontVariant,
-  fontWeight,
-  fontSize,
-  fontFamily,
-  //textWidth,
-  //rectWidth,
-  //rectHeight,
-  left,
-  top,
-}) => {
+cloudWords.forEach(({text, rotationRad, font, left, top}) => {
   ctx.save();
   ctx.translate(left, top);
-  ctx.rotate(rotation * 2 * Math.PI);
-  ctx.font = [fontStyle, fontVariant, fontWeight, `${fontSize}px`, fontFamily].join(' ');
+  ctx.rotate(rotationRad);
+  ctx.font = font;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillStyle = 'LightCoral';

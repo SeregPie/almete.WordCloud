@@ -4,13 +4,14 @@ import getPopulatedWords from './members/getPopulatedWords';
 import getWordsFontSizes from './members/getWordsFontSizes';
 import getWordCanvasData from './members/getWordCanvasData';
 import createPlaceBitImageFunction from './members/createPlaceBitImageFunction';
-import scaleCloudWords from './members/scaleCloudWords';
-import shiftCloudWords from './members/shiftCloudWords';
+import scaleWords from './members/scaleWords';
+import shiftWords from './members/shiftWords';
 
 export default function(words, cloudWidth, cloudHeight, {
 	text = '',
 	weight = 1,
 	rotation = 0,
+	rotationUnit = 'rad',
 	fontFamily = 'serif',
 	fontStyle = 'normal',
 	fontVariant = 'normal',
@@ -26,6 +27,7 @@ export default function(words, cloudWidth, cloudHeight, {
 			text,
 			weight,
 			rotation,
+			rotationUnit,
 			fontFamily,
 			fontStyle,
 			fontVariant,
@@ -34,16 +36,9 @@ export default function(words, cloudWidth, cloudHeight, {
 		words = Array_sortBy(words, ({weight}) => -weight);
 		let wordsFontSizes = getWordsFontSizes(words, fontSizeRatio);
 		let placeBitImage = createPlaceBitImageFunction(cloudWidth / cloudHeight);
-		let cloudWords = words.map(({
-			text,
-			weight,
-			rotation,
-			fontFamily,
-			fontStyle,
-			fontVariant,
-			fontWeight,
-		}, index) => {
+		words.forEach((word, index) => {
 			let fontSize = wordsFontSizes[index];
+			Object.assign(word, {fontSize});
 			let [
 				textWidth,
 				rectWidth,
@@ -51,37 +46,16 @@ export default function(words, cloudWidth, cloudHeight, {
 				image,
 				imageWidth,
 				imageHeight,
-			] = getWordCanvasData(
-				text,
-				fontStyle,
-				fontVariant,
-				fontWeight,
-				fontSize,
-				fontFamily,
-				rotation,
-				createCanvas,
-			);
+			] = getWordCanvasData(word, createCanvas);
+			Object.assign(word, {textWidth, rectWidth, rectHeight});
 			let [imageLeft, imageTop] = placeBitImage(image, imageWidth, imageHeight);
 			let left = imageLeft + imageWidth / 2;
 			let top = imageTop + imageHeight / 2;
-			return {
-				text,
-				rotation,
-				fontStyle,
-				fontVariant,
-				fontWeight,
-				fontSize,
-				fontFamily,
-				textWidth,
-				rectWidth,
-				rectHeight,
-				left,
-				top,
-			};
+			Object.assign(word, {left, top});
 		});
-		scaleCloudWords(cloudWords, cloudWidth, cloudHeight);
-		shiftCloudWords(cloudWords, cloudWidth, cloudHeight);
-		return cloudWords;
+		scaleWords(words, cloudWidth, cloudHeight);
+		shiftWords(words, cloudWidth, cloudHeight);
+		return words;
 	}
 	return [];
 }

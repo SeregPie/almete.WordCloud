@@ -122,6 +122,7 @@
 					var ctx = canvas.getContext('2d');
 					ctx.clearRect(0, 0, canvas.width, canvas.height);
 					var cloudWords = almete.WordCloud(words, canvasWidth, canvasHeight, {
+						rotationUnit: 'turn',
 						fontFamily: fontFamily,
 						fontSizeRatio: fontSizeRatio,
 					});
@@ -130,7 +131,7 @@
 					cloudWords.forEach(function(cloudWord) {
 						ctx.save();
 						ctx.translate(cloudWord.left, cloudWord.top);
-						ctx.rotate(cloudWord.rotation * 2 * Math.PI);
+						ctx.rotate(cloudWord.rotationRad);
 						ctx.font = [
 							cloudWord.fontStyle,
 							cloudWord.fontVariant,
