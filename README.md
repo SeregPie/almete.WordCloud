@@ -20,16 +20,16 @@ Generates a cloud out of the words.
 
 | argument | description |
 | ---: | :--- |
-| `words` | The words to place into the cloud. Each word will be resolved to `{text, weight, rotation, fontFamily, fontStyle, fontVariant, fontWeight, color}`. |
+| `words` | The words to place into the cloud. Each word will be resolved to `{text, weight, rotation, fontFamily, fontStyle, fontVariant, fontWeight, color}`.<br/>The units for `rotation` must be turns (1 turn is 360 degrees).<br/>Possible values for `fontStyle` are `'normal'`, `'italic'` and `'oblique'`.<br/>Possible values for `fontVariant` are `'normal'` and `'small-caps'`.<br/>Possible values for `fontWeight` are `'normal'`, `'bold'`, `'bolder'`, `'lighter'` and `'100'` to `'900'`. |
 | `cloudWidth` | ... |
 | `cloudHeight` | ... |
 | `text` | The default text for each word. |
-| `weight` | The weight for each word. |
-| `rotation` | The rotation of each word. The units for the rotation must be turns (1 turn is 360 degrees). |
-| `fontFamily` | The font family for each word. |
-| `fontStyle` | The font style for each word. Possible values are `'normal'`, `'italic'` and `'oblique'`. |
-| `fontVariant` | The font variant for each word. Possible values are `'normal'` and `'small-caps'`. |
-| `fontWeight` | The font weight for each word. Possible values are `'normal'`, `'bold'`, `'bolder'`, `'lighter'` and `'100'` to `'900'`. |
+| `weight` | The default weight for each word. |
+| `rotation` | The default rotation of each word. |
+| `fontFamily` | The default font family for each word. |
+| `fontStyle` | The default font style for each word. |
+| `fontVariant` | The default font variant for each word. |
+| `fontWeight` | The default font weight for each word. |
 | `fontSizeRatio` | The font size of the words will be scaled to respect the given ratio. For example, if the value equals `5`, then the biggest word will be 5 times bigger than the smallest one. The value can be an integer or a fraction. For example, the value `4` has the same effect as the value `1/4`. |
 | `createCanvas` | ... |
 
