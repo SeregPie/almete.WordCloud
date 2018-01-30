@@ -44,8 +44,14 @@ export default function(
 		get rectLeft() {
 			return this.left - this.rectWidth / 2;
 		},
+		/*set rectLeft(value) {
+			this.left = value + this.rectWidth / 2;
+		},*/
 		get rectTop() {
 			return this.top - this.rectHeight / 2;
 		},
+		/*set rectTop(value) {
+			this.top = value + this.rectHeight / 2;
+		},*/
 	}));
 }

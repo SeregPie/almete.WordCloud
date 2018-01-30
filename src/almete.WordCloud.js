@@ -4,8 +4,7 @@ import getPopulatedWords from './members/getPopulatedWords';
 import getWordsFontSizes from './members/getWordsFontSizes';
 import getWordCanvasData from './members/getWordCanvasData';
 import createPlaceBitImageFunction from './members/createPlaceBitImageFunction';
-import scaleWords from './members/scaleWords';
-import shiftWords from './members/shiftWords';
+import fitWordsIntoCloud from './members/fitWordsIntoCloud';
 
 export default function(words, cloudWidth, cloudHeight, {
 	text = '',
@@ -47,14 +46,12 @@ export default function(words, cloudWidth, cloudHeight, {
 				imageWidth,
 				imageHeight,
 			] = getWordCanvasData(word, createCanvas);
-			Object.assign(word, {textWidth, rectWidth, rectHeight});
 			let [imageLeft, imageTop] = placeBitImage(image, imageWidth, imageHeight);
 			let left = imageLeft + imageWidth / 2;
 			let top = imageTop + imageHeight / 2;
-			Object.assign(word, {left, top});
+			Object.assign(word, {textWidth, rectWidth, rectHeight, left, top});
 		});
-		scaleWords(words, cloudWidth, cloudHeight);
-		shiftWords(words, cloudWidth, cloudHeight);
+		fitWordsIntoCloud(words, cloudWidth, cloudHeight);
 		return words;
 	}
 	return [];
