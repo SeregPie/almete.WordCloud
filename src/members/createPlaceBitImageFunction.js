@@ -1,11 +1,10 @@
-import createBitSpace from './createBitSpace';
-import BitSpace_get from './BitSpace_get';
-import BitSpace_set from './BitSpace_set';
+import BitSpace_isOccupied from './BitSpace_isOccupied';
+import BitSpace_occupy from './BitSpace_occupy';
 import getOccupiedBitImagePixels from './getOccupiedBitImagePixels';
 import findPixel from './findPixel';
 
 export default function(spaceAspect) {
-	let space = createBitSpace();
+	let space = [];
 	return function(image, imageWidth, imageHeight) {
 		let occupiedImagePixels = getOccupiedBitImagePixels(image, imageWidth, imageHeight);
 		let startImageLeft = -Math.floor(imageWidth / 2);
@@ -14,13 +13,13 @@ export default function(spaceAspect) {
 			return occupiedImagePixels.every(([imagePixelLeft, imagePixelTop]) => {
 				let spacePixelLeft = imageLeft + imagePixelLeft;
 				let spacePixelTop = imageTop + imagePixelTop;
-				return BitSpace_get(space, spacePixelLeft, spacePixelTop);
+				return BitSpace_isOccupied(space, spacePixelLeft, spacePixelTop);
 			});
 		});
 		occupiedImagePixels.forEach(([imagePixelLeft, imagePixelTop]) => {
 			let spacePixelLeft = imageLeft + imagePixelLeft;
 			let spacePixelTop = imageTop + imagePixelTop;
-			BitSpace_set(space, spacePixelLeft, spacePixelTop);
+			BitSpace_occupy(space, spacePixelLeft, spacePixelTop);
 		});
 		return [imageLeft, imageTop];
 	};
