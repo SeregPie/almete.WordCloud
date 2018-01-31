@@ -7,10 +7,12 @@ export default function({text, font, fontSize, rotationRad}, createCanvas) {
 	let ctx = canvas.getContext('2d');
 	ctx.font = font;
 	let textWidth = ctx.measureText(text).width;
-	let letterSize = Math.max(ctx.measureText('m').width, fontSize);
-	let [rectWidth, rectHeight] = D2_rotateRect(textWidth, fontSize, rotationRad);
-	let imageWidth = rectWidth + letterSize * 2;
-	let imageHeight = rectHeight + letterSize * 2;
+	let textHeight = fontSize;
+	let [rectWidth, rectHeight] = D2_rotateRect(textWidth, textHeight, rotationRad);
+	let generousLetterSize = Math.max(ctx.measureText('m').width, fontSize);
+	let generousTextWidth = textWidth + generousLetterSize * 2;
+	let generousTextHeight = textHeight + generousLetterSize * 2;
+	let [imageWidth, imageHeight] = D2_rotateRect(generousTextWidth, generousTextHeight, rotationRad);
 	canvas.width = imageWidth;
 	canvas.height = imageHeight;
 	ctx.translate(imageWidth / 2, imageHeight / 2);
