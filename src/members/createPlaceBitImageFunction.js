@@ -12,7 +12,7 @@ export default function(spaceAspect) {
 				return occupiedImagePixels.every(([imagePixelLeft, imagePixelTop]) => {
 					let spacePixelLeft = imageLeft + imagePixelLeft;
 					let spacePixelTop = imageTop + imagePixelTop;
-					return space[`${spacePixelLeft}|${spacePixelTop}`];
+					return !space[`${spacePixelLeft}|${spacePixelTop}`];
 				});
 			});
 		} else {
