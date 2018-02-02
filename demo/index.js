@@ -123,48 +123,64 @@
 			},
 
 			drawWordCloud: function() {
-				var words = this.words;
+				var outerToken;
+				return function(canvas, canvasWidth, canvasHeight, words, fontFamily, spacing, fontSizeRatio) {
+					var innerToken = outerToken = {};
+					return Promise.resolve()
+						.then(function() {
+							return (new FontFaceObserver(fontFamily)).load()
+								.catch(function() {})
+								.then(function() {
+									if (innerToken === outerToken) {
+										var ctx = canvas.getContext('2d');
+										ctx.clearRect(0, 0, canvas.width, canvas.height);
+										var boundedWords = almete.WordCloud(words, canvasWidth, canvasHeight, {
+											rotationUnit: 'turn',
+											fontFamily: fontFamily,
+											spacing: spacing,
+											fontSizeRatio: fontSizeRatio,
+										});
+										canvas.width = canvasWidth;
+										canvas.height = canvasHeight;
+										boundedWords.forEach(function(cloudWord) {
+											ctx.save();
+											ctx.translate(cloudWord.left, cloudWord.top);
+											ctx.rotate(cloudWord.rotationRad);
+											ctx.font = cloudWord.font;
+											ctx.textAlign = 'center';
+											ctx.textBaseline = 'middle';
+											ctx.fillStyle = 'Grey';
+											ctx.fillText(cloudWord.text, 0, 0);
+											ctx.restore();
+										});
+									}
+								});
+						});
+				};
+			},
+
+			drawWordCloudTrigger: function() {
+				var canvas = this.$refs.canvas;
+
 				var canvasWidth = this.canvasWidth;
 				var canvasHeight = this.canvasHeight;
+				var words = this.words;
 				var fontFamily = this.fontFamily;
 				var spacing = this.spacing;
 				var fontSizeRatio = this.fontSizeRatio;
-				var canvas = this.$refs.canvas;
 
 				if (canvas) {
-					var ctx = canvas.getContext('2d');
-					ctx.clearRect(0, 0, canvas.width, canvas.height);
-					var cloudWords = almete.WordCloud(words, canvasWidth, canvasHeight, {
-						rotationUnit: 'turn',
-						fontFamily: fontFamily,
-						spacing: spacing,
-						fontSizeRatio: fontSizeRatio,
-					});
-					canvas.width = canvasWidth;
-					canvas.height = canvasHeight;
-					cloudWords.forEach(function(cloudWord) {
-						ctx.save();
-						ctx.translate(cloudWord.left, cloudWord.top);
-						ctx.rotate(cloudWord.rotationRad);
-						ctx.font = [
-							cloudWord.fontStyle,
-							cloudWord.fontVariant,
-							cloudWord.fontWeight,
-							cloudWord.fontSize + 'px',
-							cloudWord.fontFamily,
-						].join(' ');
-						ctx.textAlign = 'center';
-						ctx.textBaseline = 'middle';
-						ctx.fillStyle = 'SlateGray';
-						ctx.fillText(cloudWord.text, 0, 0);
-						ctx.restore();
-					});
+					return setTimeout(function() {
+						return this.drawWordCloud(canvas, canvasWidth, canvasHeight, words, fontFamily, spacing, fontSizeRatio);
+					}.bind(this), 1000);
 				}
 			},
 		},
 
 		watch: {
-			drawWordCloud: function() {},
+			drawWordCloudTrigger: function(newTimeoutId, oldTimeoutId) {
+				clearTimeout(oldTimeoutId);
+			},
 		},
 
 		created: function() {

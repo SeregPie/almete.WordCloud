@@ -27,7 +27,7 @@ Generates a cloud out of the words.
 | `text` | The default text for each word. |
 | `weight` | The default weight for each word. |
 | `rotation` | The default rotation of each word. |
-| `rotationUnit` | The default rotation unit of each word.<br/>Possible values for `rotationUnit` are `'turn'`, `'deg'` and `'rad'`. |
+| `rotationUnit` | The default rotation unit of each word.<br/>Possible values are `'turn'`, `'deg'` and `'rad'`. |
 | `fontFamily` | The default font family for each word. |
 | `fontStyle` | The default font style for each word. |
 | `fontVariant` | The default font variant for each word. |
@@ -38,7 +38,7 @@ Generates a cloud out of the words.
 Returns bounded words as an array of objects.
 
 ```
-[{
+{
   text,  
   rotationTurn,
   rotationDeg,
@@ -56,7 +56,7 @@ Returns bounded words as an array of objects.
   rectTop,
   left,
   top,
-}]
+}
 ```
 
 ## demo
