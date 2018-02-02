@@ -34,7 +34,7 @@ export default function(words, cloudWidth, cloudHeight, {
 		);
 		words = Array_sortBy(words, ({weight}) => -weight);
 		let wordsFontSizes = getWordsFontSizes(words, fontSizeRatio);
-		let placeBitImage = createPlaceBitImageFunction(cloudWidth / cloudHeight);
+		let placeBitImage = createPlaceBitImageFunction([cloudWidth, cloudHeight]);
 		words.forEach((word, index) => {
 			let fontSize = wordsFontSizes[index];
 			Object.assign(word, {fontSize});
