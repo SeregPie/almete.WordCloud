@@ -10,7 +10,7 @@ export default function(words, cloudWidth, cloudHeight, {
 	text = '',
 	weight = 1,
 	rotation = 0,
-	rotationUnit = 'rad',
+	rotationUnit = 'turn',
 	fontFamily = 'serif',
 	fontStyle = 'normal',
 	fontVariant = 'normal',

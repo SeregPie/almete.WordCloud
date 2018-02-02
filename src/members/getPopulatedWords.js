@@ -28,11 +28,11 @@ export default function(
 		text,
 		weight,
 		rotationTurn: toRotationTurn(rotation, rotationUnit),
-		get rotationRad() {
-			return Math_turnToRad(this.rotationTurn);
-		},
 		get rotationDeg() {
 			return Math_turnToDeg(this.rotationTurn);
+		},
+		get rotationRad() {
+			return Math_turnToRad(this.rotationTurn);
 		},
 		fontFamily,
 		fontStyle,
