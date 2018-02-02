@@ -64,8 +64,13 @@
 						};
 					})(),
 
+					spacing: {
+						values: [0, 1/4, 1/2, 1, 2],
+						valueIndex: 0,
+					},
+
 					fontSizeRatio: {
-						values: [0, 1, 2, 3, 4, 5, 10, 20, 30],
+						values: [0, 1, 2, 4, 8, 16],
 						valueIndex: 0,
 					},
 				},
@@ -103,6 +108,13 @@
 				return this.form.fontFamily.value;
 			},
 
+			spacing: function() {
+				var values = this.form.spacing.values;
+				var valueIndex = this.form.spacing.valueIndex;
+
+				return values[valueIndex];
+			},
+
 			fontSizeRatio: function() {
 				var values = this.form.fontSizeRatio.values;
 				var valueIndex = this.form.fontSizeRatio.valueIndex;
@@ -115,6 +127,7 @@
 				var canvasWidth = this.canvasWidth;
 				var canvasHeight = this.canvasHeight;
 				var fontFamily = this.fontFamily;
+				var spacing = this.spacing;
 				var fontSizeRatio = this.fontSizeRatio;
 				var canvas = this.$refs.canvas;
 
@@ -124,6 +137,7 @@
 					var cloudWords = almete.WordCloud(words, canvasWidth, canvasHeight, {
 						rotationUnit: 'turn',
 						fontFamily: fontFamily,
+						spacing: spacing,
 						fontSizeRatio: fontSizeRatio,
 					});
 					canvas.width = canvasWidth;
@@ -154,11 +168,11 @@
 		},
 
 		created: function() {
-			this.generateRandomText();
+			this.generateFormWordsValue();
 		},
 
 		methods: {
-			generateRandomText: function() {
+			generateFormWordsValue: function() {
 				this.form.words.value = [
 					[9, 1, 3],
 					[4, 5, 15],
@@ -166,12 +180,12 @@
 					[1, 25, 100],
 				]
 					.reduce(function(returns, item) {
-						var weigh = item[0];
+						var weight = item[0];
 						var min = item[1];
 						var max = item[2];
 						chance.n(chance.word, chance.integer({min: min, max: max}))
 							.forEach(function(word) {
-								returns.push(word + ' ' + weigh);
+								returns.push(word + ' ' + weight);
 							});
 						return returns;
 					}, [])

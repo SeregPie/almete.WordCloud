@@ -15,6 +15,7 @@ export default function(words, cloudWidth, cloudHeight, {
 	fontStyle = 'normal',
 	fontVariant = 'normal',
 	fontWeight = 'normal',
+	spacing = 0,
 	fontSizeRatio = 0,
 	createCanvas = function() {
 		return document.createElement('canvas');
@@ -36,7 +37,7 @@ export default function(words, cloudWidth, cloudHeight, {
 		let wordsFontSizes = getWordsFontSizes(words, fontSizeRatio);
 		let placeBitImage = createPlaceBitImageFunction([cloudWidth, cloudHeight]);
 		words.forEach((word, index) => {
-			let fontSize = wordsFontSizes[index];
+			let fontSize = wordsFontSizes[index] * 4;
 			Object.assign(word, {fontSize});
 			let [
 				textWidth,
@@ -45,7 +46,7 @@ export default function(words, cloudWidth, cloudHeight, {
 				image,
 				imageWidth,
 				imageHeight,
-			] = getWordCanvasData(word, createCanvas);
+			] = getWordCanvasData(word, spacing, createCanvas);
 			let [imageLeft, imageTop] = placeBitImage(image, imageWidth, imageHeight);
 			let left = imageLeft + imageWidth / 2;
 			let top = imageTop + imageHeight / 2;

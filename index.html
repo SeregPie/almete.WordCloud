@@ -58,7 +58,7 @@
 						block
 						color="deep-orange"
 						class="white--text"
-						@click="generateRandomText"
+						@click="generateFormWordsValue"
 					>
 						generate randomly
 					</v-btn>
@@ -145,6 +145,28 @@
 							<i class="fas fa-circle fa-2x"></i>
 						</v-btn>
 					</v-btn-toggle>
+				</div>
+				<div style="padding: 8px;">
+					<div style="display: flex; justify-content: space-between; align-items: center;">
+						<div class="subheading grey--text text--darken-1">
+							spacing
+						</div>
+						<v-chip
+							small
+							color="deep-orange"
+							text-color="white"
+						>
+							{{ (spacing > 0) ? (Math.round(spacing * 100) + ' ' + '%') : 'none' }}
+						</v-chip>
+					</div>
+					<v-slider
+						v-model="form.spacing.valueIndex"
+						color="deep-orange"
+						class="px-2 py-0"
+						:min="0"
+						:max="form.spacing.values.length - 1"
+						hide-details
+					></v-slider>
 				</div>
 				<div style="padding: 8px;">
 					<div style="display: flex; justify-content: space-between; align-items: center;">
