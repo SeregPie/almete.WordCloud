@@ -155,7 +155,7 @@
 						].join(' ');
 						ctx.textAlign = 'center';
 						ctx.textBaseline = 'middle';
-						ctx.fillStyle = 'LightCoral';
+						ctx.fillStyle = 'SlateGray';
 						ctx.fillText(cloudWord.text, 0, 0);
 						ctx.restore();
 					});
