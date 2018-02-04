@@ -1,5 +1,5 @@
-import Math_degToTurn from '../helpers/Math/degToTurn';
-import Math_radToTurn from '../helpers/Math/radToTurn';
+import Math_degToTurn from 'my-helpers/Math/degToTurn';
+import Math_radToTurn from 'my-helpers/Math/radToTurn';
 
 export default function(rotation, rotationUnit) {
 	switch (rotationUnit) {

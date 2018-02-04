@@ -1,5 +1,5 @@
-import Array_min from '../helpers/Array/min';
-import Array_max from '../helpers/Array/max';
+import Array_min from 'my-helpers/Array/min';
+import Array_max from 'my-helpers/Array/max';
 
 export default function(words, cloudWidth, cloudHeight) {
 	let wordsLeft = Array_min(words, ({rectLeft}) => rectLeft);

@@ -1,6 +1,6 @@
-import Array_min from '../helpers/Array/min';
-import Array_max from '../helpers/Array/max';
-import Math_mapLinear from '../helpers/Math/mapLinear';
+import Array_min from 'my-helpers/Array/min';
+import Array_max from 'my-helpers/Array/max';
+import Math_mapLinear from 'my-helpers/Math/mapLinear';
 
 export default function(words, fontSizeRatio) {
 	if (words.length > 0) {

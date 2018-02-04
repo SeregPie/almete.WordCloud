@@ -1,4 +1,5 @@
 import buble from 'rollup-plugin-buble';
+import nodeResolve from 'rollup-plugin-node-resolve';
 import uglify from 'rollup-plugin-uglify';
 
 export default {
@@ -9,6 +10,7 @@ export default {
 		name: 'almete.WordCloud',
 	},
 	plugins: [
+		nodeResolve(),
 		buble(),
 		uglify(),
 	],

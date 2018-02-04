@@ -1,4 +1,4 @@
-import Array_sortBy from './helpers/Array/sortBy';
+import Array_sortBy from 'my-helpers/Array/sortBy';
 
 import getPopulatedWords from './members/getPopulatedWords';
 import getWordsFontSizes from './members/getWordsFontSizes';
