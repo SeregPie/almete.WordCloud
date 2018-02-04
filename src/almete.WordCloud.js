@@ -1,10 +1,10 @@
 import Array_sortBy from 'my-helpers/Array/sortBy';
 
-import getPopulatedWords from './members/getPopulatedWords';
-import getWordsFontSizes from './members/getWordsFontSizes';
-import getWordCanvasData from './members/getWordCanvasData';
-import createPlaceBitImageFunction from './members/createPlaceBitImageFunction';
-import fitWordsIntoCloud from './members/fitWordsIntoCloud';
+import getPopulatedWords from './partials/getPopulatedWords';
+import getWordsFontSizes from './partials/getWordsFontSizes';
+import getWordCanvasData from './partials/getWordCanvasData';
+import createPlaceBitImageFunction from './partials/createPlaceBitImageFunction';
+import fitWordsIntoCloud from './partials/fitWordsIntoCloud';
 
 export default function(words, cloudWidth, cloudHeight, {
 	text = '',
