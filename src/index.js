@@ -1,3 +1,3 @@
-import WordCloud from './WordCloud';
+import WordCloud from './doWordCloud';
 
 export default WordCloud;
