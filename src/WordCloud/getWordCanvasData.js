@@ -1,4 +1,4 @@
-import D2_rotateRect  from 'my-helpers/D2/rotateRect';
+import D2_rotateRect  from 'asyma/src/D2/rotateRect';
 
 import toBitImage from './toBitImage';
 

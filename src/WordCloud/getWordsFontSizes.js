@@ -1,6 +1,6 @@
-import Array_min from 'my-helpers/Array/min';
-import Array_max from 'my-helpers/Array/max';
-import Math_mapLinear from 'my-helpers/Math/mapLinear';
+import Array_min from 'asyma/src/Array/min';
+import Array_max from 'asyma/src/Array/max';
+import Math_mapLinear from 'asyma/src/Math/mapLinear';
 
 export default function(words, fontSizeRatio) {
 	if (words.length > 0) {

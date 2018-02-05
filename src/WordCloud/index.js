@@ -1,10 +1,10 @@
-import Array_sortBy from 'my-helpers/Array/sortBy';
+import Array_sortBy from 'asyma/src/Array/sortBy';
 
-import getPopulatedWords from './partials/getPopulatedWords';
-import getWordsFontSizes from './partials/getWordsFontSizes';
-import getWordCanvasData from './partials/getWordCanvasData';
-import createPlaceBitImageFunction from './partials/createPlaceBitImageFunction';
-import fitWordsIntoCloud from './partials/fitWordsIntoCloud';
+import getPopulatedWords from './getPopulatedWords';
+import getWordsFontSizes from './getWordsFontSizes';
+import getWordCanvasData from './getWordCanvasData';
+import createPlaceBitImageFunction from './createPlaceBitImageFunction';
+import fitWordsIntoCloud from './fitWordsIntoCloud';
 
 export default function(words, cloudWidth, cloudHeight, {
 	text = '',

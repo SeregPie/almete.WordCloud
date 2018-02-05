@@ -1,5 +1,5 @@
-import Math_turnToRad from 'my-helpers/Math/turnToRad';
-import Math_turnToDeg from 'my-helpers/Math/turnToDeg';
+import Math_turnToRad from 'asyma/src/Math/turnToRad';
+import Math_turnToDeg from 'asyma/src/Math/turnToDeg';
 
 import toFont from './toFont';
 import toRotationTurn from './toRotationTurn';
