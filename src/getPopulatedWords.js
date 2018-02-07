@@ -41,6 +41,12 @@ export default function(
 		get font() {
 			return toFont(this.fontStyle, this.fontVariant, this.fontWeight, this.fontSize, this.fontFamily);
 		},
+		get rectWidth() {
+			return Math.ceil((this.textWidth * Math.abs(Math.cos(this.rotationRad)) + this.fontSize * Math.abs(Math.sin(this.rotationRad))));
+		},
+		get rectHeight() {
+			return Math.ceil((this.textWidth * Math.abs(Math.sin(this.rotationRad)) + this.fontSize * Math.abs(Math.cos(this.rotationRad))));
+		},
 		get rectLeft() {
 			return this.left - this.rectWidth / 2;
 		},

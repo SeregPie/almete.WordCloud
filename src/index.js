@@ -2,7 +2,8 @@ import Array_sortBy from 'asyma/src/Array/sortBy';
 
 import getPopulatedWords from './getPopulatedWords';
 import getWordsFontSizes from './getWordsFontSizes';
-import getWordCanvasData from './getWordCanvasData';
+import getWordTextWidth from './getWordTextWidth';
+import getWordImage from './getWordImage';
 import createPlaceBitImageFunction from './createPlaceBitImageFunction';
 import fitWordsIntoCloud from './fitWordsIntoCloud';
 
@@ -37,20 +38,12 @@ export default function(words, cloudWidth, cloudHeight, {
 		let wordsFontSizes = getWordsFontSizes(words, fontSizeRatio);
 		let placeBitImage = createPlaceBitImageFunction([cloudWidth, cloudHeight]);
 		words.forEach((word, index) => {
-			let fontSize = wordsFontSizes[index];
-			Object.assign(word, {fontSize});
-			let [
-				textWidth,
-				rectWidth,
-				rectHeight,
-				image,
-				imageWidth,
-				imageHeight,
-			] = getWordCanvasData(word, spacing, createCanvas);
+			word.fontSize = wordsFontSizes[index];
+			word.textWidth = getWordTextWidth(word, createCanvas);
+			let [image, imageWidth, imageHeight] = getWordImage(word, spacing, createCanvas);
 			let [imageLeft, imageTop] = placeBitImage(image, imageWidth, imageHeight);
-			let left = imageLeft + imageWidth / 2;
-			let top = imageTop + imageHeight / 2;
-			Object.assign(word, {textWidth, rectWidth, rectHeight, left, top});
+			word.left = imageLeft + imageWidth / 2;
+			word.top = imageTop + imageHeight / 2;
 		});
 		fitWordsIntoCloud(words, cloudWidth, cloudHeight);
 		return words;

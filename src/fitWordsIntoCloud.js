@@ -20,9 +20,6 @@ export default function(words, cloudWidth, cloudHeight) {
 
 		word.fontSize *= scaleFactor;
 		word.textWidth *= scaleFactor;
-		word.textHeight *= scaleFactor;
-		word.rectWidth *= scaleFactor;
-		word.rectHeight *= scaleFactor;
 		word.left *= scaleFactor;
 		word.top *= scaleFactor;
 
