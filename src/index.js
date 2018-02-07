@@ -1,5 +1,3 @@
-import Array_sortBy from 'asyma/src/Array/sortBy';
-
 import getPopulatedWords from './getPopulatedWords';
 import getWordsFontSizes from './getWordsFontSizes';
 import getWordTextWidth from './getWordTextWidth';
@@ -34,7 +32,7 @@ export default function(words, cloudWidth, cloudHeight, {
 			fontVariant,
 			fontWeight,
 		);
-		words = Array_sortBy(words, ({weight}) => -weight);
+		words.sort((word, otherWord) => otherWord.weight - word.weight);
 		let wordsFontSizes = getWordsFontSizes(words, fontSizeRatio);
 		let placeBitImage = createPlaceBitImageFunction([cloudWidth, cloudHeight]);
 		words.forEach((word, index) => {
