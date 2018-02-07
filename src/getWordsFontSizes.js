@@ -16,7 +16,7 @@ export default function(words, fontSizeRatio) {
 			return words.map(({weight}) => weight / minWeight);
 		}
 		let minFontSize = 1;
-		let maxFontSize = minFontSize + Math.abs(minWeight) + Math.abs(maxWeight);
+		let maxFontSize = minFontSize + maxWeight - minWeight;
 		return words.map(({weight}) => Math_mapLinear(weight, minWeight, maxWeight, minFontSize, maxFontSize));
 	}
 	return [];
