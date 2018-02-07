@@ -1,27 +1,27 @@
 import getOccupiedBitImagePixels from './getOccupiedBitImagePixels';
 import findPixel from './findPixel';
 
-export default function(spaceAspect) {
-	let space;
+export default function(gridAspect) {
+	let grid;
 	return function(image, imageWidth, imageHeight) {
 		let occupiedImagePixels = getOccupiedBitImagePixels(image, imageWidth, imageHeight);
 		let imageLeft = -Math.floor(imageWidth / 2);
 		let imageTop = -Math.floor(imageHeight / 2);
-		if (space) {
-			[imageLeft, imageTop] = findPixel(spaceAspect, [imageLeft, imageTop], ([imageLeft, imageTop]) => {
+		if (grid) {
+			[imageLeft, imageTop] = findPixel(gridAspect, [imageLeft, imageTop], ([imageLeft, imageTop]) => {
 				return occupiedImagePixels.every(([imagePixelLeft, imagePixelTop]) => {
-					let spacePixelLeft = imageLeft + imagePixelLeft;
-					let spacePixelTop = imageTop + imagePixelTop;
-					return !space[`${spacePixelLeft}|${spacePixelTop}`];
+					let gridPixelLeft = imageLeft + imagePixelLeft;
+					let gridPixelTop = imageTop + imagePixelTop;
+					return !grid[`${gridPixelLeft}|${gridPixelTop}`];
 				});
 			});
 		} else {
-			space = {};
+			grid = {};
 		}
 		occupiedImagePixels.forEach(([imagePixelLeft, imagePixelTop]) => {
-			let spacePixelLeft = imageLeft + imagePixelLeft;
-			let spacePixelTop = imageTop + imagePixelTop;
-			space[`${spacePixelLeft}|${spacePixelTop}`] = true;
+			let gridPixelLeft = imageLeft + imagePixelLeft;
+			let gridPixelTop = imageTop + imagePixelTop;
+			grid[`${gridPixelLeft}|${gridPixelTop}`] = true;
 		});
 		return [imageLeft, imageTop];
 	};
