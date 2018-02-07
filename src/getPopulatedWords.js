@@ -1,7 +1,6 @@
 import Math_turnToRad from 'asyma/src/Math/turnToRad';
 import Math_turnToDeg from 'asyma/src/Math/turnToDeg';
 
-import toFont from './toFont';
 import toRotationTurn from './toRotationTurn';
 
 export default function(
@@ -39,7 +38,7 @@ export default function(
 		fontVariant,
 		fontWeight,
 		get font() {
-			return toFont(this.fontStyle, this.fontVariant, this.fontWeight, this.fontSize, this.fontFamily);
+			return [this.fontStyle, this.fontVariant, this.fontWeight, `${this.fontSize}px`, this.fontFamily].join(' ');
 		},
 		get rectWidth() {
 			return Math.ceil((this.textWidth * Math.abs(Math.cos(this.rotationRad)) + this.fontSize * Math.abs(Math.sin(this.rotationRad))));
