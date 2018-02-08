@@ -1,10 +1,11 @@
 import Array_min from 'asyma/src/Array/min';
 import Array_max from 'asyma/src/Array/max';
+import Math_degToTurn from 'asyma/src/Math/degToTurn';
 import Math_mapLinear from 'asyma/src/Math/mapLinear';
+import Math_radToTurn from 'asyma/src/Math/radToTurn';
 import Math_turnToRad from 'asyma/src/Math/turnToRad';
 import Math_turnToDeg from 'asyma/src/Math/turnToDeg';
 
-import toRotationTurn from './toRotationTurn';
 import getWordTextWidth from './getWordTextWidth';
 import getWordImage from './getWordImage';
 import createPlaceBitImageFunction from './createPlaceBitImageFunction';
@@ -39,7 +40,15 @@ export default function(words, cloudWidth, cloudHeight, {
 		}) => ({
 			text,
 			weight,
-			rotationTurn: toRotationTurn(rotation, rotationUnit),
+			rotationTurn: (() => {
+				switch (rotationUnit) {
+					case 'deg':
+						return Math_degToTurn(rotation);
+					case 'rad':
+						return Math_radToTurn(rotation);
+				}
+				return rotation;
+			})(),
 			get rotationDeg() {
 				return Math_turnToDeg(this.rotationTurn);
 			},
