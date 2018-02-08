@@ -1,12 +1,12 @@
-export default function([width, height], [startLeft, startTop], iteratee) {
+export default function([aspectWidth, aspectHeight], [startLeft, startTop], iteratee) {
 	let stepLeft, stepTop;
-	if (width > height) {
+	if (aspectWidth > aspectHeight) {
 		stepLeft = 1;
-		stepTop = height / width;
+		stepTop = aspectHeight / aspectWidth;
 	} else
-	if (height > width) {
+	if (aspectHeight > aspectWidth) {
 		stepTop = 1;
-		stepLeft = width / height;
+		stepLeft = aspectWidth / aspectHeight;
 	} else {
 		stepLeft = stepTop = 1;
 	}

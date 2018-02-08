@@ -1,49 +1,141 @@
-import getPopulatedWords from './getPopulatedWords';
-import getWordsFontSizes from './getWordsFontSizes';
+import Array_min from 'asyma/src/Array/min';
+import Array_max from 'asyma/src/Array/max';
+import Math_mapLinear from 'asyma/src/Math/mapLinear';
+import Math_turnToRad from 'asyma/src/Math/turnToRad';
+import Math_turnToDeg from 'asyma/src/Math/turnToDeg';
+
+import toRotationTurn from './toRotationTurn';
 import getWordTextWidth from './getWordTextWidth';
 import getWordImage from './getWordImage';
 import createPlaceBitImageFunction from './createPlaceBitImageFunction';
-import fitWordsIntoCloud from './fitWordsIntoCloud';
 
 export default function(words, cloudWidth, cloudHeight, {
-	text = '',
-	weight = 1,
-	rotation = 0,
-	rotationUnit = 'turn',
-	fontFamily = 'serif',
-	fontStyle = 'normal',
-	fontVariant = 'normal',
-	fontWeight = 'normal',
+	text: defaultText = '',
+	weight: defaultWeight = 1,
+	rotation: defaultRotation = 0,
+	rotationUnit: defaultRotationUnit = 'turn',
+	fontFamily: defaultFontFamily = 'serif',
+	fontStyle: defaultFontStyle = 'normal',
+	fontVariant: defaultFontVariant = 'normal',
+	fontWeight: defaultFontWeight = 'normal',
 	spacing = 0,
 	fontSizeRatio = 0,
 	createCanvas = function() {
 		return document.createElement('canvas');
 	},
 } = {}) {
+
 	if (words.length > 0 && cloudWidth > 0 && cloudHeight > 0) {
-		words = getPopulatedWords(
-			words,
+
+		words = words.map(({
+			text = defaultText,
+			weight = defaultWeight,
+			rotation = defaultRotation,
+			rotationUnit = defaultRotationUnit,
+			fontFamily = defaultFontFamily,
+			fontStyle = defaultFontStyle,
+			fontVariant = defaultFontVariant,
+			fontWeight = defaultFontWeight,
+		}) => ({
 			text,
 			weight,
-			rotation,
-			rotationUnit,
+			rotationTurn: toRotationTurn(rotation, rotationUnit),
+			get rotationDeg() {
+				return Math_turnToDeg(this.rotationTurn);
+			},
+			get rotationRad() {
+				return Math_turnToRad(this.rotationTurn);
+			},
 			fontFamily,
 			fontStyle,
 			fontVariant,
 			fontWeight,
-		);
+			get font() {
+				return [this.fontStyle, this.fontVariant, this.fontWeight, `${this.fontSize}px`, this.fontFamily].join(' ');
+			},
+			get rectWidth() {
+				return Math.ceil((this.textWidth * Math.abs(Math.cos(this.rotationRad)) + this.fontSize * Math.abs(Math.sin(this.rotationRad))));
+			},
+			get rectHeight() {
+				return Math.ceil((this.textWidth * Math.abs(Math.sin(this.rotationRad)) + this.fontSize * Math.abs(Math.cos(this.rotationRad))));
+			},
+			get rectLeft() {
+				return this.left - this.rectWidth / 2;
+			},
+			get rectTop() {
+				return this.top - this.rectHeight / 2;
+			},
+		}));
+
+		fontSizeRatio = Math.abs(fontSizeRatio);
+		if (fontSizeRatio > 1) {
+			fontSizeRatio = 1 / fontSizeRatio;
+		}
+
 		words.sort((word, otherWord) => otherWord.weight - word.weight);
-		let wordsFontSizes = getWordsFontSizes(words, fontSizeRatio);
+
+		let maxWeight = words[0].weight;
+		let minWeight = words[words.length - 1].weight;
+		let gridMinFontSize = 1;
+		let gridMaxFontSize = (() => {
+			if (minWeight < maxWeight) {
+				if (fontSizeRatio > 0) {
+					return 1 / fontSizeRatio;
+				}
+				if (minWeight > 0) {
+					return maxWeight / minWeight;
+				}
+				if (maxWeight < 0) {
+					return minWeight / maxWeight;
+				}
+				return gridMinFontSize + maxWeight - minWeight;
+			}
+			return gridMinFontSize;
+		})();
+		if (gridMinFontSize < gridMaxFontSize) {
+			words.forEach(word => {
+				word.fontSize = Math_mapLinear(word.weight, minWeight, maxWeight, gridMinFontSize, gridMaxFontSize);
+			});
+		} else {
+			words.forEach(word => {
+				word.fontSize = gridMinFontSize;
+			});
+		}
+
 		let placeBitImage = createPlaceBitImageFunction([cloudWidth, cloudHeight]);
-		words.forEach((word, index) => {
-			word.fontSize = wordsFontSizes[index];
+		words.forEach(word => {
 			word.textWidth = getWordTextWidth(word, createCanvas);
 			let [image, imageWidth, imageHeight] = getWordImage(word, spacing, createCanvas);
 			let [imageLeft, imageTop] = placeBitImage(image, imageWidth, imageHeight);
 			word.left = imageLeft + imageWidth / 2;
 			word.top = imageTop + imageHeight / 2;
 		});
-		fitWordsIntoCloud(words, cloudWidth, cloudHeight);
+
+		let gridWordsLeft = Array_min(words, ({rectLeft}) => rectLeft);
+		let gridWordsLeftUntil = Array_max(words, ({rectLeft, rectWidth}) => rectLeft + rectWidth);
+		let gridMinWordsWidth = gridWordsLeftUntil - gridWordsLeft;
+		let gridMaxWordsWidth = gridWordsLeftUntil + gridWordsLeft;
+
+		let gridWordsTop = Array_min(words, ({rectTop}) => rectTop);
+		let gridWordsTopUntil = Array_max(words, ({rectTop, rectHeight}) => rectTop + rectHeight);
+		let gridMinWordsHeight = gridWordsTopUntil - gridWordsTop;
+		let gridMaxWordsHeight = gridWordsTopUntil + gridWordsTop;
+
+		let scaleFactor = Math.min(cloudWidth / gridMinWordsWidth, cloudHeight / gridMinWordsHeight);
+
+		words.forEach(word => {
+			word.left -= gridMaxWordsWidth / 2;
+			word.top -= gridMaxWordsHeight / 2;
+
+			word.fontSize *= scaleFactor;
+			word.textWidth *= scaleFactor;
+			word.left *= scaleFactor;
+			word.top *= scaleFactor;
+
+			word.left += cloudWidth / 2;
+			word.top += cloudHeight / 2;
+		});
+
 		return words;
 	}
 	return [];
