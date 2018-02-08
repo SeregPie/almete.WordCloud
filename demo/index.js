@@ -66,7 +66,7 @@
 
 					spacing: {
 						values: [0, 1/4, 1/2, 1, 2],
-						valueIndex: 0,
+						valueIndex: 1,
 					},
 
 					fontSizeRatio: {
