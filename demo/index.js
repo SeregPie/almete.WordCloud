@@ -193,16 +193,17 @@
 					[9, 1, 3],
 					[4, 5, 15],
 					[2, 5, 15],
-					[1, 25, 100],
+					[1, 25, 150],
 				]
 					.reduce(function(returns, item) {
 						var weight = item[0];
-						var min = item[1];
-						var max = item[2];
-						chance.n(chance.word, chance.integer({min: min, max: max}))
-							.forEach(function(word) {
-								returns.push(word + ' ' + weight);
-							});
+						var minCount = item[1];
+						var maxCount = item[2];
+						var count = chance.integer({min: minCount, max: maxCount});
+						var words = chance.n(chance.word, count);
+						words.forEach(function(word) {
+							returns.push(word + ' ' + weight);
+						});
 						return returns;
 					}, [])
 					.join('\n');
