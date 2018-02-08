@@ -6,9 +6,9 @@ import Math_radToTurn from 'asyma/src/Math/radToTurn';
 import Math_turnToRad from 'asyma/src/Math/turnToRad';
 import Math_turnToDeg from 'asyma/src/Math/turnToDeg';
 
-import getWordTextWidth from './getWordTextWidth';
-import getWordImage from './getWordImage';
-import createPlaceBitImageFunction from './createPlaceBitImageFunction';
+import getTextWidth from './getTextWidth';
+import getTextImage from './getTextImage';
+import findPixel from './findPixel';
 
 export default function(words, cloudWidth, cloudHeight, {
 	text: defaultText = '',
@@ -111,14 +111,61 @@ export default function(words, cloudWidth, cloudHeight, {
 			});
 		}
 
-		let placeBitImage = createPlaceBitImageFunction([cloudWidth, cloudHeight]);
-		words.forEach(word => {
-			word.textWidth = getWordTextWidth(word, createCanvas);
-			let [image, imageWidth, imageHeight] = getWordImage(word, spacing, createCanvas);
-			let [imageLeft, imageTop] = placeBitImage(image, imageWidth, imageHeight);
-			word.left = imageLeft + imageWidth / 2;
-			word.top = imageTop + imageHeight / 2;
-		});
+		let word = words[0];
+		word.textWidth = getTextWidth(word.text, word.font, createCanvas);
+		word.left = 0;
+		word.top = 0;
+		if (words.length > 1) {
+			let imagePixels;
+			let imageWidth;
+			let imageHeight;
+			let imageLeft;
+			let imageTop;
+			let setWordImageDate = function() {
+				imageWidth = 2 + word.rectWidth * 2;
+				imageHeight = 2 + word.rectHeight * 2;
+				imageLeft = -Math.floor(imageWidth / 2);
+				imageTop = -Math.floor(imageHeight / 2);
+				let image = getTextImage(
+					word.text,
+					word.font,
+					0,
+					word.rotationRad,
+					imageWidth,
+					imageHeight,
+					createCanvas,
+				);
+				imagePixels = [];
+				for (let pixelLeft = 0; pixelLeft < imageWidth; ++pixelLeft) {
+					for (let pixelTop = 0; pixelTop < imageHeight; ++pixelTop) {
+						if (image[(imageWidth * pixelTop + pixelLeft) * 4 + 3]) {
+							imagePixels.push([pixelLeft, pixelTop]);
+						}
+					}
+				}
+			};
+			setWordImageDate();
+			let grid = {};
+			for (let i = 1, ii = words.length; i < ii; ++i) {
+				imagePixels.forEach(([imagePixelLeft, imagePixelTop]) => {
+					let gridPixelLeft = imageLeft + imagePixelLeft;
+					let gridPixelTop = imageTop + imagePixelTop;
+					grid[`${gridPixelLeft}|${gridPixelTop}`] = true;
+				});
+				word = words[i];
+				word.textWidth = getTextWidth(word.text, word.font, createCanvas);
+				setWordImageDate();
+				[imageLeft, imageTop] = findPixel([cloudWidth, cloudHeight], [imageLeft, imageTop], ([imageLeft, imageTop]) => {
+					return imagePixels.every(([imagePixelLeft, imagePixelTop]) => {
+						let gridPixelLeft = imageLeft + imagePixelLeft;
+						let gridPixelTop = imageTop + imagePixelTop;
+						return !grid[`${gridPixelLeft}|${gridPixelTop}`];
+					});
+				});
+				word.left = imageLeft + imageWidth / 2;
+				word.top = imageTop + imageHeight / 2;
+			}
+		}
 
 		let gridWordsLeft = Array_min(words, ({rectLeft}) => rectLeft);
 		let gridWordsLeftUntil = Array_max(words, ({rectLeft, rectWidth}) => rectLeft + rectWidth);

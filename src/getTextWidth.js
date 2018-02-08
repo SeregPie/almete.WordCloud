@@ -1,4 +1,4 @@
-export default function({text, font}, createCanvas) {
+export default function(text, font, createCanvas) {
 	let canvas = createCanvas();
 	let ctx = canvas.getContext('2d');
 	ctx.font = font;
