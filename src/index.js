@@ -10,6 +10,8 @@ import getTextWidth from './getTextWidth';
 import getTextImage from './getTextImage';
 import findPixel from './findPixel';
 
+const fontSizeBase = 4;
+
 export default function(words, cloudWidth, cloudHeight, {
 	text: defaultText = '',
 	weight: defaultWeight = 1,
@@ -85,29 +87,24 @@ export default function(words, cloudWidth, cloudHeight, {
 
 		let maxWeight = words[0].weight;
 		let minWeight = words[words.length - 1].weight;
-		let gridMinFontSize = 1;
-		let gridMaxFontSize = (() => {
-			if (minWeight < maxWeight) {
-				if (fontSizeRatio > 0) {
-					return 1 / fontSizeRatio;
-				}
-				if (minWeight > 0) {
-					return maxWeight / minWeight;
-				}
-				if (maxWeight < 0) {
-					return minWeight / maxWeight;
-				}
-				return gridMinFontSize + maxWeight - minWeight;
+		if (minWeight < maxWeight) {
+			if (fontSizeRatio > 0) {
+				fontSizeRatio = 1 / fontSizeRatio;
+			} else
+			if (minWeight > 0) {
+				fontSizeRatio = maxWeight / minWeight;
+			} else
+			if (maxWeight < 0) {
+				fontSizeRatio = minWeight / maxWeight;
+			} else {
+				fontSizeRatio = 1 + maxWeight - minWeight;
 			}
-			return gridMinFontSize;
-		})();
-		if (gridMinFontSize < gridMaxFontSize) {
 			words.forEach(word => {
-				word.fontSize = Math_mapLinear(word.weight, minWeight, maxWeight, gridMinFontSize, gridMaxFontSize);
+				word.fontSize = fontSizeBase * Math_mapLinear(word.weight, minWeight, maxWeight, 1, fontSizeRatio);
 			});
 		} else {
 			words.forEach(word => {
-				word.fontSize = gridMinFontSize;
+				word.fontSize = fontSizeBase;
 			});
 		}
 
@@ -129,7 +126,7 @@ export default function(words, cloudWidth, cloudHeight, {
 				let image = getTextImage(
 					word.text,
 					word.font,
-					0,
+					2 * fontSizeBase * spacing,
 					word.rotationRad,
 					imageWidth,
 					imageHeight,
