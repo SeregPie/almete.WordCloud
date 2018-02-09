@@ -10,6 +10,30 @@
 						value: '',
 					},
 
+					rotation: (function() {
+						var values = [
+							function() {
+								return 0;
+							},
+							function() {
+								return 7/8;
+							},
+							function() {
+								return chance.pickone([0, 3/4]);
+							},
+							function() {
+								return chance.pickone([0, 1/8, 3/4, 7/8]);
+							},
+							function() {
+								return Math.random();
+							},
+						];
+						return {
+							values: values,
+							value: chance.pickone(values),
+						};
+					})(),
+
 					fontFamily: (function() {
 						var values = [
 							'Abril Fatface',
@@ -40,30 +64,6 @@
 						};
 					})(),
 
-					rotation: (function() {
-						var values = [
-							function() {
-								return 0;
-							},
-							function() {
-								return 7/8;
-							},
-							function() {
-								return chance.pickone([0, 3/4]);
-							},
-							function() {
-								return chance.pickone([0, 1/8, 3/4, 7/8]);
-							},
-							function() {
-								return Math.random();
-							},
-						];
-						return {
-							values: values,
-							value: chance.pickone(values),
-						};
-					})(),
-
 					spacing: {
 						values: [0, 1/4, 1/2, 1, 2],
 						valueIndex: 1,
@@ -84,10 +84,10 @@
 
 		computed: {
 			words: function() {
-				var formRotationValue = this.form.rotation.value;
-				var formWordsValue = this.form.words.value;
+				var rotationValue = this.form.rotation.value;
+				var wordsValue = this.form.words.value;
 
-				return formWordsValue
+				return wordsValue
 					.split(/[\r\n]+/)
 					.map(function(line) {
 						return /^(.+)\s+(-?\d+)$/.exec(line);
@@ -99,27 +99,31 @@
 						return {
 							text: matched[1],
 							weight: Number.parseInt(matched[2]),
-							rotation: formRotationValue(),
+							rotation: rotationValue(),
 						};
 					});
-			},
-
-			fontFamily: function() {
-				return this.form.fontFamily.value;
 			},
 
 			spacing: function() {
 				var values = this.form.spacing.values;
 				var valueIndex = this.form.spacing.valueIndex;
+				var value = values[valueIndex];
 
-				return values[valueIndex];
+				return value;
+			},
+
+			fontFamily: function() {
+				var value = this.form.fontFamily.value;
+
+				return value;
 			},
 
 			fontSizeRatio: function() {
 				var values = this.form.fontSizeRatio.values;
 				var valueIndex = this.form.fontSizeRatio.valueIndex;
+				var value = values[valueIndex];
 
-				return values[valueIndex];
+				return value;
 			},
 
 			drawWordCloud: function() {
