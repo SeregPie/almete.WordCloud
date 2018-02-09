@@ -70,7 +70,7 @@
 					},
 
 					fontSizeRatio: {
-						values: [0, 1, 2, 4, 8, 16],
+						values: [0, 1, 2, 5, 20],
 						valueIndex: 0,
 					},
 				},
