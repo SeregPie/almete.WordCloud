@@ -1,10 +1,10 @@
-import Array_min from 'asyma/src/Array/min';
-import Array_max from 'asyma/src/Array/max';
-import Math_degToTurn from 'asyma/src/Math/degToTurn';
-import Math_mapLinear from 'asyma/src/Math/mapLinear';
-import Math_radToTurn from 'asyma/src/Math/radToTurn';
-import Math_turnToRad from 'asyma/src/Math/turnToRad';
-import Math_turnToDeg from 'asyma/src/Math/turnToDeg';
+import Array_min from 'x/src/Array/min';
+import Array_max from 'x/src/Array/max';
+import Math_degToTurn from 'x/src/Math/degToTurn';
+import Math_mapLinear from 'x/src/Math/mapLinear';
+import Math_radToTurn from 'x/src/Math/radToTurn';
+import Math_turnToRad from 'x/src/Math/turnToRad';
+import Math_turnToDeg from 'x/src/Math/turnToDeg';
 
 import getTextWidth from './getTextWidth';
 import getTextImage from './getTextImage';

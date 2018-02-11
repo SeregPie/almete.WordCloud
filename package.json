@@ -8,6 +8,10 @@
 		"dev": "rollup -c -w",
 		"prepublishOnly": "npm run build"
 	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/SeregPie/almete.VueWordCloud.git"
+	},
 	"keywords": [
 		"algorithm",
 		"array",
@@ -26,11 +30,11 @@
 	},
 	"homepage": "https://github.com/SeregPie/almete.WordCloud#readme",
 	"devDependencies": {
-		"asyma": "^18.2.5",
 		"eslint": "^4.17.0",
-		"rollup": "^0.55.3",
-		"rollup-plugin-buble": "^0.18.0",
+		"rollup": "^0.55.5",
+		"rollup-plugin-buble": "^0.19.1",
 		"rollup-plugin-node-resolve": "^3.0.2",
-		"rollup-plugin-uglify": "^3.0.0"
+		"rollup-plugin-uglify": "^3.0.0",
+		"x": "github:SeregPie/MyJavaScriptHelpers"
 	}
 }
