@@ -23,5 +23,13 @@ export default function(
 		ctx.strokeText(text, 0, 0);
 	}
 	let image = ctx.getImageData(0, 0, canvasWidth, canvasHeight).data;
-	return image;
+	let imagePixels = [];
+	for (let pixelLeft = 0; pixelLeft < canvasWidth; ++pixelLeft) {
+		for (let pixelTop = 0; pixelTop < canvasHeight; ++pixelTop) {
+			if (image[(canvasWidth * pixelTop + pixelLeft) * 4 + 3]) {
+				imagePixels.push([pixelLeft, pixelTop]);
+			}
+		}
+	}
+	return imagePixels;
 }

@@ -7,7 +7,7 @@ import Math_turnToRad from 'x/src/Math/turnToRad';
 import Math_turnToDeg from 'x/src/Math/turnToDeg';
 
 import getTextWidth from './getTextWidth';
-import getTextImage from './getTextImage';
+import getTextImagePixels from './getTextImagePixels';
 import findPixel from './findPixel';
 
 const fontSizeBase = 4;
@@ -113,37 +113,22 @@ export default function(words, cloudWidth, cloudHeight, {
 		word.left = 0;
 		word.top = 0;
 		if (words.length > 1) {
+			let grid = {};
+			let imageWidth = 2 + word.rectWidth * 2;
+			let imageHeight = 2 + word.rectHeight * 2;
 			let imagePixels;
-			let imageWidth;
-			let imageHeight;
-			let imageLeft;
-			let imageTop;
-			let setWordImageDate = function() {
-				imageWidth = 2 + word.rectWidth * 2;
-				imageHeight = 2 + word.rectHeight * 2;
-				imageLeft = -Math.floor(imageWidth / 2);
-				imageTop = -Math.floor(imageHeight / 2);
-				let image = getTextImage(
+			let imageLeft = -Math.floor(imageWidth / 2);
+			let imageTop = -Math.floor(imageHeight / 2);
+			for (let i = 1, ii = words.length; i < ii; ++i) {
+				imagePixels = getTextImagePixels(
 					word.text,
 					word.font,
-					2 * fontSizeBase * spacing,
+					0,
 					word.rotationRad,
 					imageWidth,
 					imageHeight,
 					createCanvas,
 				);
-				imagePixels = [];
-				for (let pixelLeft = 0; pixelLeft < imageWidth; ++pixelLeft) {
-					for (let pixelTop = 0; pixelTop < imageHeight; ++pixelTop) {
-						if (image[(imageWidth * pixelTop + pixelLeft) * 4 + 3]) {
-							imagePixels.push([pixelLeft, pixelTop]);
-						}
-					}
-				}
-			};
-			setWordImageDate();
-			let grid = {};
-			for (let i = 1, ii = words.length; i < ii; ++i) {
 				imagePixels.forEach(([imagePixelLeft, imagePixelTop]) => {
 					let gridPixelLeft = imageLeft + imagePixelLeft;
 					let gridPixelTop = imageTop + imagePixelTop;
@@ -151,7 +136,19 @@ export default function(words, cloudWidth, cloudHeight, {
 				});
 				word = words[i];
 				word.textWidth = getTextWidth(word.text, word.font, createCanvas);
-				setWordImageDate();
+				imageWidth = 2 + word.rectWidth * 2;
+				imageHeight = 2 + word.rectHeight * 2;
+				imagePixels = getTextImagePixels(
+					word.text,
+					word.font,
+					word.fontSize * spacing * 2,
+					word.rotationRad,
+					imageWidth,
+					imageHeight,
+					createCanvas,
+				);
+				imageLeft = -Math.floor(imageWidth / 2);
+				imageTop = -Math.floor(imageHeight / 2);
 				[imageLeft, imageTop] = findPixel([cloudWidth, cloudHeight], [imageLeft, imageTop], ([imageLeft, imageTop]) => {
 					return imagePixels.every(([imagePixelLeft, imagePixelTop]) => {
 						let gridPixelLeft = imageLeft + imagePixelLeft;

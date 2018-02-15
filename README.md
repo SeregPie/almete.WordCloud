@@ -10,6 +10,7 @@ almete.WordCloud(words, cloudWidth, cloudHeight, {
   fontStyle = 'normal',
   fontVariant = 'normal',
   fontWeight = 'normal',
+  spacing = 0,
   fontSizeRatio = 0,
   createCanvas = function() {
     return document.createElement('canvas');
@@ -27,11 +28,12 @@ Generates a cloud out of the words.
 | `text` | Default text for each word. |
 | `weight` | Default weight for each word. |
 | `rotation` | Default rotation of each word. |
-| `rotationUnit` | Default rotation unit of each word.<br/>Possible values are `'turn'`, `'deg'` and `'rad'`. |
+| `rotationUnit` | Default rotation unit of each word. Possible values are `'turn'`, `'deg'` and `'rad'`. |
 | `fontFamily` | Default font family for each word. |
 | `fontStyle` | Default font style for each word. |
 | `fontVariant` | Default font variant for each word. |
 | `fontWeight` | Default font weight for each word. |
+| `spacing` | Spacing between the words. The value is relative to the font size. |
 | `fontSizeRatio` | Font size ratio between the words. For example, if the value is `5`, then the largest word will be 5 times larger than the smallest one. The value `5` has the same effect as the value `1/5`. |
 | `createCanvas` | Function that returns a new `canvas` instance. |
 
