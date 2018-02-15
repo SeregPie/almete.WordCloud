@@ -72,7 +72,10 @@
 						color="deep-orange"
 						hide-details
 					>
-						<template slot="item" slot-scope="data">
+						<template
+							slot="item"
+							slot-scope="data"
+						>
 							<span :style="{fontFamily: data.item}">
 								{{ data.item }}
 							</span>
@@ -148,7 +151,13 @@
 					</v-btn-toggle>
 				</div>
 				<div style="padding: 8px;">
-					<div style="display: flex; justify-content: space-between; align-items: center;">
+					<div
+						style="
+							display: flex;
+							justify-content: space-between;
+							align-items: center;
+						"
+					>
 						<div class="subheading grey--text text--darken-1">
 							spacing
 						</div>
@@ -170,7 +179,13 @@
 					></v-slider>
 				</div>
 				<div style="padding: 8px;">
-					<div style="display: flex; justify-content: space-between; align-items: center;">
+					<div
+						style="
+							display: flex;
+							justify-content: space-between;
+							align-items: center;
+						"
+					>
 						<div class="subheading grey--text text--darken-1">
 							font size ratio
 						</div>
@@ -215,7 +230,10 @@
 					fill-height
 				>
 					<vue-resize-sensor
-					 	style="width: 100%; height: 100%;"
+					 	style="
+							width: 100%;
+							height: 100%;
+						"
 					 	@resize="onCanvasContainerResize"
 					>
 						<canvas
