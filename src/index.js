@@ -3,7 +3,7 @@ import Array_max from 'x/src/Array/max';
 import Math_mapLinear from 'x/src/Math/mapLinear';
 
 import createPopulatedWords from './createPopulatedWords';
-import findPixel from './findPixel';
+import createPixelGrid from './createPixelGrid';
 
 const fontSizeBase = 4;
 
@@ -69,43 +69,33 @@ export default function(words, cloudWidth, cloudHeight, {
 		}
 
 		if (words.length > 1) {
-			let grid = {};
+			let grid = createPixelGrid([cloudWidth, cloudHeight]);
 			words.reduce((previousWord, word) => {
 				previousWord.padding = 0;
-				previousWord.imagePixels.forEach(([imagePixelLeft, imagePixelTop]) => {
-					let gridPixelLeft = previousWord.imageLeft + imagePixelLeft;
-					let gridPixelTop = previousWord.imageTop + imagePixelTop;
-					grid[`${gridPixelLeft}|${gridPixelTop}`] = true;
-				});
+				grid.placePixels(previousWord.imagePixels, previousWord.imageLeft, previousWord.imageTop);
 				word.padding = spacing;
-				let [imageLeft, imageTop] = findPixel([cloudWidth, cloudHeight], [word.imageLeft, word.imageTop], ([imageLeft, imageTop]) => {
-					return word.imagePixels.every(([imagePixelLeft, imagePixelTop]) => {
-						let gridPixelLeft = imageLeft + imagePixelLeft;
-						let gridPixelTop = imageTop + imagePixelTop;
-						return !grid[`${gridPixelLeft}|${gridPixelTop}`];
-					});
-				});
+				let [imageLeft, imageTop] = grid.fitPixels(word.imagePixels, word.imageLeft, word.imageTop);
 				word.imageLeft = imageLeft;
 				word.imageTop = imageTop;
 				return word;
 			});
 		}
 
-		let gridWordsLeft = Array_min(words, ({rectLeft}) => rectLeft);
-		let gridWordsLeftUntil = Array_max(words, ({rectLeft, rectWidth}) => rectLeft + rectWidth);
-		let gridMinWordsWidth = gridWordsLeftUntil - gridWordsLeft;
-		let gridMaxWordsWidth = gridWordsLeftUntil + gridWordsLeft;
+		let wordsLeft = Array_min(words, ({rectLeft}) => rectLeft);
+		let wordsLeftUntil = Array_max(words, ({rectLeft, rectWidth}) => rectLeft + rectWidth);
+		let minWordsWidth = wordsLeftUntil - wordsLeft;
+		let maxWordsWidth = wordsLeftUntil + wordsLeft;
 
-		let gridWordsTop = Array_min(words, ({rectTop}) => rectTop);
-		let gridWordsTopUntil = Array_max(words, ({rectTop, rectHeight}) => rectTop + rectHeight);
-		let gridMinWordsHeight = gridWordsTopUntil - gridWordsTop;
-		let gridMaxWordsHeight = gridWordsTopUntil + gridWordsTop;
+		let wordsTop = Array_min(words, ({rectTop}) => rectTop);
+		let wordsTopUntil = Array_max(words, ({rectTop, rectHeight}) => rectTop + rectHeight);
+		let minWordsHeight = wordsTopUntil - wordsTop;
+		let maxWordsHeight = wordsTopUntil + wordsTop;
 
-		let scaleFactor = Math.min(cloudWidth / gridMinWordsWidth, cloudHeight / gridMinWordsHeight);
+		let scaleFactor = Math.min(cloudWidth / minWordsWidth, cloudHeight / minWordsHeight);
 
 		words.forEach(word => {
-			word.left -= gridMaxWordsWidth / 2;
-			word.top -= gridMaxWordsHeight / 2;
+			word.left -= maxWordsWidth / 2;
+			word.top -= maxWordsHeight / 2;
 
 			word.fontSize *= scaleFactor;
 			word.left *= scaleFactor;
