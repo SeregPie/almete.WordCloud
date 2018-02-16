@@ -1,7 +1,7 @@
 export default function(
 	text,
-	font,
 	lineWidth,
+	font,
 	rotation,
 	canvasWidth,
 	canvasHeight,

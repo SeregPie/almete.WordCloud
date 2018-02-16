@@ -1,26 +1,21 @@
 import Array_min from 'x/src/Array/min';
 import Array_max from 'x/src/Array/max';
-import Math_degToTurn from 'x/src/Math/degToTurn';
 import Math_mapLinear from 'x/src/Math/mapLinear';
-import Math_radToTurn from 'x/src/Math/radToTurn';
-import Math_turnToRad from 'x/src/Math/turnToRad';
-import Math_turnToDeg from 'x/src/Math/turnToDeg';
 
-import getTextWidth from './getTextWidth';
-import getTextImagePixels from './getTextImagePixels';
+import createPopulatedWords from './createPopulatedWords';
 import findPixel from './findPixel';
 
 const fontSizeBase = 4;
 
 export default function(words, cloudWidth, cloudHeight, {
-	text: defaultText = '',
-	weight: defaultWeight = 1,
-	rotation: defaultRotation = 0,
-	rotationUnit: defaultRotationUnit = 'turn',
-	fontFamily: defaultFontFamily = 'serif',
-	fontStyle: defaultFontStyle = 'normal',
-	fontVariant: defaultFontVariant = 'normal',
-	fontWeight: defaultFontWeight = 'normal',
+	text = '',
+	weight = 1,
+	rotation = 0,
+	rotationUnit = 'turn',
+	fontFamily = 'serif',
+	fontStyle = 'normal',
+	fontVariant= 'normal',
+	fontWeight = 'normal',
 	spacing = 0,
 	fontSizeRatio = 0,
 	createCanvas = function() {
@@ -30,53 +25,18 @@ export default function(words, cloudWidth, cloudHeight, {
 
 	if (words.length > 0 && cloudWidth > 0 && cloudHeight > 0) {
 
-		words = words.map(({
-			text = defaultText,
-			weight = defaultWeight,
-			rotation = defaultRotation,
-			rotationUnit = defaultRotationUnit,
-			fontFamily = defaultFontFamily,
-			fontStyle = defaultFontStyle,
-			fontVariant = defaultFontVariant,
-			fontWeight = defaultFontWeight,
-		}) => ({
+		words = createPopulatedWords(
+			words,
 			text,
 			weight,
-			rotationTurn: (() => {
-				switch (rotationUnit) {
-					case 'deg':
-						return Math_degToTurn(rotation);
-					case 'rad':
-						return Math_radToTurn(rotation);
-				}
-				return rotation;
-			})(),
-			get rotationDeg() {
-				return Math_turnToDeg(this.rotationTurn);
-			},
-			get rotationRad() {
-				return Math_turnToRad(this.rotationTurn);
-			},
+			rotation,
+			rotationUnit,
 			fontFamily,
 			fontStyle,
 			fontVariant,
 			fontWeight,
-			get font() {
-				return [this.fontStyle, this.fontVariant, this.fontWeight, `${this.fontSize}px`, this.fontFamily].join(' ');
-			},
-			get rectWidth() {
-				return Math.ceil((this.textWidth * Math.abs(Math.cos(this.rotationRad)) + this.fontSize * Math.abs(Math.sin(this.rotationRad))));
-			},
-			get rectHeight() {
-				return Math.ceil((this.textWidth * Math.abs(Math.sin(this.rotationRad)) + this.fontSize * Math.abs(Math.cos(this.rotationRad))));
-			},
-			get rectLeft() {
-				return this.left - this.rectWidth / 2;
-			},
-			get rectTop() {
-				return this.top - this.rectHeight / 2;
-			},
-		}));
+			createCanvas,
+		);
 
 		fontSizeRatio = Math.abs(fontSizeRatio);
 		if (fontSizeRatio > 1) {
@@ -108,57 +68,27 @@ export default function(words, cloudWidth, cloudHeight, {
 			});
 		}
 
-		let word = words[0];
-		word.textWidth = getTextWidth(word.text, word.font, createCanvas);
-		word.left = 0;
-		word.top = 0;
 		if (words.length > 1) {
 			let grid = {};
-			let imageWidth = 2 + word.rectWidth * 2;
-			let imageHeight = 2 + word.rectHeight * 2;
-			let imagePixels;
-			let imageLeft = -Math.floor(imageWidth / 2);
-			let imageTop = -Math.floor(imageHeight / 2);
-			for (let i = 1, ii = words.length; i < ii; ++i) {
-				imagePixels = getTextImagePixels(
-					word.text,
-					word.font,
-					0,
-					word.rotationRad,
-					imageWidth,
-					imageHeight,
-					createCanvas,
-				);
-				imagePixels.forEach(([imagePixelLeft, imagePixelTop]) => {
-					let gridPixelLeft = imageLeft + imagePixelLeft;
-					let gridPixelTop = imageTop + imagePixelTop;
+			words.reduce((previousWord, word) => {
+				previousWord.padding = 0;
+				previousWord.imagePixels.forEach(([imagePixelLeft, imagePixelTop]) => {
+					let gridPixelLeft = previousWord.imageLeft + imagePixelLeft;
+					let gridPixelTop = previousWord.imageTop + imagePixelTop;
 					grid[`${gridPixelLeft}|${gridPixelTop}`] = true;
 				});
-				word = words[i];
-				word.textWidth = getTextWidth(word.text, word.font, createCanvas);
-				imageWidth = 2 + word.rectWidth * 2;
-				imageHeight = 2 + word.rectHeight * 2;
-				imagePixels = getTextImagePixels(
-					word.text,
-					word.font,
-					word.fontSize * spacing * 2,
-					word.rotationRad,
-					imageWidth,
-					imageHeight,
-					createCanvas,
-				);
-				imageLeft = -Math.floor(imageWidth / 2);
-				imageTop = -Math.floor(imageHeight / 2);
-				[imageLeft, imageTop] = findPixel([cloudWidth, cloudHeight], [imageLeft, imageTop], ([imageLeft, imageTop]) => {
-					return imagePixels.every(([imagePixelLeft, imagePixelTop]) => {
+				word.padding = spacing;
+				let [imageLeft, imageTop] = findPixel([cloudWidth, cloudHeight], [word.imageLeft, word.imageTop], ([imageLeft, imageTop]) => {
+					return word.imagePixels.every(([imagePixelLeft, imagePixelTop]) => {
 						let gridPixelLeft = imageLeft + imagePixelLeft;
 						let gridPixelTop = imageTop + imagePixelTop;
 						return !grid[`${gridPixelLeft}|${gridPixelTop}`];
 					});
 				});
-				word.left = imageLeft + imageWidth / 2;
-				word.top = imageTop + imageHeight / 2;
-			}
+				word.imageLeft = imageLeft;
+				word.imageTop = imageTop;
+				return word;
+			});
 		}
 
 		let gridWordsLeft = Array_min(words, ({rectLeft}) => rectLeft);
@@ -178,7 +108,6 @@ export default function(words, cloudWidth, cloudHeight, {
 			word.top -= gridMaxWordsHeight / 2;
 
 			word.fontSize *= scaleFactor;
-			word.textWidth *= scaleFactor;
 			word.left *= scaleFactor;
 			word.top *= scaleFactor;
 
