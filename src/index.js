@@ -2,20 +2,20 @@ import Array_min from 'x/src/Array/min';
 import Array_max from 'x/src/Array/max';
 import Math_mapLinear from 'x/src/Math/mapLinear';
 
-import createPopulatedWords from './createPopulatedWords';
-import createPixelGrid from './createPixelGrid';
+import CloudWord from './CloudWord';
+import CloudGrid from './CloudGrid';
 
 const fontSizeBase = 4;
 
 export default function(words, cloudWidth, cloudHeight, {
-	text = '',
-	weight = 1,
-	rotation = 0,
-	rotationUnit = 'turn',
-	fontFamily = 'serif',
-	fontStyle = 'normal',
-	fontVariant= 'normal',
-	fontWeight = 'normal',
+	text: defaultText = '',
+	weight: defaultWeight = 1,
+	rotation: defaultRotation = 0,
+	rotationUnit: defaultRotationUnit = 'turn',
+	fontFamily: defaultFontFamily = 'serif',
+	fontStyle: defaultFontStyle = 'normal',
+	fontVariant: defaultFontVariant= 'normal',
+	fontWeight: defaultFontWeight = 'normal',
 	spacing = 0,
 	fontSizeRatio = 0,
 	createCanvas = function() {
@@ -25,28 +25,37 @@ export default function(words, cloudWidth, cloudHeight, {
 
 	if (words.length > 0 && cloudWidth > 0 && cloudHeight > 0) {
 
-		words = createPopulatedWords(
-			words,
+		words = words.map(({
+			text = defaultText,
+			weight = defaultWeight,
+			rotation = defaultRotation,
+			rotationUnit = defaultRotationUnit,
+			fontFamily = defaultFontFamily,
+			fontStyle = defaultFontStyle,
+			fontVariant = defaultFontVariant,
+			fontWeight = defaultFontWeight,
+		}) => new CloudWord(
 			text,
 			weight,
 			rotation,
 			rotationUnit,
-			fontFamily,
 			fontStyle,
 			fontVariant,
 			fontWeight,
+			fontSizeBase,
+			fontFamily,
 			createCanvas,
-		);
+		));
 
 		fontSizeRatio = Math.abs(fontSizeRatio);
 		if (fontSizeRatio > 1) {
 			fontSizeRatio = 1 / fontSizeRatio;
 		}
 
-		words.sort((word, otherWord) => otherWord.weight - word.weight);
+		words.sort((word, otherWord) => otherWord.$weight - word.$weight);
 
-		let maxWeight = words[0].weight;
-		let minWeight = words[words.length - 1].weight;
+		let maxWeight = words[0].$weight;
+		let minWeight = words[words.length - 1].$weight;
 		if (minWeight < maxWeight) {
 			if (fontSizeRatio > 0) {
 				fontSizeRatio = 1 / fontSizeRatio;
@@ -60,50 +69,62 @@ export default function(words, cloudWidth, cloudHeight, {
 				fontSizeRatio = 1 + maxWeight - minWeight;
 			}
 			words.forEach(word => {
-				word.fontSize = fontSizeBase * Math_mapLinear(word.weight, minWeight, maxWeight, 1, fontSizeRatio);
-			});
-		} else {
-			words.forEach(word => {
-				word.fontSize = fontSizeBase;
+				word.$fontSize *= Math_mapLinear(word.$weight, minWeight, maxWeight, 1, fontSizeRatio);
 			});
 		}
 
-		if (words.length > 1) {
-			let grid = createPixelGrid([cloudWidth, cloudHeight]);
-			words.reduce((previousWord, word) => {
-				previousWord.padding = 0;
-				grid.placePixels(previousWord.imagePixels, previousWord.imageLeft, previousWord.imageTop);
-				word.padding = spacing;
-				let [imageLeft, imageTop] = grid.fitPixels(word.imagePixels, word.imageLeft, word.imageTop);
-				word.imageLeft = imageLeft;
-				word.imageTop = imageTop;
-				return word;
-			});
-		}
+		let grid = new CloudGrid([cloudWidth, cloudHeight]);
+		words.reduce((previousWord, word) => {
+			previousWord.$relativePadding = 0;
+			grid.$put(previousWord.$imagePixels, previousWord.$imageLeft, previousWord.$imageTop);
+			word.$relativePadding = spacing;
+			let [imageLeft, imageTop] = grid.$findFit(word.$imagePixels, word.$imageLeft, word.$imageTop);
+			word.$imageLeft = imageLeft;
+			word.$imageTop = imageTop;
+			return word;
+		});
 
-		let wordsLeft = Array_min(words, ({rectLeft}) => rectLeft);
-		let wordsLeftUntil = Array_max(words, ({rectLeft, rectWidth}) => rectLeft + rectWidth);
+		let wordsLeft = Array_min(words, ({$rectLeft}) => $rectLeft);
+		let wordsLeftUntil = Array_max(words, ({$rectLeft, $rectWidth}) => $rectLeft + $rectWidth);
 		let minWordsWidth = wordsLeftUntil - wordsLeft;
 		let maxWordsWidth = wordsLeftUntil + wordsLeft;
 
-		let wordsTop = Array_min(words, ({rectTop}) => rectTop);
-		let wordsTopUntil = Array_max(words, ({rectTop, rectHeight}) => rectTop + rectHeight);
+		let wordsTop = Array_min(words, ({$rectTop}) => $rectTop);
+		let wordsTopUntil = Array_max(words, ({$rectTop, $rectHeight}) => $rectTop + $rectHeight);
 		let minWordsHeight = wordsTopUntil - wordsTop;
 		let maxWordsHeight = wordsTopUntil + wordsTop;
 
 		let scaleFactor = Math.min(cloudWidth / minWordsWidth, cloudHeight / minWordsHeight);
 
 		words.forEach(word => {
-			word.left -= maxWordsWidth / 2;
-			word.top -= maxWordsHeight / 2;
+			word.$left -= maxWordsWidth / 2;
+			word.$top -= maxWordsHeight / 2;
 
-			word.fontSize *= scaleFactor;
-			word.left *= scaleFactor;
-			word.top *= scaleFactor;
+			word.$scale(scaleFactor);
 
-			word.left += cloudWidth / 2;
-			word.top += cloudHeight / 2;
+			word.$left += cloudWidth / 2;
+			word.$top += cloudHeight / 2;
 		});
+
+		words = words.map(word => ({
+			text: word.$text,
+			rotationTurn: word.$rotationTurn,
+			rotationDeg: word.$rotationDeg,
+			rotationRad: word.$rotationRad,
+			fontStyle: word.$fontStyle,
+			fontVariant: word.$fontVariant,
+			fontWeight: word.$fontWeight,
+			fontSize: word.$fontSize,
+			fontFamily: word.$fontFamily,
+			font: word.$font,
+			textWidth: word.$textWidth,
+			rectWidth: word.$rectWidth,
+			rectHeight: word.$rectHeight,
+			rectLeft: word.$rectLeft,
+			rectTop: word.$rectTop,
+			left: word.$left,
+			top: word.$top,
+		}));
 
 		return words;
 	}
