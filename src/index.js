@@ -3,7 +3,7 @@ import Array_max from 'x/src/Array/max';
 import Math_mapLinear from 'x/src/Math/mapLinear';
 
 import CloudWord from './CloudWord';
-import CloudGrid from './CloudGrid';
+import PixelGrid from './PixelGrid';
 
 const fontSizeBase = 4;
 
@@ -39,11 +39,10 @@ export default function(words, cloudWidth, cloudHeight, {
 			weight,
 			rotation,
 			rotationUnit,
+			fontFamily,
 			fontStyle,
 			fontVariant,
 			fontWeight,
-			fontSizeBase,
-			fontFamily,
 			createCanvas,
 		));
 
@@ -52,47 +51,56 @@ export default function(words, cloudWidth, cloudHeight, {
 			fontSizeRatio = 1 / fontSizeRatio;
 		}
 
-		words.sort((word, otherWord) => otherWord.$weight - word.$weight);
+		words.sort((word, otherWord) =>
+			otherWord.$weight - word.$weight
+			||
+			otherWord.$textWidth - word.$textWidth
+		);
 
 		let maxWeight = words[0].$weight;
 		let minWeight = words[words.length - 1].$weight;
 		if (minWeight < maxWeight) {
-			if (fontSizeRatio > 0) {
-				fontSizeRatio = 1 / fontSizeRatio;
-			} else
-			if (minWeight > 0) {
-				fontSizeRatio = maxWeight / minWeight;
-			} else
-			if (maxWeight < 0) {
-				fontSizeRatio = minWeight / maxWeight;
-			} else {
-				fontSizeRatio = 1 + maxWeight - minWeight;
-			}
+			let fontSizeRange = (() => {
+				if (fontSizeRatio > 0) {
+					return 1 / fontSizeRatio;
+				}
+				if (minWeight > 0) {
+					return maxWeight / minWeight;
+				}
+				if (maxWeight < 0) {
+					return minWeight / maxWeight;
+				}
+				return 1 + maxWeight - minWeight;
+			})();
 			words.forEach(word => {
-				word.$fontSize *= Math_mapLinear(word.$weight, minWeight, maxWeight, 1, fontSizeRatio);
+				word.$scaleFactor *= Math_mapLinear(word.$weight, minWeight, maxWeight, 1, fontSizeRange);
 			});
 		}
 
-		let grid = new CloudGrid([cloudWidth, cloudHeight]);
+		words.forEach(word => {
+			word.$scaleFactor *= fontSizeBase;
+		});
+
+		let grid = new PixelGrid([cloudWidth, cloudHeight]);
 		words.reduce((previousWord, word) => {
-			previousWord.$relativePadding = 0;
 			grid.$put(previousWord.$imagePixels, previousWord.$imageLeft, previousWord.$imageTop);
 			word.$relativePadding = spacing;
 			let [imageLeft, imageTop] = grid.$findFit(word.$imagePixels, word.$imageLeft, word.$imageTop);
 			word.$imageLeft = imageLeft;
 			word.$imageTop = imageTop;
+			word.$relativePadding = 0;
 			return word;
 		});
 
-		let wordsLeft = Array_min(words, ({$rectLeft}) => $rectLeft);
-		let wordsLeftUntil = Array_max(words, ({$rectLeft, $rectWidth}) => $rectLeft + $rectWidth);
-		let minWordsWidth = wordsLeftUntil - wordsLeft;
-		let maxWordsWidth = wordsLeftUntil + wordsLeft;
+		let minWordsLeft = Array_min(words, ({$boundingBoxLeft}) => $boundingBoxLeft);
+		let maxWordsLeft = Array_max(words, ({$boundingBoxLeft, $boundingBoxWidth}) => $boundingBoxLeft + $boundingBoxWidth);
+		let minWordsWidth = maxWordsLeft - minWordsLeft;
+		let maxWordsWidth = maxWordsLeft + minWordsLeft;
 
-		let wordsTop = Array_min(words, ({$rectTop}) => $rectTop);
-		let wordsTopUntil = Array_max(words, ({$rectTop, $rectHeight}) => $rectTop + $rectHeight);
-		let minWordsHeight = wordsTopUntil - wordsTop;
-		let maxWordsHeight = wordsTopUntil + wordsTop;
+		let minWordsTop = Array_min(words, ({$boundingBoxTop}) => $boundingBoxTop);
+		let maxWordsTop = Array_max(words, ({$boundingBoxTop, $boundingBoxHeight}) => $boundingBoxTop + $boundingBoxHeight);
+		let minWordsHeight = maxWordsTop - minWordsTop;
+		let maxWordsHeight = maxWordsTop + minWordsTop;
 
 		let scaleFactor = Math.min(cloudWidth / minWordsWidth, cloudHeight / minWordsHeight);
 
@@ -100,7 +108,7 @@ export default function(words, cloudWidth, cloudHeight, {
 			word.$left -= maxWordsWidth / 2;
 			word.$top -= maxWordsHeight / 2;
 
-			word.$scale(scaleFactor);
+			word.$scaleFactor *= scaleFactor;
 
 			word.$left += cloudWidth / 2;
 			word.$top += cloudHeight / 2;
@@ -118,10 +126,10 @@ export default function(words, cloudWidth, cloudHeight, {
 			fontFamily: word.$fontFamily,
 			font: word.$font,
 			textWidth: word.$textWidth,
-			rectWidth: word.$rectWidth,
-			rectHeight: word.$rectHeight,
-			rectLeft: word.$rectLeft,
-			rectTop: word.$rectTop,
+			boundingBoxWidth: word.$boundingBoxWidth,
+			boundingBoxHeight: word.$boundingBoxHeight,
+			boundingBoxLeft: word.$boundingBoxLeft,
+			boundingBoxTop: word.$boundingBoxTop,
 			left: word.$left,
 			top: word.$top,
 		}));
