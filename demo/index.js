@@ -130,35 +130,32 @@
 				var outerToken;
 				return function(canvas, canvasWidth, canvasHeight, words, fontFamily, spacing, fontSizeRatio) {
 					var innerToken = outerToken = {};
-					return Promise.resolve()
+					(new FontFaceObserver(fontFamily)).load()
+						.catch(function() {})
 						.then(function() {
-							return (new FontFaceObserver(fontFamily)).load()
-								.catch(function() {})
-								.then(function() {
-									if (innerToken === outerToken) {
-										var ctx = canvas.getContext('2d');
-										ctx.clearRect(0, 0, canvas.width, canvas.height);
-										var boundedWords = almete.WordCloud(words, canvasWidth, canvasHeight, {
-											rotationUnit: 'turn',
-											fontFamily: fontFamily,
-											spacing: spacing,
-											fontSizeRatio: fontSizeRatio,
-										});
-										canvas.width = canvasWidth;
-										canvas.height = canvasHeight;
-										boundedWords.forEach(function(cloudWord) {
-											ctx.save();
-											ctx.translate(cloudWord.left, cloudWord.top);
-											ctx.rotate(cloudWord.rotationRad);
-											ctx.font = cloudWord.font;
-											ctx.textAlign = 'center';
-											ctx.textBaseline = 'middle';
-											ctx.fillStyle = 'Grey';
-											ctx.fillText(cloudWord.text, 0, 0);
-											ctx.restore();
-										});
-									}
+							if (innerToken === outerToken) {
+								var ctx = canvas.getContext('2d');
+								ctx.clearRect(0, 0, canvas.width, canvas.height);
+								var boundedWords = almete.WordCloud(words, canvasWidth, canvasHeight, {
+									rotationUnit: 'turn',
+									fontFamily: fontFamily,
+									spacing: spacing,
+									fontSizeRatio: fontSizeRatio,
 								});
+								canvas.width = canvasWidth;
+								canvas.height = canvasHeight;
+								boundedWords.forEach(function(boundedWord) {
+									ctx.save();
+									ctx.translate(boundedWord.left, boundedWord.top);
+									ctx.rotate(boundedWord.rotationRad);
+									ctx.font = boundedWord.font;
+									ctx.textAlign = 'center';
+									ctx.textBaseline = 'middle';
+									ctx.fillStyle = 'Grey';
+									ctx.fillText(boundedWord.text, 0, 0);
+									ctx.restore();
+								});
+							}
 						});
 				};
 			},
@@ -175,7 +172,7 @@
 
 				if (canvas) {
 					return setTimeout(function() {
-						return this.drawWordCloud(canvas, canvasWidth, canvasHeight, words, fontFamily, spacing, fontSizeRatio);
+						this.drawWordCloud(canvas, canvasWidth, canvasHeight, words, fontFamily, spacing, fontSizeRatio);
 					}.bind(this), 1000);
 				}
 			},
