@@ -1,3 +1,6 @@
+import Array_min from 'x/src/Array/min';
+import Array_max from 'x/src/Array/max';
+
 export default function(text, font, lineWidth, rotation, canvasWidth, canvasHeight, createCanvas) {
 	let canvas = createCanvas();
 	let ctx = canvas.getContext('2d');
@@ -23,9 +26,18 @@ export default function(text, font, lineWidth, rotation, canvasWidth, canvasHeig
 			}
 		}
 	}
-	let imageWidth = canvasWidth;
-	let imageHeight = canvasHeight;
-	let imageLeftShift = canvasWidth / 2;
-	let imageTopShift = canvasHeight / 2;
-	return [imagePixels, imageWidth, imageHeight, imageLeftShift, imageTopShift];
+	if (imagePixels.length < 1) {
+		return [imagePixels, 0, 0, 0, 0];
+	}
+	let minPixelLeft = Array_min(imagePixels, pixel => pixel[0]);
+	let maxPixelLeftWidth = Array_max(imagePixels, pixel => pixel[0]) + 1;
+	let minPixelTop = Array_min(imagePixels, pixel => pixel[1]);
+	let maxPixelTopHeight = Array_max(imagePixels, pixel => pixel[1]) + 1;
+	return [
+		imagePixels.map(([pixelLeft, pixelTop]) => [pixelLeft - minPixelLeft, pixelTop - minPixelTop]),
+		maxPixelLeftWidth - minPixelLeft,
+		maxPixelTopHeight - minPixelTop,
+		Math.ceil(canvasWidth / 2) - minPixelLeft,
+		Math.ceil(canvasHeight / 2) - minPixelTop,
+	];
 }

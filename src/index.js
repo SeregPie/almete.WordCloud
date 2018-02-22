@@ -73,12 +73,12 @@ export default function(words, cloudWidth, cloudHeight, {
 				return 1 + maxWeight - minWeight;
 			})();
 			words.forEach(word => {
-				word.$scaleFactor *= Math_mapLinear(word.$weight, minWeight, maxWeight, 1, fontSizeRange);
+				word.$fontSize *= Math_mapLinear(word.$weight, minWeight, maxWeight, 1, fontSizeRange);
 			});
 		}
 
 		words.forEach(word => {
-			word.$scaleFactor *= fontSizeBase;
+			word.$fontSize *= fontSizeBase;
 		});
 
 		let grid = new PixelGrid([cloudWidth, cloudHeight]);
@@ -92,30 +92,27 @@ export default function(words, cloudWidth, cloudHeight, {
 			return word;
 		});
 
-		let minWordsLeft = Array_min(words, ({$boundingBoxLeft}) => $boundingBoxLeft);
-		let maxWordsLeft = Array_max(words, ({$boundingBoxLeft, $boundingBoxWidth}) => $boundingBoxLeft + $boundingBoxWidth);
-		let minWordsWidth = maxWordsLeft - minWordsLeft;
-		let maxWordsWidth = maxWordsLeft + minWordsLeft;
-
-		let minWordsTop = Array_min(words, ({$boundingBoxTop}) => $boundingBoxTop);
-		let maxWordsTop = Array_max(words, ({$boundingBoxTop, $boundingBoxHeight}) => $boundingBoxTop + $boundingBoxHeight);
-		let minWordsHeight = maxWordsTop - minWordsTop;
-		let maxWordsHeight = maxWordsTop + minWordsTop;
-
-		let scaleFactor = Math.min(cloudWidth / minWordsWidth, cloudHeight / minWordsHeight);
-
+		let minImageLeft = Array_min(words, ({$imageLeft}) => $imageLeft);
+		let maxImageLeftWidth = Array_max(words, ({$imageLeft, $imageWidth}) => $imageLeft + $imageWidth);
+		let minImageTop = Array_min(words, ({$imageTop}) => $imageTop);
+		let maxImageTopHeight = Array_max(words, ({$imageTop, $imageHeight}) => $imageTop + $imageHeight);
+		let scaleFactor = Math.min(
+			cloudWidth / (maxImageLeftWidth - minImageLeft),
+			cloudHeight / (maxImageTopHeight - minImageTop),
+		);
+		let leftShift = (maxImageLeftWidth + minImageLeft) / 2;
+		let topShift = (maxImageTopHeight + minImageTop) / 2;
 		words.forEach(word => {
-			word.$left -= maxWordsWidth / 2;
-			word.$top -= maxWordsHeight / 2;
-
-			word.$scaleFactor *= scaleFactor;
-
+			word.$left -= leftShift;
+			word.$top -= topShift;
+			word.$fontSize *= scaleFactor;
 			word.$left += cloudWidth / 2;
 			word.$top += cloudHeight / 2;
 		});
 
 		words = words.map(word => ({
 			text: word.$text,
+			weight: word.$weight,
 			rotationTurn: word.$rotationTurn,
 			rotationDeg: word.$rotationDeg,
 			rotationRad: word.$rotationRad,

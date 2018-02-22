@@ -1,6 +1,5 @@
 import Geometry_getRotatedRectangleBoundingBoxHeight from 'x/src/Geometry/getRotatedRectangleBoundingBoxHeight';
 import Geometry_getRotatedRectangleBoundingBoxWidth from 'x/src/Geometry/getRotatedRectangleBoundingBoxWidth';
-import Math_ceilDivisible from 'x/src/Math/ceilDivisible';
 import Math_degToTurn from 'x/src/Math/degToTurn';
 import Math_radToTurn from 'x/src/Math/radToTurn';
 import Math_turnToRad from 'x/src/Math/turnToRad';
@@ -41,7 +40,7 @@ export default class {
 		this.$relativeTop = 0;
 		this.$createCanvas = createCanvas;
 		this.$_relativePadding = 0;
-		this.$_scaleFactor = 1;
+		this.$_fontSize = 1;
 	}
 
 	get $rotationDeg() {
@@ -52,19 +51,15 @@ export default class {
 		return Math_turnToRad(this.$rotationTurn);
 	}
 
-	get $scaleFactor() {
-		return this.$_scaleFactor;
+	get $fontSize() {
+		return this.$_fontSize;
 	}
 
-	set $scaleFactor(value) {
-		if (this.$_scaleFactor !== value) {
-			this.$_scaleFactor = value;
+	set $fontSize(value) {
+		if (this.$_fontSize !== value) {
+			this.$_fontSize = value;
 			this.$_imageData = undefined;
 		}
-	}
-
-	get $fontSize() {
-		return Math.ceil(this.$_scaleFactor);
 	}
 
 	get $font() {
@@ -95,23 +90,23 @@ export default class {
 	}
 
 	get $textWidth() {
-		return Math.ceil(this.$relativeTextWidth * this.$scaleFactor);
+		return this.$relativeTextWidth * this.$fontSize;
 	}
 
 	get $left() {
-		return Math.ceil(this.$relativeLeft * this.$scaleFactor);
+		return this.$relativeLeft * this.$fontSize;
 	}
 
 	set $left(value) {
-		this.$relativeLeft = value / this.$scaleFactor;
+		this.$relativeLeft = value / this.$fontSize;
 	}
 
 	get $top() {
-		return Math.ceil(this.$relativeTop * this.$scaleFactor);
+		return this.$relativeTop * this.$fontSize;
 	}
 
 	set $top(value) {
-		this.$relativeTop = value / this.$scaleFactor;
+		this.$relativeTop = value / this.$fontSize;
 	}
 
 	get $boundingBoxWidth() {
@@ -131,11 +126,11 @@ export default class {
 	}
 
 	get $boundingBoxLeft() {
-		return Math.ceil(this.$left - this.$boundingBoxWidth / 2);
+		return this.$left - this.$boundingBoxWidth / 2;
 	}
 
 	get $boundingBoxTop() {
-		return Math.ceil(this.$top - this.$boundingBoxHeight / 2);
+		return this.$top - this.$boundingBoxHeight / 2;
 	}
 
 	get $relativePadding() {
@@ -150,7 +145,7 @@ export default class {
 	}
 
 	get $padding() {
-		return Math.ceil(this.$relativePadding * this.$scaleFactor);
+		return this.$relativePadding * this.$fontSize;
 	}
 
 	get $imageData() {
@@ -160,16 +155,16 @@ export default class {
 				this.$font,
 				this.$padding * 2,
 				this.$rotationRad,
-				Math_ceilDivisible(Geometry_getRotatedRectangleBoundingBoxWidth(
+				Geometry_getRotatedRectangleBoundingBoxWidth(
 					this.$textWidth + (this.$padding + this.$fontSize) * 2,
 					this.$fontSize + (this.$padding + this.$fontSize) * 2,
 					this.$rotationRad,
-				), 2),
-				Math_ceilDivisible(Geometry_getRotatedRectangleBoundingBoxHeight(
+				),
+				Geometry_getRotatedRectangleBoundingBoxHeight(
 					this.$textWidth + (this.$padding + this.$fontSize) * 2,
 					this.$fontSize + (this.$padding + this.$fontSize) * 2,
 					this.$rotationRad,
-				), 2),
+				),
 				this.$createCanvas,
 			);
 		}
@@ -197,7 +192,7 @@ export default class {
 	}
 
 	get $imageLeft() {
-		return this.$left - this.$imageLeftShift;
+		return Math.ceil(this.$left - this.$imageLeftShift);
 	}
 
 	set $imageLeft(value) {
@@ -205,7 +200,7 @@ export default class {
 	}
 
 	get $imageTop() {
-		return this.$top - this.$imageTopShift;
+		return Math.ceil(this.$top - this.$imageTopShift);
 	}
 
 	set $imageTop(value) {
