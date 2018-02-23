@@ -1,7 +1,5 @@
 import Geometry_getRotatedRectangleBoundingBoxHeight from 'x/src/Geometry/getRotatedRectangleBoundingBoxHeight';
 import Geometry_getRotatedRectangleBoundingBoxWidth from 'x/src/Geometry/getRotatedRectangleBoundingBoxWidth';
-import Math_degToTurn from 'x/src/Math/degToTurn';
-import Math_radToTurn from 'x/src/Math/radToTurn';
 import Math_turnToRad from 'x/src/Math/turnToRad';
 import Math_turnToDeg from 'x/src/Math/turnToDeg';
 
@@ -13,8 +11,7 @@ export default class {
 	constructor(
 		text,
 		weight,
-		rotation,
-		rotationUnit,
+		rotationTurn,
 		fontFamily,
 		fontStyle,
 		fontVariant,
@@ -23,24 +20,16 @@ export default class {
 	) {
 		this.$text = text;
 		this.$weight = weight;
-		this.$rotationTurn = (() => {
-			switch (rotationUnit) {
-				case 'deg':
-					return Math_degToTurn(rotation);
-				case 'rad':
-					return Math_radToTurn(rotation);
-			}
-			return rotation;
-		})();
+		this.$rotationTurn = rotationTurn;
 		this.$fontFamily = fontFamily;
 		this.$fontStyle = fontStyle;
 		this.$fontVariant = fontVariant;
 		this.$fontWeight = fontWeight;
+		this.$createCanvas = createCanvas;
+		this.$_fontSize = 1;
+		this.$_relativePadding = 0;
 		this.$relativeLeft = 0;
 		this.$relativeTop = 0;
-		this.$createCanvas = createCanvas;
-		this.$_relativePadding = 0;
-		this.$_fontSize = 1;
 	}
 
 	get $rotationDeg() {

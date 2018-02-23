@@ -1,8 +1,10 @@
 import Array_min from 'x/src/Array/min';
 import Array_max from 'x/src/Array/max';
+import Math_degToTurn from 'x/src/Math/degToTurn';
 import Math_mapLinear from 'x/src/Math/mapLinear';
+import Math_radToTurn from 'x/src/Math/radToTurn';
 
-import CloudWord from './CloudWord';
+import BoundingWord from './BoundingWord';
 import PixelGrid from './PixelGrid';
 
 const fontSizeBase = 4;
@@ -34,11 +36,18 @@ export default function(words, cloudWidth, cloudHeight, {
 			fontStyle = defaultFontStyle,
 			fontVariant = defaultFontVariant,
 			fontWeight = defaultFontWeight,
-		}) => new CloudWord(
+		}) => new BoundingWord(
 			text,
 			weight,
-			rotation,
-			rotationUnit,
+			(() => {
+				switch (rotationUnit) {
+					case 'deg':
+						return Math_degToTurn(rotation);
+					case 'rad':
+						return Math_radToTurn(rotation);
+				}
+				return rotation;
+			})(),
 			fontFamily,
 			fontStyle,
 			fontVariant,
@@ -92,16 +101,15 @@ export default function(words, cloudWidth, cloudHeight, {
 			return word;
 		});
 
-		let minImageLeft = Array_min(words, ({$imageLeft}) => $imageLeft);
-		let maxImageLeftWidth = Array_max(words, ({$imageLeft, $imageWidth}) => $imageLeft + $imageWidth);
-		let minImageTop = Array_min(words, ({$imageTop}) => $imageTop);
-		let maxImageTopHeight = Array_max(words, ({$imageTop, $imageHeight}) => $imageTop + $imageHeight);
-		let scaleFactor = Math.min(
-			cloudWidth / (maxImageLeftWidth - minImageLeft),
-			cloudHeight / (maxImageTopHeight - minImageTop),
-		);
-		let leftShift = (maxImageLeftWidth + minImageLeft) / 2;
-		let topShift = (maxImageTopHeight + minImageTop) / 2;
+		let currentMinImageLeft = Array_min(words, ({$imageLeft}) => $imageLeft);
+		let currentMaxImageLeftWidth = Array_max(words, ({$imageLeft, $imageWidth}) => $imageLeft + $imageWidth);
+		let currentMinImageTop = Array_min(words, ({$imageTop}) => $imageTop);
+		let currentMaxImageTopHeight = Array_max(words, ({$imageTop, $imageHeight}) => $imageTop + $imageHeight);
+		let currentCloudWidth = currentMaxImageLeftWidth - currentMinImageLeft;
+		let currentCloudHeight = currentMaxImageTopHeight - currentMinImageTop;
+		let leftShift = (currentMaxImageLeftWidth + currentMinImageLeft) / 2;
+		let topShift = (currentMaxImageTopHeight + currentMinImageTop) / 2;
+		let scaleFactor = Math.min(cloudWidth / currentCloudWidth, cloudHeight / currentCloudHeight);
 		words.forEach(word => {
 			word.$left -= leftShift;
 			word.$top -= topShift;
