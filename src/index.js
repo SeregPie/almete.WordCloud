@@ -1,5 +1,5 @@
-import Array_max from 'x/src/Array/max';
-import Array_min from 'x/src/Array/min';
+import Array_first from 'x/src/Array/first';
+import Array_last from 'x/src/Array/last';
 import Math_degToTurn from 'x/src/Math/degToTurn';
 import Math_mapLinear from 'x/src/Math/mapLinear';
 import Math_radToTurn from 'x/src/Math/radToTurn';
@@ -66,8 +66,11 @@ export default function(words, cloudWidth, cloudHeight, {
 			otherWord.$textWidth - word.$textWidth
 		);
 
-		let maxWeight = words[0].$weight;
-		let minWeight = words[words.length - 1].$weight;
+		let firstWord = Array_first(words);
+		let lastWord = Array_last(words);
+
+		let maxWeight = firstWord.$weight;
+		let minWeight = lastWord.$weight;
 		if (minWeight < maxWeight) {
 			let fontSizeRange = (() => {
 				if (fontSizeRatio > 0) {
@@ -86,10 +89,10 @@ export default function(words, cloudWidth, cloudHeight, {
 			});
 		}
 
-		let firstWord = words[0];
+		let grid = new PixelGrid([cloudWidth, cloudHeight]);
+
 		let aaa = firstWord.$fontSize / xxx;
 		firstWord.$fontSize = xxx;
-		let grid = new PixelGrid([cloudWidth, cloudHeight]);
 		words.reduce((previousWord, word, index) => {
 			let ccc = word.$fontSize / xxx;
 			if (ccc * yyy > aaa) {
@@ -111,19 +114,12 @@ export default function(words, cloudWidth, cloudHeight, {
 			word.$relativePadding = 0;
 			return word;
 		});
+		grid.$put(lastWord.$imagePixels, lastWord.$imageLeft, lastWord.$imageTop);
 
-		let currentMinImageLeft = Array_min(words, ({$imageLeft}) => $imageLeft);
-		let currentMaxImageLeftWidth = Array_max(words, ({$imageLeft, $imageWidth}) => $imageLeft + $imageWidth);
-		let currentMinImageTop = Array_min(words, ({$imageTop}) => $imageTop);
-		let currentMaxImageTopHeight = Array_max(words, ({$imageTop, $imageHeight}) => $imageTop + $imageHeight);
-		let currentCloudWidth = currentMaxImageLeftWidth - currentMinImageLeft;
-		let currentCloudHeight = currentMaxImageTopHeight - currentMinImageTop;
-		let currentCloudLeft = (currentMaxImageLeftWidth + currentMinImageLeft) / 2;
-		let currentCloudTop = (currentMaxImageTopHeight + currentMinImageTop) / 2;
-		let scaleFactor = Math.min(cloudWidth / currentCloudWidth, cloudHeight / currentCloudHeight);
+		let scaleFactor = Math.min(cloudWidth / grid.$width, cloudHeight / grid.$height);
 		words.forEach(word => {
-			word.$left -= currentCloudLeft;
-			word.$top -= currentCloudTop;
+			word.$left -= grid.$left;
+			word.$top -= grid.$top;
 			word.$fontSize *= scaleFactor;
 			word.$left += cloudWidth / 2;
 			word.$top += cloudHeight / 2;
