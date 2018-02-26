@@ -60,60 +60,57 @@ export default function(words, cloudWidth, cloudHeight, {
 			createCanvas,
 		));
 
-		if (words.length > 1) {
+		words.sort((word, otherWord) =>
+			otherWord.$weight - word.$weight
+			||
+			otherWord.$textWidth - word.$textWidth
+		);
 
-			words.sort((word, otherWord) =>
-				otherWord.$weight - word.$weight
-				||
-				otherWord.$textWidth - word.$textWidth
-			);
-
-			let maxWeight = words[0].$weight;
-			let minWeight = words[words.length - 1].$weight;
-			if (minWeight < maxWeight) {
-				let fontSizeRange = (() => {
-					if (fontSizeRatio > 0) {
-						return 1 / fontSizeRatio;
-					}
-					if (minWeight > 0) {
-						return maxWeight / minWeight;
-					}
-					if (maxWeight < 0) {
-						return minWeight / maxWeight;
-					}
-					return 1 + maxWeight - minWeight;
-				})();
-				words.forEach(word => {
-					word.$fontSize *= Math_mapLinear(word.$weight, minWeight, maxWeight, 1, fontSizeRange);
-				});
-			}
-
-			let grid = new PixelGrid([cloudWidth, cloudHeight]);
-			let word = words[0];
-			let aaa = word.$fontSize / xxx;
-			word.$fontSize /= aaa;
-			words.reduce((previousWord, word, index) => {
-				let ccc = word.$fontSize / xxx;
-				if (ccc * yyy > aaa) {
-					grid.$put(previousWord.$imagePixels, previousWord.$imageLeft, previousWord.$imageTop);
-				} else {
-					let bbb = aaa / ccc;
-					grid = new PixelGrid([cloudWidth, cloudHeight]);
-					words.slice(0, index).forEach(word => {
-						word.$fontSize *= bbb;
-						grid.$put(word.$imagePixels, word.$imageLeft, word.$imageTop);
-					});
-					aaa = ccc;
+		let maxWeight = words[0].$weight;
+		let minWeight = words[words.length - 1].$weight;
+		if (minWeight < maxWeight) {
+			let fontSizeRange = (() => {
+				if (fontSizeRatio > 0) {
+					return 1 / fontSizeRatio;
 				}
-				word.$fontSize /= aaa;
-				word.$relativePadding = spacing;
-				let [imageLeft, imageTop] = grid.$findFit(word.$imagePixels, word.$imageLeft, word.$imageTop);
-				word.$imageLeft = imageLeft;
-				word.$imageTop = imageTop;
-				word.$relativePadding = 0;
-				return word;
+				if (minWeight > 0) {
+					return maxWeight / minWeight;
+				}
+				if (maxWeight < 0) {
+					return minWeight / maxWeight;
+				}
+				return 1 + maxWeight - minWeight;
+			})();
+			words.forEach(word => {
+				word.$fontSize *= Math_mapLinear(word.$weight, minWeight, maxWeight, 1, fontSizeRange);
 			});
 		}
+
+		let firstWord = words[0];
+		let aaa = firstWord.$fontSize / xxx;
+		firstWord.$fontSize = xxx;
+		let grid = new PixelGrid([cloudWidth, cloudHeight]);
+		words.reduce((previousWord, word, index) => {
+			let ccc = word.$fontSize / xxx;
+			if (ccc * yyy > aaa) {
+				grid.$put(previousWord.$imagePixels, previousWord.$imageLeft, previousWord.$imageTop);
+			} else {
+				let bbb = aaa / ccc;
+				grid = new PixelGrid([cloudWidth, cloudHeight]);
+				words.slice(0, index).forEach(word => {
+					word.$fontSize *= bbb;
+					grid.$put(word.$imagePixels, word.$imageLeft, word.$imageTop);
+				});
+				aaa = ccc;
+			}
+			word.$fontSize /= aaa;
+			word.$relativePadding = spacing;
+			let [imageLeft, imageTop] = grid.$findFit(word.$imagePixels, word.$imageLeft, word.$imageTop);
+			word.$imageLeft = imageLeft;
+			word.$imageTop = imageTop;
+			word.$relativePadding = 0;
+			return word;
+		});
 
 		let currentMinImageLeft = Array_min(words, ({$imageLeft}) => $imageLeft);
 		let currentMaxImageLeftWidth = Array_max(words, ({$imageLeft, $imageWidth}) => $imageLeft + $imageWidth);
