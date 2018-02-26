@@ -1,5 +1,5 @@
-import Array_min from 'x/src/Array/min';
 import Array_max from 'x/src/Array/max';
+import Array_min from 'x/src/Array/min';
 
 export default function(text, font, lineWidth, rotation, canvasWidth, canvasHeight, createCanvas) {
 	let canvas = createCanvas();

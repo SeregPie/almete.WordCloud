@@ -1,7 +1,7 @@
 import Geometry_getRotatedRectangleBoundingBoxHeight from 'x/src/Geometry/getRotatedRectangleBoundingBoxHeight';
 import Geometry_getRotatedRectangleBoundingBoxWidth from 'x/src/Geometry/getRotatedRectangleBoundingBoxWidth';
-import Math_turnToRad from 'x/src/Math/turnToRad';
 import Math_turnToDeg from 'x/src/Math/turnToDeg';
+import Math_turnToRad from 'x/src/Math/turnToRad';
 
 import getFont from './getFont';
 import getTextWidth from './getTextWidth';
@@ -65,15 +65,9 @@ export default class {
 		if (this.$_relativeTextWidth === undefined) {
 			this.$_relativeTextWidth = getTextWidth(
 				this.$text,
-				getFont(
-					this.$fontStyle,
-					this.$fontVariant,
-					this.$fontWeight,
-					1,
-					this.$fontFamily,
-				),
+				this.$font,
 				this.$createCanvas,
-			);
+			) / this.$fontSize;
 		}
 		return this.$_relativeTextWidth;
 	}
@@ -181,7 +175,7 @@ export default class {
 	}
 
 	get $imageLeft() {
-		return Math.ceil(this.$left - this.$imageLeftShift);
+		return Math.ceil(this.$left) - this.$imageLeftShift;
 	}
 
 	set $imageLeft(value) {
@@ -189,7 +183,7 @@ export default class {
 	}
 
 	get $imageTop() {
-		return Math.ceil(this.$top - this.$imageTopShift);
+		return Math.ceil(this.$top) - this.$imageTopShift;
 	}
 
 	set $imageTop(value) {
