@@ -90,7 +90,6 @@ export default function(words, cloudWidth, cloudHeight, {
 		}
 
 		let grid = new PixelGrid([cloudWidth, cloudHeight]);
-
 		let aaa = firstWord.$fontSize / xxx;
 		firstWord.$fontSize = xxx;
 		words.reduce((previousWord, word, index) => {
@@ -115,7 +114,6 @@ export default function(words, cloudWidth, cloudHeight, {
 			return word;
 		});
 		grid.$put(lastWord.$imagePixels, lastWord.$imageLeft, lastWord.$imageTop);
-
 		let scaleFactor = Math.min(cloudWidth / grid.$width, cloudHeight / grid.$height);
 		words.forEach(word => {
 			word.$left -= grid.$left;

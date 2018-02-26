@@ -1,29 +1,29 @@
-import find from './find';
+import findPixel from './findPixel';
 
 export default class {
 	constructor(aspect) {
 		this.$aspect = aspect;
 		this.$pixels = {};
 		this.$minLeft = 0;
-		this.$maxLeft = 0;
+		this.$maxLeftWidth = 0;
 		this.$minTop = 0;
-		this.$maxTop = 0;
+		this.$maxTopHeight = 0;
 	}
 
 	get $left() {
-		return Math.ceil((this.$maxLeft + this.$minLeft) / 2);
+		return Math.ceil((this.$minLeft + this.$maxLeftWidth) / 2);
 	}
 
 	get $top() {
-		return Math.ceil((this.$maxTop + this.$minTop) / 2);
+		return Math.ceil((this.$minTop + this.$maxTopHeight) / 2);
 	}
 
 	get $width() {
-		return this.$maxLeft - this.$minLeft;
+		return this.$maxLeftWidth - this.$minLeft;
 	}
 
 	get $height() {
-		return this.$maxTop - this.$minTop;
+		return this.$maxTopHeight - this.$minTop;
 	}
 
 	$put(pixels, pixelsLeft, pixelsTop) {
@@ -32,9 +32,9 @@ export default class {
 			let top = pixelsTop + pixelTop;
 			this.$pixels[`${left}|${top}`] = true;
 			this.$minLeft = Math.min(left, this.$minLeft);
-			this.$maxLeft = Math.max(left, this.$maxLeft);
+			this.$maxLeftWidth = Math.max(left + 1, this.$maxLeftWidth);
 			this.$minTop = Math.min(top, this.$minTop);
-			this.$maxTop = Math.max(top, this.$maxTop);
+			this.$maxTopHeight = Math.max(top + 1, this.$maxTopHeight);
 		});
 	}
 
@@ -47,7 +47,7 @@ export default class {
 	}
 
 	$findFit(pixels, pixelsLeft, pixelsTop) {
-		return find(this.$aspect, [pixelsLeft + this.$left, pixelsTop + this.$top], ([pixelsLeft, pixelsTop]) => {
+		return findPixel(this.$aspect, [pixelsLeft + this.$left, pixelsTop + this.$top], ([pixelsLeft, pixelsTop]) => {
 			return this.$canFit(pixels, pixelsLeft, pixelsTop);
 		});
 	}
