@@ -18,8 +18,8 @@ export default function(words, cloudWidth, cloudHeight, {
 	fontWeight: defaultFontWeight = 'normal',
 	spacing = 0,
 	fontSizeRatio = 0,
-	xxx = 6,
-	yyy = 2,
+	renderingFontSizeBase = 6,
+	renderingFontSizeInterval = 2,
 	createCanvas = function() {
 		return document.createElement('canvas');
 	},
@@ -65,7 +65,6 @@ export default function(words, cloudWidth, cloudHeight, {
 			||
 			otherWord.$textWidth - word.$textWidth
 		);
-
 		let firstWord = Array_first(words);
 		let lastWord = Array_last(words);
 
@@ -90,15 +89,15 @@ export default function(words, cloudWidth, cloudHeight, {
 		}
 
 		let grid = new PixelGrid([cloudWidth, cloudHeight]);
-		let aaa = firstWord.$fontSize / xxx;
-		firstWord.$fontSize = xxx;
+		let aaa = firstWord.$fontSize / renderingFontSizeBase;
+		firstWord.$fontSize = renderingFontSizeBase;
 		words.reduce((previousWord, word, index) => {
-			let ccc = word.$fontSize / xxx;
-			if (ccc * yyy > aaa) {
+			let ccc = word.$fontSize / renderingFontSizeBase;
+			if (ccc * renderingFontSizeInterval > aaa) {
 				grid.$put(previousWord.$imagePixels, previousWord.$imageLeft, previousWord.$imageTop);
 			} else {
-				let bbb = aaa / ccc;
 				grid = new PixelGrid([cloudWidth, cloudHeight]);
+				let bbb = aaa / ccc;
 				words.slice(0, index).forEach(word => {
 					word.$fontSize *= bbb;
 					grid.$put(word.$imagePixels, word.$imageLeft, word.$imageTop);

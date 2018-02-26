@@ -1,6 +1,3 @@
-import Array_max from 'x/src/Array/max';
-import Array_min from 'x/src/Array/min';
-
 export default function(text, font, lineWidth, rotation, canvasWidth, canvasHeight, createCanvas) {
 	let canvas = createCanvas();
 	let ctx = canvas.getContext('2d');
@@ -19,20 +16,24 @@ export default function(text, font, lineWidth, rotation, canvasWidth, canvasHeig
 	}
 	let image = ctx.getImageData(0, 0, canvasWidth, canvasHeight).data;
 	let imagePixels = [];
+	let minPixelLeft = Infinity;
+	let maxPixelLeftWidth = 0;
+	let minPixelTop = Infinity;
+	let maxPixelTopHeight = 0;
 	for (let pixelLeft = 0; pixelLeft < canvasWidth; ++pixelLeft) {
 		for (let pixelTop = 0; pixelTop < canvasHeight; ++pixelTop) {
 			if (image[(canvasWidth * pixelTop + pixelLeft) * 4 + 3]) {
 				imagePixels.push([pixelLeft, pixelTop]);
+				minPixelLeft = Math.min(pixelLeft, minPixelLeft);
+				maxPixelLeftWidth = Math.max(pixelLeft + 1, maxPixelLeftWidth);
+				minPixelTop = Math.min(pixelTop, minPixelTop);
+				maxPixelTopHeight = Math.max(pixelTop + 1, maxPixelTopHeight);
 			}
 		}
 	}
 	if (imagePixels.length < 1) {
 		return [imagePixels, 0, 0, 0, 0];
 	}
-	let minPixelLeft = Array_min(imagePixels, pixel => pixel[0]);
-	let maxPixelLeftWidth = Array_max(imagePixels, pixel => pixel[0]) + 1;
-	let minPixelTop = Array_min(imagePixels, pixel => pixel[1]);
-	let maxPixelTopHeight = Array_max(imagePixels, pixel => pixel[1]) + 1;
 	return [
 		imagePixels.map(([pixelLeft, pixelTop]) => [pixelLeft - minPixelLeft, pixelTop - minPixelTop]),
 		maxPixelLeftWidth - minPixelLeft,
