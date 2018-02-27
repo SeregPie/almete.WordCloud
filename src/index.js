@@ -30,9 +30,8 @@ export default function(words, cloudWidth, cloudHeight, {
 		fontSizeRatio = 1 / fontSizeRatio;
 	}
 
-	if (words.length > 0 && cloudWidth > 0 && cloudHeight > 0) {
-
-		words = words.map(({
+	words = words
+		.map(({
 			text = defaultText,
 			weight = defaultWeight,
 			rotation = defaultRotation,
@@ -58,9 +57,12 @@ export default function(words, cloudWidth, cloudHeight, {
 			fontVariant,
 			fontWeight,
 			createCanvas,
-		));
+		))
+		.filter(({$textWidth}) => $textWidth > 0)
+		.sort((word, otherWord) => otherWord.$weight - word.$weight);
 
-		words.sort((word, otherWord) => otherWord.$weight - word.$weight);
+	if (words.length > 0 && cloudWidth > 0 && cloudHeight > 0) {
+
 		let firstWord = Array_first(words);
 		let lastWord = Array_last(words);
 
@@ -109,14 +111,16 @@ export default function(words, cloudWidth, cloudHeight, {
 			return word;
 		});
 		grid.$put(lastWord.$imagePixels, lastWord.$imageLeft, lastWord.$imageTop);
-		let scaleFactor = Math.min(cloudWidth / grid.$width, cloudHeight / grid.$height);
-		words.forEach(word => {
-			word.$left -= grid.$left;
-			word.$top -= grid.$top;
-			word.$fontSize *= scaleFactor;
-			word.$left += cloudWidth / 2;
-			word.$top += cloudHeight / 2;
-		});
+		if (grid.$width > 0 && grid.$height > 0) {
+			let scaleFactor = Math.min(cloudWidth / grid.$width, cloudHeight / grid.$height);
+			words.forEach(word => {
+				word.$left -= grid.$left;
+				word.$top -= grid.$top;
+				word.$fontSize *= scaleFactor;
+				word.$left += cloudWidth / 2;
+				word.$top += cloudHeight / 2;
+			});
+		}
 
 		return words.map(word => ({
 			text: word.$text,
