@@ -3,11 +3,7 @@ import findPixel from './findPixel';
 export default class {
 	constructor(aspect) {
 		this.$aspect = aspect;
-		this.$pixels = {};
-		this.$minLeft = 0;
-		this.$maxLeftWidth = 0;
-		this.$minTop = 0;
-		this.$maxTopHeight = 0;
+		this.$clear();
 	}
 
 	get $left() {
@@ -50,5 +46,13 @@ export default class {
 		return findPixel(this.$aspect, [pixelsLeft + this.$left, pixelsTop + this.$top], ([pixelsLeft, pixelsTop]) => {
 			return this.$canFit(pixels, pixelsLeft, pixelsTop);
 		});
+	}
+
+	$clear() {
+		this.$pixels = {};
+		this.$minLeft = 0;
+		this.$maxLeftWidth = 0;
+		this.$minTop = 0;
+		this.$maxTopHeight = 0;
 	}
 }
