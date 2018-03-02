@@ -18,8 +18,8 @@ export default function(words, cloudWidth, cloudHeight, {
 	fontWeight: defaultFontWeight = 'normal',
 	spacing = 0,
 	fontSizeRatio = 0,
-	renderingFontSizeBase = 6,
-	renderingFontSizeInterval = 2,
+	//renderingFontSizeBase = 6,
+	//renderingFontSizeInterval = 2,
 	createCanvas = function() {
 		return document.createElement('canvas');
 	},
@@ -89,28 +89,28 @@ export default function(words, cloudWidth, cloudHeight, {
 			}
 
 			let grid = new PixelGrid([cloudWidth, cloudHeight]);
-			let aaa = (firstWord.$fontSize / renderingFontSizeBase) * renderingFontSizeInterval;
+			let aaa = firstWord.$fontSize / 8;
 			firstWord.$fontSize /= aaa;
-			words.reduce((previousWord, word, index) => {
-				let ccc = word.$fontSize / renderingFontSizeBase;
-				if (ccc * renderingFontSizeInterval > aaa) {
+			words.reduce((previousWord, currentWord, index) => {
+				let ccc = currentWord.$fontSize / 8;
+				if (ccc * 2 > aaa) {
 					grid.$put(previousWord.$imagePixels, previousWord.$imageLeft, previousWord.$imageTop);
 				} else {
 					grid.$clear();
-					let bbb = aaa / ccc;
-					words.slice(0, index).forEach(word => {
-						word.$fontSize *= bbb;
-						grid.$put(word.$imagePixels, word.$imageLeft, word.$imageTop);
+					let scaleFactor = aaa / ccc;
+					words.slice(0, index).forEach(previousWord => {
+						previousWord.$fontSize *= scaleFactor;
+						grid.$put(previousWord.$imagePixels, previousWord.$imageLeft, previousWord.$imageTop);
 					});
 					aaa = ccc;
 				}
-				word.$fontSize /= aaa;
-				word.$relativePadding = spacing;
-				let [imageLeft, imageTop] = grid.$findFit(word.$imagePixels, word.$imageLeft, word.$imageTop);
-				word.$imageLeft = imageLeft;
-				word.$imageTop = imageTop;
-				word.$relativePadding = 0;
-				return word;
+				currentWord.$fontSize /= aaa;
+				currentWord.$relativePadding = spacing;
+				let [imageLeft, imageTop] = grid.$findFit(currentWord.$imagePixels, currentWord.$imageLeft, currentWord.$imageTop);
+				currentWord.$imageLeft = imageLeft;
+				currentWord.$imageTop = imageTop;
+				currentWord.$relativePadding = 0;
+				return currentWord;
 			});
 			grid.$put(lastWord.$imagePixels, lastWord.$imageLeft, lastWord.$imageTop);
 			if (grid.$width > 0 && grid.$height > 0) {
