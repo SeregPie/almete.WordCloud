@@ -88,23 +88,32 @@ export default function(words, cloudWidth, cloudHeight, {
 				});
 			}
 
+			lastWord.$aaa = lastWord.$fontSize / 4;
+			lastWord.$fontSize = 4;
+			words.reverse().reduce((previousWord, currentWord) => {
+				let aaa = currentWord.$fontSize / 4;
+				if (aaa < previousWord.$aaa * 2) {
+					currentWord.$aaa = previousWord.$aaa;
+					currentWord.$fontSize /= currentWord.$aaa;
+					return previousWord;
+				}
+				currentWord.$aaa = aaa;
+				currentWord.$fontSize = 4;
+				return currentWord;
+			});
+
 			let grid = new PixelGrid([cloudWidth, cloudHeight]);
-			let aaa = firstWord.$fontSize / 8;
-			firstWord.$fontSize /= aaa;
-			words.reduce((previousWord, currentWord, index) => {
-				let ccc = currentWord.$fontSize / 8;
-				if (ccc * 2 > aaa) {
-					grid.$put(previousWord.$imagePixels, previousWord.$imageLeft, previousWord.$imageTop);
-				} else {
+			words.reverse().reduce((previousWord, currentWord, index) => {
+				if (previousWord.$aaa > currentWord.$aaa) {
 					grid.$clear();
-					let scaleFactor = aaa / ccc;
+					let scaleFactor = previousWord.$aaa / currentWord.$aaa;
 					words.slice(0, index).forEach(previousWord => {
 						previousWord.$fontSize *= scaleFactor;
 						grid.$put(previousWord.$imagePixels, previousWord.$imageLeft, previousWord.$imageTop);
 					});
-					aaa = ccc;
+				} else {
+					grid.$put(previousWord.$imagePixels, previousWord.$imageLeft, previousWord.$imageTop);
 				}
-				currentWord.$fontSize /= aaa;
 				currentWord.$relativePadding = spacing;
 				let [imageLeft, imageTop] = grid.$findFit(currentWord.$imagePixels, currentWord.$imageLeft, currentWord.$imageTop);
 				currentWord.$imageLeft = imageLeft;
