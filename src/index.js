@@ -18,8 +18,8 @@ export default function(words, cloudWidth, cloudHeight, {
 	fontWeight: defaultFontWeight = 'normal',
 	spacing = 0,
 	fontSizeRatio = 0,
-	//renderingFontSizeBase = 6,
-	//renderingFontSizeInterval = 2,
+	renderingFontSizeInterval = 2,
+	renderingFontSizeBase = 4,
 	createCanvas = function() {
 		return document.createElement('canvas');
 	},
@@ -42,34 +42,37 @@ export default function(words, cloudWidth, cloudHeight, {
 				fontStyle = defaultFontStyle,
 				fontVariant = defaultFontVariant,
 				fontWeight = defaultFontWeight,
-			}) => new BoundingWord(
-				text,
-				weight,
-				(() => {
-					switch (rotationUnit) {
-						case 'deg':
-							return Math_degToTurn(rotation);
-						case 'rad':
-							return Math_radToTurn(rotation);
-					}
-					return rotation;
-				})(),
-				fontFamily,
-				fontStyle,
-				fontVariant,
-				fontWeight,
-				createCanvas,
-			))
-			.filter(({$textWidth}) => $textWidth > 0)
-			.sort((word, otherWord) => otherWord.$weight - word.$weight);
+			}) => {
+				let boundingWord = new BoundingWord(
+					text,
+					(() => {
+						switch (rotationUnit) {
+							case 'deg':
+								return Math_degToTurn(rotation);
+							case 'rad':
+								return Math_radToTurn(rotation);
+						}
+						return rotation;
+					})(),
+					fontFamily,
+					fontStyle,
+					fontVariant,
+					fontWeight,
+					createCanvas,
+				);
+				boundingWord.ǂweight = weight;
+				return boundingWord;
+			})
+			.filter(({ǂtextWidth}) => ǂtextWidth > 0)
+			.sort((word, otherWord) => otherWord.ǂweight - word.ǂweight);
 
 		if (words.length > 0) {
 
 			let firstWord = Array_first(words);
 			let lastWord = Array_last(words);
 
-			let maxWeight = firstWord.$weight;
-			let minWeight = lastWord.$weight;
+			let maxWeight = firstWord.ǂweight;
+			let minWeight = lastWord.ǂweight;
 			if (minWeight < maxWeight) {
 				let fontSizeRange = (() => {
 					if (fontSizeRatio > 0) {
@@ -84,74 +87,76 @@ export default function(words, cloudWidth, cloudHeight, {
 					return 1 + maxWeight - minWeight;
 				})();
 				words.forEach(word => {
-					word.$fontSize *= Math_mapLinear(word.$weight, minWeight, maxWeight, 1, fontSizeRange);
+					word.ǂfontSize = Math_mapLinear(word.ǂweight, minWeight, maxWeight, 1, fontSizeRange);
 				});
 			}
 
-			lastWord.$aaa = lastWord.$fontSize / 4;
-			lastWord.$fontSize = 4;
-			words.reverse().reduce((previousWord, currentWord) => {
-				let aaa = currentWord.$fontSize / 4;
-				if (aaa < previousWord.$aaa * 2) {
-					currentWord.$aaa = previousWord.$aaa;
-					currentWord.$fontSize /= currentWord.$aaa;
-					return previousWord;
+			words.reduceRight((renderingFontSizeFactor, word) => {
+				if (word.ǂfontSize < renderingFontSizeInterval * renderingFontSizeFactor) {
+					word.ǂfontSize /= renderingFontSizeFactor;
+				} else {
+					renderingFontSizeFactor = word.ǂfontSize;
+					word.ǂfontSize = 1;
 				}
-				currentWord.$aaa = aaa;
-				currentWord.$fontSize = 4;
-				return currentWord;
+				return (word.ǂrenderingFontSizeFactor = renderingFontSizeFactor);
+			}, 1);
+
+			words.forEach(word => {
+				word.ǂfontSize *= renderingFontSizeBase;
 			});
 
 			let grid = new PixelGrid([cloudWidth, cloudHeight]);
-			words.reverse().reduce((previousWord, currentWord, index) => {
-				if (previousWord.$aaa > currentWord.$aaa) {
-					grid.$clear();
-					let scaleFactor = previousWord.$aaa / currentWord.$aaa;
+
+			words.reduce((previousWord, currentWord, index) => {
+				if (currentWord.ǂrenderingFontSizeFactor < previousWord.ǂrenderingFontSizeFactor) {
+					grid.ǂclear();
+					let scaleFactor = previousWord.ǂrenderingFontSizeFactor / currentWord.ǂrenderingFontSizeFactor;
 					words.slice(0, index).forEach(previousWord => {
-						previousWord.$fontSize *= scaleFactor;
-						grid.$put(previousWord.$imagePixels, previousWord.$imageLeft, previousWord.$imageTop);
+						previousWord.ǂfontSize *= scaleFactor;
+						grid.ǂput(previousWord.ǂimagePixels, previousWord.ǂimageLeft, previousWord.ǂimageTop);
 					});
 				} else {
-					grid.$put(previousWord.$imagePixels, previousWord.$imageLeft, previousWord.$imageTop);
+					grid.ǂput(previousWord.ǂimagePixels, previousWord.ǂimageLeft, previousWord.ǂimageTop);
 				}
-				currentWord.$relativePadding = spacing;
-				let [imageLeft, imageTop] = grid.$findFit(currentWord.$imagePixels, currentWord.$imageLeft, currentWord.$imageTop);
-				currentWord.$imageLeft = imageLeft;
-				currentWord.$imageTop = imageTop;
-				currentWord.$relativePadding = 0;
+				currentWord.ǂrelativePadding = spacing;
+				let [imageLeft, imageTop] = grid.ǂfindFit(currentWord.ǂimagePixels, currentWord.ǂimageLeft, currentWord.ǂimageTop);
+				currentWord.ǂimageLeft = imageLeft;
+				currentWord.ǂimageTop = imageTop;
+				currentWord.ǂrelativePadding = 0;
 				return currentWord;
 			});
-			grid.$put(lastWord.$imagePixels, lastWord.$imageLeft, lastWord.$imageTop);
-			if (grid.$width > 0 && grid.$height > 0) {
-				let scaleFactor = Math.min(cloudWidth / grid.$width, cloudHeight / grid.$height);
+			grid.ǂput(lastWord.ǂimagePixels, lastWord.ǂimageLeft, lastWord.ǂimageTop);
+
+			if (grid.ǂwidth > 0 && grid.ǂheight > 0) {
+				let scaleFactor = Math.min(cloudWidth / grid.ǂwidth, cloudHeight / grid.ǂheight);
 				words.forEach(word => {
-					word.$left -= grid.$left;
-					word.$top -= grid.$top;
-					word.$fontSize *= scaleFactor;
-					word.$left += cloudWidth / 2;
-					word.$top += cloudHeight / 2;
+					word.ǂleft -= grid.ǂleft;
+					word.ǂtop -= grid.ǂtop;
+					word.ǂfontSize *= scaleFactor;
+					word.ǂleft += cloudWidth / 2;
+					word.ǂtop += cloudHeight / 2;
 				});
 			}
 
 			return words.map(word => ({
-				text: word.$text,
-				weight: word.$weight,
-				rotationTurn: word.$rotationTurn,
-				rotationDeg: word.$rotationDeg,
-				rotationRad: word.$rotationRad,
-				fontStyle: word.$fontStyle,
-				fontVariant: word.$fontVariant,
-				fontWeight: word.$fontWeight,
-				fontSize: word.$fontSize,
-				fontFamily: word.$fontFamily,
-				font: word.$font,
-				textWidth: word.$textWidth,
-				boundingBoxWidth: word.$boundingBoxWidth,
-				boundingBoxHeight: word.$boundingBoxHeight,
-				boundingBoxLeft: word.$boundingBoxLeft,
-				boundingBoxTop: word.$boundingBoxTop,
-				left: word.$left,
-				top: word.$top,
+				text: word.ǂtext,
+				weight: word.ǂweight,
+				rotationTurn: word.ǂrotationTurn,
+				rotationDeg: word.ǂrotationDeg,
+				rotationRad: word.ǂrotationRad,
+				fontStyle: word.ǂfontStyle,
+				fontVariant: word.ǂfontVariant,
+				fontWeight: word.ǂfontWeight,
+				fontSize: word.ǂfontSize,
+				fontFamily: word.ǂfontFamily,
+				font: word.ǂfont,
+				textWidth: word.ǂtextWidth,
+				boundingBoxWidth: word.ǂboundingBoxWidth,
+				boundingBoxHeight: word.ǂboundingBoxHeight,
+				boundingBoxLeft: word.ǂboundingBoxLeft,
+				boundingBoxTop: word.ǂboundingBoxTop,
+				left: word.ǂleft,
+				top: word.ǂtop,
 			}));
 		}
 	}

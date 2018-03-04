@@ -10,7 +10,6 @@ import getImageData from './getImageData';
 export default class {
 	constructor(
 		text,
-		weight,
 		rotationTurn,
 		fontFamily,
 		fontStyle,
@@ -18,175 +17,174 @@ export default class {
 		fontWeight,
 		createCanvas,
 	) {
-		this.$text = text;
-		this.$weight = weight;
-		this.$rotationTurn = rotationTurn;
-		this.$fontFamily = fontFamily;
-		this.$fontStyle = fontStyle;
-		this.$fontVariant = fontVariant;
-		this.$fontWeight = fontWeight;
-		this.$createCanvas = createCanvas;
-		this.$_fontSize = 1;
-		this.$_relativePadding = 0;
-		this.$relativeLeft = 0;
-		this.$relativeTop = 0;
+		this.ǂtext = text;
+		this.ǂrotationTurn = rotationTurn;
+		this.ǂfontFamily = fontFamily;
+		this.ǂfontStyle = fontStyle;
+		this.ǂfontVariant = fontVariant;
+		this.ǂfontWeight = fontWeight;
+		this.ǂcreateCanvas = createCanvas;
+		this.ǂ_fontSize = 1;
+		this.ǂ_relativePadding = 0;
+		this.ǂrelativeLeft = 0;
+		this.ǂrelativeTop = 0;
 	}
 
-	get $rotationDeg() {
-		return Math_turnToDeg(this.$rotationTurn);
+	get ǂrotationDeg() {
+		return Math_turnToDeg(this.ǂrotationTurn);
 	}
 
-	get $rotationRad() {
-		return Math_turnToRad(this.$rotationTurn);
+	get ǂrotationRad() {
+		return Math_turnToRad(this.ǂrotationTurn);
 	}
 
-	get $fontSize() {
-		return this.$_fontSize;
+	get ǂfontSize() {
+		return this.ǂ_fontSize;
 	}
 
-	set $fontSize(value) {
-		if (this.$_fontSize !== value) {
-			this.$_fontSize = value;
-			this.$_imageData = undefined;
+	set ǂfontSize(value) {
+		if (this.ǂ_fontSize !== value) {
+			this.ǂ_fontSize = value;
+			this.ǂ_imageData = undefined;
 		}
 	}
 
-	get $font() {
+	get ǂfont() {
 		return getFont(
-			this.$fontStyle,
-			this.$fontVariant,
-			this.$fontWeight,
-			this.$fontSize,
-			this.$fontFamily,
+			this.ǂfontStyle,
+			this.ǂfontVariant,
+			this.ǂfontWeight,
+			this.ǂfontSize,
+			this.ǂfontFamily,
 		);
 	}
 
-	get $relativeTextWidth() {
-		if (this.$_relativeTextWidth === undefined) {
-			this.$_relativeTextWidth = getTextWidth(
-				this.$text,
-				this.$font,
-				this.$createCanvas,
-			) / this.$fontSize;
+	get ǂrelativeTextWidth() {
+		if (this.ǂ_relativeTextWidth === undefined) {
+			this.ǂ_relativeTextWidth = getTextWidth(
+				this.ǂtext,
+				this.ǂfont,
+				this.ǂcreateCanvas,
+			) / this.ǂfontSize;
 		}
-		return this.$_relativeTextWidth;
+		return this.ǂ_relativeTextWidth;
 	}
 
-	get $textWidth() {
-		return this.$relativeTextWidth * this.$fontSize;
+	get ǂtextWidth() {
+		return this.ǂrelativeTextWidth * this.ǂfontSize;
 	}
 
-	get $left() {
-		return this.$relativeLeft * this.$fontSize;
+	get ǂleft() {
+		return this.ǂrelativeLeft * this.ǂfontSize;
 	}
 
-	set $left(value) {
-		this.$relativeLeft = value / this.$fontSize;
+	set ǂleft(value) {
+		this.ǂrelativeLeft = value / this.ǂfontSize;
 	}
 
-	get $top() {
-		return this.$relativeTop * this.$fontSize;
+	get ǂtop() {
+		return this.ǂrelativeTop * this.ǂfontSize;
 	}
 
-	set $top(value) {
-		this.$relativeTop = value / this.$fontSize;
+	set ǂtop(value) {
+		this.ǂrelativeTop = value / this.ǂfontSize;
 	}
 
-	get $boundingBoxWidth() {
+	get ǂboundingBoxWidth() {
 		return Geometry_getRotatedRectangleBoundingBoxWidth(
-			this.$textWidth,
-			this.$fontSize,
-			this.$rotationRad,
+			this.ǂtextWidth,
+			this.ǂfontSize,
+			this.ǂrotationRad,
 		);
 	}
 
-	get $boundingBoxHeight() {
+	get ǂboundingBoxHeight() {
 		return Geometry_getRotatedRectangleBoundingBoxHeight(
-			this.$textWidth,
-			this.$fontSize,
-			this.$rotationRad,
+			this.ǂtextWidth,
+			this.ǂfontSize,
+			this.ǂrotationRad,
 		);
 	}
 
-	get $boundingBoxLeft() {
-		return this.$left - this.$boundingBoxWidth / 2;
+	get ǂboundingBoxLeft() {
+		return this.ǂleft - this.ǂboundingBoxWidth / 2;
 	}
 
-	get $boundingBoxTop() {
-		return this.$top - this.$boundingBoxHeight / 2;
+	get ǂboundingBoxTop() {
+		return this.ǂtop - this.ǂboundingBoxHeight / 2;
 	}
 
-	get $relativePadding() {
-		return this.$_relativePadding;
+	get ǂrelativePadding() {
+		return this.ǂ_relativePadding;
 	}
 
-	set $relativePadding(value) {
-		if (this.$_relativePadding !== value) {
-			this.$_relativePadding = value;
-			this.$_imageData = undefined;
+	set ǂrelativePadding(value) {
+		if (this.ǂ_relativePadding !== value) {
+			this.ǂ_relativePadding = value;
+			this.ǂ_imageData = undefined;
 		}
 	}
 
-	get $padding() {
-		return this.$relativePadding * this.$fontSize;
+	get ǂpadding() {
+		return this.ǂrelativePadding * this.ǂfontSize;
 	}
 
-	get $imageData() {
-		if (this.$_imageData === undefined) {
-			this.$_imageData = getImageData(
-				this.$text,
-				this.$font,
-				this.$padding * 2,
-				this.$rotationRad,
+	get ǂimageData() {
+		if (this.ǂ_imageData === undefined) {
+			this.ǂ_imageData = getImageData(
+				this.ǂtext,
+				this.ǂfont,
+				this.ǂpadding * 2,
+				this.ǂrotationRad,
 				Geometry_getRotatedRectangleBoundingBoxWidth(
-					this.$textWidth + (this.$padding + this.$fontSize) * 2,
-					this.$fontSize + (this.$padding + this.$fontSize) * 2,
-					this.$rotationRad,
+					this.ǂtextWidth + (this.ǂpadding + this.ǂfontSize) * 2,
+					this.ǂfontSize + (this.ǂpadding + this.ǂfontSize) * 2,
+					this.ǂrotationRad,
 				),
 				Geometry_getRotatedRectangleBoundingBoxHeight(
-					this.$textWidth + (this.$padding + this.$fontSize) * 2,
-					this.$fontSize + (this.$padding + this.$fontSize) * 2,
-					this.$rotationRad,
+					this.ǂtextWidth + (this.ǂpadding + this.ǂfontSize) * 2,
+					this.ǂfontSize + (this.ǂpadding + this.ǂfontSize) * 2,
+					this.ǂrotationRad,
 				),
-				this.$createCanvas,
+				this.ǂcreateCanvas,
 			);
 		}
-		return this.$_imageData;
+		return this.ǂ_imageData;
 	}
 
-	get $imagePixels() {
-		return this.$imageData[0];
+	get ǂimagePixels() {
+		return this.ǂimageData[0];
 	}
 
-	get $imageWidth() {
-		return this.$imageData[1];
+	get ǂimageWidth() {
+		return this.ǂimageData[1];
 	}
 
-	get $imageHeight() {
-		return this.$imageData[2];
+	get ǂimageHeight() {
+		return this.ǂimageData[2];
 	}
 
-	get $imageLeftShift() {
-		return this.$imageData[3];
+	get ǂimageLeftShift() {
+		return this.ǂimageData[3];
 	}
 
-	get $imageTopShift() {
-		return this.$imageData[4];
+	get ǂimageTopShift() {
+		return this.ǂimageData[4];
 	}
 
-	get $imageLeft() {
-		return Math.ceil(this.$left) - this.$imageLeftShift;
+	get ǂimageLeft() {
+		return Math.ceil(this.ǂleft) - this.ǂimageLeftShift;
 	}
 
-	set $imageLeft(value) {
-		this.$left = value + this.$imageLeftShift;
+	set ǂimageLeft(value) {
+		this.ǂleft = value + this.ǂimageLeftShift;
 	}
 
-	get $imageTop() {
-		return Math.ceil(this.$top) - this.$imageTopShift;
+	get ǂimageTop() {
+		return Math.ceil(this.ǂtop) - this.ǂimageTopShift;
 	}
 
-	set $imageTop(value) {
-		this.$top = value + this.$imageTopShift;
+	set ǂimageTop(value) {
+		this.ǂtop = value + this.ǂimageTopShift;
 	}
 }

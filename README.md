@@ -22,20 +22,20 @@ Generates a cloud out of the words.
 
 | argument | description |
 | ---: | :--- |
-| `words` | Array of words to place into the cloud. A word is an object which is resolved to `{text, weight, rotation, rotationUnit, fontFamily, fontStyle, fontVariant, fontWeight, color}`. |
-| `cloudWidth` | Width of the cloud, in pixels. |
-| `cloudHeight` | Height of the cloud, in pixels. |
-| `text` | Default text for each word. |
-| `weight` | Default weight for each word. |
-| `rotation` | Default rotation of each word. |
-| `rotationUnit` | Default rotation unit of each word. Possible values are `'turn'`, `'deg'` and `'rad'`. |
-| `fontFamily` | Default font family for each word. |
-| `fontStyle` | Default font style for each word. |
-| `fontVariant` | Default font variant for each word. |
-| `fontWeight` | Default font weight for each word. |
-| `spacing` | Spacing between the words. The value is relative to the font size. |
-| `fontSizeRatio` | Font size ratio between the words. For example, if the value is `5`, then the largest word will be 5 times larger than the smallest one. The value `5` has the same effect as the value `1/5`. |
-| `createCanvas` | Function that returns a new `canvas` instance. |
+| `words` | An array of the words to place into the cloud. A word is an object which is resolved to `{text, weight, rotation, rotationUnit, fontFamily, fontStyle, fontVariant, fontWeight, color}`. |
+| `cloudWidth` | The width of the cloud, in pixels. |
+| `cloudHeight` | The height of the cloud, in pixels. |
+| `text` | The default text for each word. |
+| `weight` | The default weight for each word. |
+| `rotation` | The default rotation of each word. |
+| `rotationUnit` | The default rotation unit of each word. Possible values are `'turn'`, `'deg'` and `'rad'`. |
+| `fontFamily` | The default font family for each word. |
+| `fontStyle` | The default font style for each word. |
+| `fontVariant` | The default font variant for each word. |
+| `fontWeight` | The default font weight for each word. |
+| `spacing` | The spacing between the words. The value is relative to the font size. |
+| `fontSizeRatio` | The font size ratio between the words. For example, if the value is `5`, then the largest word will be 5 times larger than the smallest one. The value `5` has the same effect as the value `1/5`. |
+| `createCanvas` | A function that returns a new `canvas` instance. |
 
 Returns bounded words as an array of objects.
 

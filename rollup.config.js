@@ -17,7 +17,7 @@ export default {
 		uglify({
 			mangle: {
 				properties: {
-					regex: /^\$/,
+					regex: /^ǂ/,
 				},
 			},
 		}),

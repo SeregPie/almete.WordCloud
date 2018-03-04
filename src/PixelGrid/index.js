@@ -2,57 +2,57 @@ import findPixel from './findPixel';
 
 export default class {
 	constructor(aspect) {
-		this.$aspect = aspect;
-		this.$clear();
+		this.ǂaspect = aspect;
+		this.ǂclear();
 	}
 
-	get $left() {
-		return Math.ceil((this.$minLeft + this.$maxLeftWidth) / 2);
+	get ǂleft() {
+		return Math.ceil((this.ǂminLeft + this.ǂmaxLeftWidth) / 2);
 	}
 
-	get $top() {
-		return Math.ceil((this.$minTop + this.$maxTopHeight) / 2);
+	get ǂtop() {
+		return Math.ceil((this.ǂminTop + this.ǂmaxTopHeight) / 2);
 	}
 
-	get $width() {
-		return this.$maxLeftWidth - this.$minLeft;
+	get ǂwidth() {
+		return this.ǂmaxLeftWidth - this.ǂminLeft;
 	}
 
-	get $height() {
-		return this.$maxTopHeight - this.$minTop;
+	get ǂheight() {
+		return this.ǂmaxTopHeight - this.ǂminTop;
 	}
 
-	$put(pixels, pixelsLeft, pixelsTop) {
+	ǂput(pixels, pixelsLeft, pixelsTop) {
 		pixels.forEach(([pixelLeft, pixelTop]) => {
 			let left = pixelsLeft + pixelLeft;
 			let top = pixelsTop + pixelTop;
-			this.$pixels[`${left}|${top}`] = true;
-			this.$minLeft = Math.min(left, this.$minLeft);
-			this.$maxLeftWidth = Math.max(left + 1, this.$maxLeftWidth);
-			this.$minTop = Math.min(top, this.$minTop);
-			this.$maxTopHeight = Math.max(top + 1, this.$maxTopHeight);
+			this.ǂpixels[`${left}|${top}`] = true;
+			this.ǂminLeft = Math.min(left, this.ǂminLeft);
+			this.ǂmaxLeftWidth = Math.max(left + 1, this.ǂmaxLeftWidth);
+			this.ǂminTop = Math.min(top, this.ǂminTop);
+			this.ǂmaxTopHeight = Math.max(top + 1, this.ǂmaxTopHeight);
 		});
 	}
 
-	$canFit(pixels, pixelsLeft, pixelsTop) {
+	ǂcanFit(pixels, pixelsLeft, pixelsTop) {
 		return pixels.every(([pixelLeft, pixelTop]) => {
 			let left = pixelsLeft + pixelLeft;
 			let top = pixelsTop + pixelTop;
-			return !this.$pixels[`${left}|${top}`];
+			return !this.ǂpixels[`${left}|${top}`];
 		});
 	}
 
-	$findFit(pixels, pixelsLeft, pixelsTop) {
-		return findPixel(this.$aspect, [pixelsLeft + this.$left, pixelsTop + this.$top], ([pixelsLeft, pixelsTop]) => {
-			return this.$canFit(pixels, pixelsLeft, pixelsTop);
+	ǂfindFit(pixels, pixelsLeft, pixelsTop) {
+		return findPixel(this.ǂaspect, [pixelsLeft + this.ǂleft, pixelsTop + this.ǂtop], ([pixelsLeft, pixelsTop]) => {
+			return this.ǂcanFit(pixels, pixelsLeft, pixelsTop);
 		});
 	}
 
-	$clear() {
-		this.$pixels = {};
-		this.$minLeft = 0;
-		this.$maxLeftWidth = 0;
-		this.$minTop = 0;
-		this.$maxTopHeight = 0;
+	ǂclear() {
+		this.ǂpixels = {};
+		this.ǂminLeft = 0;
+		this.ǂmaxLeftWidth = 0;
+		this.ǂminTop = 0;
+		this.ǂmaxTopHeight = 0;
 	}
 }
