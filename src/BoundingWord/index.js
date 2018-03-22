@@ -1,11 +1,11 @@
-import Geometry_getRotatedRectangleBoundingBoxHeight from 'x/src/Geometry/getRotatedRectangleBoundingBoxHeight';
-import Geometry_getRotatedRectangleBoundingBoxWidth from 'x/src/Geometry/getRotatedRectangleBoundingBoxWidth';
 import Math_turnToDeg from 'x/src/Math/turnToDeg';
 import Math_turnToRad from 'x/src/Math/turnToRad';
 
+import getBoundingBoxHeight from './getBoundingBoxHeight';
+import getBoundingBoxWidth from './getBoundingBoxWidth';
 import getFont from './getFont';
-import getTextWidth from './getTextWidth';
 import getImageData from './getImageData';
+import getTextWidth from './getTextWidth';
 
 export default class {
 	constructor(
@@ -91,7 +91,7 @@ export default class {
 	}
 
 	get ǂboundingBoxWidth() {
-		return Geometry_getRotatedRectangleBoundingBoxWidth(
+		return getBoundingBoxWidth(
 			this.ǂtextWidth,
 			this.ǂfontSize,
 			this.ǂrotationRad,
@@ -99,7 +99,7 @@ export default class {
 	}
 
 	get ǂboundingBoxHeight() {
-		return Geometry_getRotatedRectangleBoundingBoxHeight(
+		return getBoundingBoxHeight(
 			this.ǂtextWidth,
 			this.ǂfontSize,
 			this.ǂrotationRad,
@@ -136,12 +136,12 @@ export default class {
 				this.ǂfont,
 				this.ǂpadding * 2,
 				this.ǂrotationRad,
-				Geometry_getRotatedRectangleBoundingBoxWidth(
+				getBoundingBoxWidth(
 					this.ǂtextWidth + (this.ǂpadding + this.ǂfontSize) * 2,
 					this.ǂfontSize + (this.ǂpadding + this.ǂfontSize) * 2,
 					this.ǂrotationRad,
 				),
-				Geometry_getRotatedRectangleBoundingBoxHeight(
+				getBoundingBoxHeight(
 					this.ǂtextWidth + (this.ǂpadding + this.ǂfontSize) * 2,
 					this.ǂfontSize + (this.ǂpadding + this.ǂfontSize) * 2,
 					this.ǂrotationRad,

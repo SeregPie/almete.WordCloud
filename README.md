@@ -35,12 +35,12 @@ Generates a cloud out of the words.
 | `fontWeight` | The default font weight for each word. |
 | `spacing` | The spacing between the words. The value is relative to the font size. |
 | `fontSizeRatio` | The font size ratio between the words. For example, if the value is `5` then the largest word will be 5 times larger than the smallest one. The value `5` has the same effect as the value `1/5`. |
-| `createCanvas` | A function that returns a new `canvas` instance. |
+| `createCanvas` | A function that creates a new `canvas` instance. |
 
 Returns bounded words as an array of objects.
 
 ```
-{
+[{
   text,  
   rotationTurn,
   rotationDeg,
@@ -58,7 +58,7 @@ Returns bounded words as an array of objects.
   boundingBoxTop,
   left,
   top,
-}
+}]
 ```
 
 ## demo
