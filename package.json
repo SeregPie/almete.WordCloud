@@ -1,6 +1,6 @@
 {
 	"name": "almete.wordcloud",
-	"version": "18.3.4",
+	"version": "18.3.23",
 	"description": "Generates a cloud out of the words.",
 	"main": "almete.WordCloud.js",
 	"scripts": {
