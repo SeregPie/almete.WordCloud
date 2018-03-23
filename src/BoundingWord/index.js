@@ -25,7 +25,7 @@ export default class {
 		this.ǂfontWeight = fontWeight;
 		this.ǂcreateCanvas = createCanvas;
 		this.ǂ_fontSize = 1;
-		this.ǂ_relativePadding = 0;
+		this.ǂ_padding = 0;
 		this.ǂrelativeLeft = 0;
 		this.ǂrelativeTop = 0;
 	}
@@ -63,9 +63,15 @@ export default class {
 		if (this.ǂ_relativeTextWidth === undefined) {
 			this.ǂ_relativeTextWidth = getTextWidth(
 				this.ǂtext,
-				this.ǂfont,
+				getFont(
+					this.ǂfontStyle,
+					this.ǂfontVariant,
+					this.ǂfontWeight,
+					1,
+					this.ǂfontFamily,
+				),
 				this.ǂcreateCanvas,
-			) / this.ǂfontSize;
+			);
 		}
 		return this.ǂ_relativeTextWidth;
 	}
@@ -114,38 +120,28 @@ export default class {
 		return this.ǂtop - this.ǂboundingBoxHeight / 2;
 	}
 
-	get ǂrelativePadding() {
-		return this.ǂ_relativePadding;
+	get ǂpadding() {
+		return this.ǂ_padding;
 	}
 
-	set ǂrelativePadding(value) {
-		if (this.ǂ_relativePadding !== value) {
-			this.ǂ_relativePadding = value;
+	set ǂpadding(value) {
+		if (this.ǂ_padding !== value) {
+			this.ǂ_padding = value;
 			this.ǂ_imageData = undefined;
 		}
-	}
-
-	get ǂpadding() {
-		return this.ǂrelativePadding * this.ǂfontSize;
 	}
 
 	get ǂimageData() {
 		if (this.ǂ_imageData === undefined) {
 			this.ǂ_imageData = getImageData(
 				this.ǂtext,
-				this.ǂfont,
-				this.ǂpadding * 2,
+				this.ǂfontStyle,
+				this.ǂfontVariant,
+				this.ǂfontWeight,
+				this.ǂfontSize,
+				this.ǂfontFamily,
+				this.ǂpadding,
 				this.ǂrotationRad,
-				getBoundingBoxWidth(
-					this.ǂtextWidth + (this.ǂpadding + this.ǂfontSize) * 2,
-					this.ǂfontSize + (this.ǂpadding + this.ǂfontSize) * 2,
-					this.ǂrotationRad,
-				),
-				getBoundingBoxHeight(
-					this.ǂtextWidth + (this.ǂpadding + this.ǂfontSize) * 2,
-					this.ǂfontSize + (this.ǂpadding + this.ǂfontSize) * 2,
-					this.ǂrotationRad,
-				),
 				this.ǂcreateCanvas,
 			);
 		}

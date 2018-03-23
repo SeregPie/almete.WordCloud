@@ -7,6 +7,9 @@ import Math_radToTurn from 'x/src/Math/radToTurn';
 import BoundingWord from './BoundingWord';
 import PixelGrid from './PixelGrid';
 
+const renderingFontSizeInterval = 2;
+const renderingFontSizeBase = 4;
+
 export default function(words, cloudWidth, cloudHeight, {
 	text: defaultText = '',
 	weight: defaultWeight = 1,
@@ -18,8 +21,6 @@ export default function(words, cloudWidth, cloudHeight, {
 	fontWeight: defaultFontWeight = 'normal',
 	spacing = 0,
 	fontSizeRatio = 0,
-	renderingFontSizeInterval = 2,
-	renderingFontSizeBase = 4,
 	createCanvas = function() {
 		return document.createElement('canvas');
 	},
@@ -118,11 +119,11 @@ export default function(words, cloudWidth, cloudHeight, {
 				} else {
 					grid.ǂput(previousWord.ǂimagePixels, previousWord.ǂimageLeft, previousWord.ǂimageTop);
 				}
-				currentWord.ǂrelativePadding = spacing;
+				currentWord.ǂpadding = spacing;
 				let [imageLeft, imageTop] = grid.ǂfindFit(currentWord.ǂimagePixels, currentWord.ǂimageLeft, currentWord.ǂimageTop);
 				currentWord.ǂimageLeft = imageLeft;
 				currentWord.ǂimageTop = imageTop;
-				currentWord.ǂrelativePadding = 0;
+				currentWord.ǂpadding = 0;
 				return currentWord;
 			});
 			grid.ǂput(lastWord.ǂimagePixels, lastWord.ǂimageLeft, lastWord.ǂimageTop);

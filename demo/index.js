@@ -66,7 +66,7 @@
 
 					spacing: {
 						values: [0, 1/4, 1/2, 1, 2],
-						valueIndex: 1,
+						valueIndex: 0,
 					},
 
 					fontSizeRatio: {
@@ -151,7 +151,7 @@
 									ctx.font = boundedWord.font;
 									ctx.textAlign = 'center';
 									ctx.textBaseline = 'middle';
-									ctx.fillStyle = 'Grey';
+									ctx.fillStyle = chance.color({format: 'hex'});
 									ctx.fillText(boundedWord.text, 0, 0);
 									ctx.restore();
 								});
