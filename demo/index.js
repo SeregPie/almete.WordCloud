@@ -1,93 +1,179 @@
 (function() {
 
+	var svgNS = 'http://www.w3.org/2000/svg';
+
 	new Vue({
-		el: '#App',
+		el: '#app',
 
 		data: function() {
 			return {
-				form: {
-					words: {
-						value: '',
-					},
-
-					rotation: (function() {
-						var values = [
-							function() {
-								return 0;
-							},
-							function() {
-								return 7/8;
-							},
-							function() {
-								return chance.pickone([0, 3/4]);
-							},
-							function() {
-								return chance.pickone([0, 1/8, 3/4, 7/8]);
-							},
-							function() {
-								return Math.random();
-							},
-						];
-						return {
-							values: values,
-							value: chance.pickone(values),
-						};
-					})(),
-
-					fontFamily: (function() {
-						var values = [
-							'Abril Fatface',
-							'Annie Use Your Telescope',
-							'Anton',
-							'Bahiana',
-							'Baloo Bhaijaan',
-							'Barrio',
-							'Finger Paint',
-							'Fredericka the Great',
-							'Gloria Hallelujah',
-							'Indie Flower',
-							'Life Savers',
-							'Londrina Sketch',
-							'Lora',
-							'Love Ya Like A Sister',
-							'Merienda',
-							'Nothing You Could Do',
-							'Pacifico',
-							'Quicksand',
-							'Righteous',
-							'Sacramento',
-							'Shadows Into Light',
-						];
-						return {
-							values: values,
-							value: chance.pickone(values),
-						};
-					})(),
-
-					spacing: {
-						values: [0, 1/4, 1/2, 1, 2],
-						valueIndex: 0,
-					},
-
-					fontSizeRatio: {
-						values: [0, 1, 2, 5, 20],
-						valueIndex: 0,
-					},
-				},
-
+				drawer: true,
 				canvasWidth: 0,
 				canvasHeight: 0,
-
-				drawer: true,
+				wordsText: undefined,
+				rotationItemIndex: undefined,
+				rotationItems: [
+					{
+						value: function() {
+							return 0;
+						},
+						svg: (function() {
+							var div = document.createElement('div');
+							div.appendChild((function() {
+								var svg = document.createElementNS(svgNS, 'svg');
+								svg.setAttribute('viewBox', '0 0 12 12');
+								svg.appendChild((function() {
+									var path = document.createElementNS(svgNS, 'path');
+									path.setAttribute('d', 'M0 7 L0 5 L12 5 L12 7 Z');
+									return path;
+								})());
+								return svg;
+							})());
+							return URL.createObjectURL(new Blob([div.innerHTML]));
+						})(),
+					},
+					{
+						value: function() {
+							return 7/8;
+						},
+						svg: (function() {
+							var div = document.createElement('div');
+							div.appendChild((function() {
+								var svg = document.createElementNS(svgNS, 'svg');
+								svg.setAttribute('viewBox', '0 0 12 12');
+								svg.appendChild((function() {
+									var path = document.createElementNS(svgNS, 'path');
+									path.setAttribute('d', 'M0 7 L0 5 L12 5 L12 7 Z');
+									path.setAttribute('transform', 'rotate(315 6 6)');
+									return path;
+								})());
+								return svg;
+							})());
+							return URL.createObjectURL(new Blob([div.innerHTML]));
+						})(),
+					},
+					{
+						value: function(text) {
+							var chance = new Chance(text);
+							return chance.pickone([0, 3/4]);
+						},
+						svg: (function() {
+							var div = document.createElement('div');
+							div.appendChild((function() {
+								var svg = document.createElementNS(svgNS, 'svg');
+								svg.setAttribute('viewBox', '0 0 12 12');
+								svg.appendChild((function() {
+									var path = document.createElementNS(svgNS, 'path');
+									path.setAttribute('d', 'M0 7 L0 5 L12 5 L12 7 Z');
+									return path;
+								})());
+								svg.appendChild((function() {
+									var path = document.createElementNS(svgNS, 'path');
+									path.setAttribute('d', 'M0 7 L0 5 L12 5 L12 7 Z');
+									path.setAttribute('transform', 'rotate(90 6 6)');
+									return path;
+								})());
+								return svg;
+							})());
+							return URL.createObjectURL(new Blob([div.innerHTML]));
+						})(),
+					},
+					{
+						value: function(text) {
+							var chance = new Chance(text);
+							return chance.pickone([0, 1/8, 3/4, 7/8]);
+						},
+						svg: (function() {
+							var div = document.createElement('div');
+							div.appendChild((function() {
+								var svg = document.createElementNS(svgNS, 'svg');
+								svg.setAttribute('viewBox', '0 0 12 12');
+								svg.appendChild((function() {
+									var path = document.createElementNS(svgNS, 'path');
+									path.setAttribute('d', 'M0 7 L0 5 L12 5 L12 7 Z');
+									return path;
+								})());
+								svg.appendChild((function() {
+									var path = document.createElementNS(svgNS, 'path');
+									path.setAttribute('d', 'M0 7 L0 5 L12 5 L12 7 Z');
+									path.setAttribute('transform', 'rotate(45 6 6)');
+									return path;
+								})());
+								svg.appendChild((function() {
+									var path = document.createElementNS(svgNS, 'path');
+									path.setAttribute('d', 'M0 7 L0 5 L12 5 L12 7 Z');
+									path.setAttribute('transform', 'rotate(90 6 6)');
+									return path;
+								})());
+								svg.appendChild((function() {
+									var path = document.createElementNS(svgNS, 'path');
+									path.setAttribute('d', 'M0 7 L0 5 L12 5 L12 7 Z');
+									path.setAttribute('transform', 'rotate(315 6 6)');
+									return path;
+								})());
+								return svg;
+							})());
+							return URL.createObjectURL(new Blob([div.innerHTML]));
+						})(),
+					},
+					{
+						value: function(text) {
+							var chance = new Chance(text);
+							return chance.random();
+						},
+						svg: (function() {
+							var div = document.createElement('div');
+							div.appendChild((function() {
+								var svg = document.createElementNS(svgNS, 'svg');
+								svg.setAttribute('viewBox', '0 0 2 2');
+								svg.appendChild((function() {
+									var circle = document.createElementNS(svgNS, 'circle');
+									circle.setAttribute('cx', 1);
+									circle.setAttribute('cy', 1);
+									circle.setAttribute('r', 1);
+									return circle;
+								})());
+								return svg;
+							})());
+							return URL.createObjectURL(new Blob([div.innerHTML]));
+						})(),
+					}
+				],
+				fontFamily: undefined,
+				fontFamilyValues: [
+					'Abril Fatface',
+					'Annie Use Your Telescope',
+					'Anton',
+					'Bahiana',
+					'Baloo Bhaijaan',
+					'Barrio',
+					'Finger Paint',
+					'Fredericka the Great',
+					'Gloria Hallelujah',
+					'Indie Flower',
+					'Life Savers',
+					'Londrina Sketch',
+					'Love Ya Like A Sister',
+					'Merienda',
+					'Nothing You Could Do',
+					'Pacifico',
+					'Quicksand',
+					'Righteous',
+					'Sacramento',
+					'Shadows Into Light',
+				],
+				spacingValueIndex: 1,
+				spacingValues: [0, 1/4, 1/2, 1, 2],
+				fontSizeRatioValueIndex: 0,
+				fontSizeRatioValues: [0, 1/20, 1/5, 1/2, 1],
 			};
 		},
 
 		computed: {
 			words: function() {
-				var rotationValue = this.form.rotation.value;
-				var wordsValue = this.form.words.value;
-
-				return wordsValue
+				var wordsText = this.wordsText;
+				var rotation = this.rotation;
+				return wordsText
 					.split(/[\r\n]+/)
 					.map(function(line) {
 						return /^(.+)\s+(-?\d+)$/.exec(line);
@@ -96,34 +182,27 @@
 						return matched;
 					})
 					.map(function(matched) {
+						var text = matched[1];
+						var weight = Number.parseInt(matched[2]);
 						return {
-							text: matched[1],
-							weight: Number.parseInt(matched[2]),
-							rotation: rotationValue(),
+							text: text,
+							weight: weight,
+							rotation: rotation(text),
 						};
 					});
 			},
 
-			spacing: function() {
-				var values = this.form.spacing.values;
-				var valueIndex = this.form.spacing.valueIndex;
-				var value = values[valueIndex];
-
-				return value;
+			rotation: function() {
+				var item = this.rotationItems[this.rotationItemIndex];
+				return item.value;
 			},
 
-			fontFamily: function() {
-				var value = this.form.fontFamily.value;
-
-				return value;
+			spacing: function() {
+				return this.spacingValues[this.spacingValueIndex];
 			},
 
 			fontSizeRatio: function() {
-				var values = this.form.fontSizeRatio.values;
-				var valueIndex = this.form.fontSizeRatio.valueIndex;
-				var value = values[valueIndex];
-
-				return value;
+				return this.fontSizeRatioValues[this.fontSizeRatioValueIndex];
 			},
 
 			drawWordCloud: function() {
@@ -159,38 +238,33 @@
 						});
 				};
 			},
+		},
 
-			drawWordCloudTrigger: function() {
+		created: function() {
+			this.generateWordsText();
+			this.rotationItemIndex = chance.integer({min: 0, max: this.rotationItems.length - 1});
+			this.fontFamily = chance.pickone(this.fontFamilyValues);
+			this.$watch(function() {
 				var canvas = this.$refs.canvas;
-
 				var canvasWidth = this.canvasWidth;
 				var canvasHeight = this.canvasHeight;
 				var words = this.words;
 				var fontFamily = this.fontFamily;
 				var spacing = this.spacing;
 				var fontSizeRatio = this.fontSizeRatio;
-
 				if (canvas) {
 					return setTimeout(function() {
 						this.drawWordCloud(canvas, canvasWidth, canvasHeight, words, fontFamily, spacing, fontSizeRatio);
 					}.bind(this), 1000);
 				}
-			},
-		},
-
-		watch: {
-			drawWordCloudTrigger: function(newTimeoutId, oldTimeoutId) {
+			}, function(newTimeoutId, oldTimeoutId) {
 				clearTimeout(oldTimeoutId);
-			},
-		},
-
-		created: function() {
-			this.generateFormWordsValue();
+			});
 		},
 
 		methods: {
-			generateFormWordsValue: function() {
-				this.form.words.value = [
+			generateWordsText: function() {
+				this.wordsText = [
 					[9, 1, 3],
 					[4, 5, 15],
 					[2, 5, 15],
@@ -201,18 +275,18 @@
 						var minCount = item[1];
 						var maxCount = item[2];
 						var count = chance.integer({min: minCount, max: maxCount});
-						var words = chance.n(chance.word, count);
-						words.forEach(function(word) {
-							returns.push(word + ' ' + weight);
-						});
+						chance.n(function() {
+							var word = chance.word();
+							returns.push(word+' '+weight);
+						}, count);
 						return returns;
 					}, [])
 					.join('\n');
 			},
 
-			onCanvasContainerResize: function(size) {
-				this.canvasWidth = size.width;
-				this.canvasHeight = size.height;
+			onCanvasContainerResize: function(event) {
+				this.canvasWidth = event.w;
+				this.canvasHeight = event.h;
 			},
 		},
 	});

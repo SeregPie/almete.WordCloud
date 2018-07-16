@@ -1,5 +1,5 @@
-import Math_turnToDeg from 'x/src/Math/turnToDeg';
-import Math_turnToRad from 'x/src/Math/turnToRad';
+import Math_turnToDeg from '/utils/Math/turnToDeg';
+import Math_turnToRad from '/utils/Math/turnToRad';
 
 import getBoundingBoxHeight from './getBoundingBoxHeight';
 import getBoundingBoxWidth from './getBoundingBoxWidth';

@@ -1,14 +1,13 @@
-import Array_first from 'x/src/Array/first';
-import Array_last from 'x/src/Array/last';
-import Math_degToTurn from 'x/src/Math/degToTurn';
-import Math_mapLinear from 'x/src/Math/mapLinear';
-import Math_radToTurn from 'x/src/Math/radToTurn';
+import Array_last from '/utils/Array/last';
+import Math_degToTurn from '/utils/Math/degToTurn';
+import Math_mapLinear from '/utils/Math/mapLinear';
+import Math_radToTurn from '/utils/Math/radToTurn';
 
 import BoundingWord from './BoundingWord';
 import PixelGrid from './PixelGrid';
 
-const renderingFontSizeInterval = 2;
-const renderingFontSizeBase = 4;
+let renderingFontSizeInterval = 2;
+let renderingFontSizeBase = 4;
 
 export default function(words, cloudWidth, cloudHeight, {
 	text: defaultText = '',
@@ -69,7 +68,7 @@ export default function(words, cloudWidth, cloudHeight, {
 
 		if (words.length > 0) {
 
-			let firstWord = Array_first(words);
+			let firstWord = words[0];
 			let lastWord = Array_last(words);
 
 			let maxWeight = firstWord.ǂweight;
