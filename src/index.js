@@ -24,14 +24,11 @@ export default function(words, cloudWidth, cloudHeight, {
 		return document.createElement('canvas');
 	},
 } = {}) {
-
 	fontSizeRatio = Math.abs(fontSizeRatio);
 	if (fontSizeRatio > 1) {
 		fontSizeRatio = 1 / fontSizeRatio;
 	}
-
 	if (cloudWidth > 0 && cloudHeight > 0) {
-
 		words = words
 			.map(({
 				text = defaultText,
@@ -65,12 +62,9 @@ export default function(words, cloudWidth, cloudHeight, {
 			})
 			.filter(({ǂtextWidth}) => ǂtextWidth > 0)
 			.sort((word, otherWord) => otherWord.ǂweight - word.ǂweight);
-
 		if (words.length > 0) {
-
 			let firstWord = words[0];
 			let lastWord = Array_last(words);
-
 			let maxWeight = firstWord.ǂweight;
 			let minWeight = lastWord.ǂweight;
 			if (minWeight < maxWeight) {
@@ -90,7 +84,6 @@ export default function(words, cloudWidth, cloudHeight, {
 					word.ǂfontSize = Math_mapLinear(word.ǂweight, minWeight, maxWeight, 1, fontSizeRange);
 				});
 			}
-
 			words.reduceRight((renderingFontSizeFactor, word) => {
 				if (word.ǂfontSize < renderingFontSizeInterval * renderingFontSizeFactor) {
 					word.ǂfontSize /= renderingFontSizeFactor;
@@ -100,13 +93,10 @@ export default function(words, cloudWidth, cloudHeight, {
 				}
 				return (word.ǂrenderingFontSizeFactor = renderingFontSizeFactor);
 			}, 1);
-
 			words.forEach(word => {
 				word.ǂfontSize *= renderingFontSizeBase;
 			});
-
 			let grid = new PixelGrid([cloudWidth, cloudHeight]);
-
 			words.reduce((previousWord, currentWord, index) => {
 				if (currentWord.ǂrenderingFontSizeFactor < previousWord.ǂrenderingFontSizeFactor) {
 					grid.ǂclear();
@@ -126,7 +116,6 @@ export default function(words, cloudWidth, cloudHeight, {
 				return currentWord;
 			});
 			grid.ǂput(lastWord.ǂimagePixels, lastWord.ǂimageLeft, lastWord.ǂimageTop);
-
 			if (grid.ǂwidth > 0 && grid.ǂheight > 0) {
 				let scaleFactor = Math.min(cloudWidth / grid.ǂwidth, cloudHeight / grid.ǂheight);
 				words.forEach(word => {
@@ -137,7 +126,6 @@ export default function(words, cloudWidth, cloudHeight, {
 					word.ǂtop += cloudHeight / 2;
 				});
 			}
-
 			return words.map(word => ({
 				text: word.ǂtext,
 				weight: word.ǂweight,
@@ -160,6 +148,5 @@ export default function(words, cloudWidth, cloudHeight, {
 			}));
 		}
 	}
-
 	return [];
 }
