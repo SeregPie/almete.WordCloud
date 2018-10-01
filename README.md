@@ -34,29 +34,29 @@ Generates a cloud out of the words.
 | `fontVariant` | The default font variant for each word. |
 | `fontWeight` | The default font weight for each word. |
 | `spacing` | The spacing between the words. The value is relative to the font size. |
-| `fontSizeRatio` | The font size ratio between the words. For example, if the value is `5` then the largest word will be 5 times larger than the smallest one. The value `5` has the same effect as the value `1/5`. |
-| `createCanvas` | A function that creates a new `canvas` instance. |
+| `fontSizeRatio` | The font size ratio between the words. For example, if the value is `5`, then the largest word will be 5 times larger than the smallest one. The value `5` has the same effect as the value `1/5`. |
+| `createCanvas` | Creates a new `Canvas` instance. |
 
 Returns bounded words as an array of objects.
 
 ```
 [{
-  text,  
-  rotationTurn,
-  rotationDeg,
-  rotationRad,
-  fontStyle,
-  fontVariant,
-  fontWeight,
-  fontSize,
-  fontFamily,
-  font,
-  textWidth,
-  boundingBoxWidth,
   boundingBoxHeight,
   boundingBoxLeft,
   boundingBoxTop,
+  boundingBoxWidth,
+  font,
+  fontFamily,
+  fontSize,
+  fontStyle,
+  fontVariant,
+  fontWeight,
   left,
+  rotationDeg,
+  rotationRad,
+  rotationTurn,
+  text,  
+  textWidth,
   top,
 }]
 ```
@@ -86,7 +86,7 @@ import WordCloud from 'almete.wordcloud';
 ### Node
 
 ```javascript
-const WordCloud = require('almete.wordcloud');
+let WordCloud = require('almete.wordcloud');
 ```
 
 ### browser
