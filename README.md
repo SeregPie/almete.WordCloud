@@ -41,16 +41,13 @@ Returns bounded words as an array of objects.
 
 ```
 [{
-  boundingBoxHeight,
-  boundingBoxLeft,
-  boundingBoxTop,
-  boundingBoxWidth,
   font,
   fontFamily,
   fontSize,
   fontStyle,
   fontVariant,
   fontWeight,
+  height,
   left,
   rotationDeg,
   rotationRad,
@@ -58,6 +55,7 @@ Returns bounded words as an array of objects.
   text,  
   textWidth,
   top,
+  width,
 }]
 ```
 
@@ -114,9 +112,9 @@ let boundedWords = almete.WordCloud(words, canvas.width, canvas.height, {
   fontFamily: 'Roboto',
   fontWeight: 'bold',
 });
-boundedWords.forEach(({text, rotationRad, font, left, top}) => {
+boundedWords.forEach(({text, rotationRad, font, left, top, width, height}) => {
   ctx.save();
-  ctx.translate(left, top);
+  ctx.translate(left + width / 2, top + height / 2);
   ctx.rotate(rotationRad);
   ctx.font = font;
   ctx.textAlign = 'center';

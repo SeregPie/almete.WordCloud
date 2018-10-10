@@ -31,14 +31,14 @@ export default function(words, cloudWidth, cloudHeight, {
 	if (cloudWidth > 0 && cloudHeight > 0) {
 		words = words
 			.map(({
-				text = defaultText,
-				weight = defaultWeight,
-				rotation = defaultRotation,
-				rotationUnit = defaultRotationUnit,
 				fontFamily = defaultFontFamily,
 				fontStyle = defaultFontStyle,
 				fontVariant = defaultFontVariant,
 				fontWeight = defaultFontWeight,
+				rotation = defaultRotation,
+				rotationUnit = defaultRotationUnit,
+				text = defaultText,
+				weight = defaultWeight,
 			}) => {
 				let boundingWord = new BoundingWord(
 					text,
@@ -127,24 +127,22 @@ export default function(words, cloudWidth, cloudHeight, {
 				});
 			}
 			return words.map(word => ({
-				text: word.ǂtext,
-				weight: word.ǂweight,
-				rotationTurn: word.ǂrotationTurn,
-				rotationDeg: word.ǂrotationDeg,
-				rotationRad: word.ǂrotationRad,
+				font: word.ǂfont,
+				fontFamily: word.ǂfontFamily,
+				fontSize: word.ǂfontSize,
 				fontStyle: word.ǂfontStyle,
 				fontVariant: word.ǂfontVariant,
 				fontWeight: word.ǂfontWeight,
-				fontSize: word.ǂfontSize,
-				fontFamily: word.ǂfontFamily,
-				font: word.ǂfont,
+				height: word.ǂboundingBoxHeight,
+				left: word.ǂboundingBoxLeft,
+				rotationDeg: word.ǂrotationDeg,
+				rotationRad: word.ǂrotationRad,
+				rotationTurn: word.ǂrotationTurn,
+				text: word.ǂtext,
 				textWidth: word.ǂtextWidth,
-				boundingBoxWidth: word.ǂboundingBoxWidth,
-				boundingBoxHeight: word.ǂboundingBoxHeight,
-				boundingBoxLeft: word.ǂboundingBoxLeft,
-				boundingBoxTop: word.ǂboundingBoxTop,
-				left: word.ǂleft,
-				top: word.ǂtop,
+				top: word.ǂboundingBoxTop,
+				weight: word.ǂweight,
+				width: word.ǂboundingBoxWidth,
 			}));
 		}
 	}
