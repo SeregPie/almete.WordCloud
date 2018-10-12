@@ -4,12 +4,12 @@
 almete.WordCloud(words, cloudWidth, cloudHeight, {
   text = '',
   weight = 1,
-  rotation = 0,
-  rotationUnit = 'turn',
   fontFamily = 'serif',
   fontStyle = 'normal',
   fontVariant = 'normal',
   fontWeight = 'normal',
+  rotation = 0,
+  rotationUnit = 'turn',
   spacing = 0,
   fontSizeRatio = 0,
   createCanvas = function() {
@@ -27,12 +27,12 @@ Generates a cloud out of the words.
 | `cloudHeight` | The height of the cloud, in pixels. |
 | `text` | The default text for each word. |
 | `weight` | The default weight for each word. |
-| `rotation` | The default rotation for each word. |
-| `rotationUnit` | The default rotation unit for each word. Possible values are `'turn'`, `'deg'` and `'rad'`. |
 | `fontFamily` | The default font family for each word. |
 | `fontStyle` | The default font style for each word. |
 | `fontVariant` | The default font variant for each word. |
 | `fontWeight` | The default font weight for each word. |
+| `rotation` | The default rotation for each word. |
+| `rotationUnit` | The default rotation unit for each word. Possible values are `'turn'`, `'deg'` and `'rad'`. |
 | `spacing` | The spacing between the words. The value is relative to the font size. |
 | `fontSizeRatio` | The font size ratio between the words. For example, if the value is `5`, then the largest word will be 5 times larger than the smallest one. The value `5` has the same effect as the value `1/5`. |
 | `createCanvas` | Creates a new `Canvas` instance. |
@@ -41,21 +41,22 @@ Returns bounded words as an array of objects.
 
 ```
 [{
-  font,
+  text,
+  weight,
   fontFamily,
   fontSize,
   fontStyle,
   fontVariant,
   fontWeight,
-  height,
-  left,
+  font,
+  textWidth,
   rotationDeg,
   rotationRad,
   rotationTurn,
-  text,  
-  textWidth,
-  top,
   width,
+  height,
+  left,
+  top,
 }]
 ```
 
@@ -108,11 +109,11 @@ let words = [
   {text: 'adventure', weight: 3, rotation: -45},
 ];
 let boundedWords = almete.WordCloud(words, canvas.width, canvas.height, {
-  rotationUnit: 'deg',
   fontFamily: 'Roboto',
   fontWeight: 'bold',
+  rotationUnit: 'deg',
 });
-boundedWords.forEach(({text, rotationRad, font, left, top, width, height}) => {
+boundedWords.forEach(({text, font, rotationRad, width, height, left, top}) => {
   ctx.save();
   ctx.translate(left + width / 2, top + height / 2);
   ctx.rotate(rotationRad);

@@ -1,3 +1,3 @@
 export default function(n) {
-	return n / 360;
+	return n * Math.PI / 180;
 }
