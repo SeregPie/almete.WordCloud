@@ -30,8 +30,8 @@ export default class {
 					let currentTop = top + pixelTop;
 					this.ǂpixels[`${currentLeft}|${currentTop}`] = true;
 					this.ǂminLeft = Math.min(currentLeft, this.ǂminLeft);
-					this.ǂmaxLeft = Math.max(currentLeft, this.ǂmaxLeft);
 					this.ǂminTop = Math.min(currentTop, this.ǂminTop);
+					this.ǂmaxLeft = Math.max(currentLeft, this.ǂmaxLeft);
 					this.ǂmaxTop = Math.max(currentTop, this.ǂmaxTop);
 				}
 			}
@@ -67,7 +67,10 @@ export default class {
 			);
 			let [left, top] = InfinityInsideOutRectangeIterator(
 				this.ǂaspect,
-				[this.ǂcenterLeft - Math.floor((maxPixelLeft - minPixelLeft) / 2), this.ǂcenterTop - Math.floor((maxPixelTop - minPixelTop) / 2)],
+				[
+					Math.floor((this.ǂminLeft + this.ǂmaxLeft + minPixelLeft - maxPixelLeft) / 2),
+					Math.floor((this.ǂminTop + this.ǂmaxTop + minPixelTop - maxPixelTop) / 2),
+				],
 				([left, top]) => this.ǂfits(pixels, left, top),
 			);
 			return [left - minPixelLeft, top - minPixelTop];
