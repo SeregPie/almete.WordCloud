@@ -81,8 +81,8 @@ export default class {
 	ǂclear() {
 		this.ǂpixels = {};
 		this.ǂminLeft = 1;
-		this.ǂmaxLeft = 0;
 		this.ǂminTop = 1;
+		this.ǂmaxLeft = 0;
 		this.ǂmaxTop = 0;
 	}
 }
