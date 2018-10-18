@@ -7,19 +7,19 @@ export default class {
 	}
 
 	get ǂcenterLeft() {
-		return Math.ceil((this.ǂminLeft + this.ǂmaxLeftWidth) / 2);
+		return Math.floor((this.ǂminLeft + this.ǂmaxLeft) / 2);
 	}
 
 	get ǂcenterTop() {
-		return Math.ceil((this.ǂminTop + this.ǂmaxTopHeight) / 2);
+		return Math.floor((this.ǂminTop + this.ǂmaxTop) / 2);
 	}
 
 	get ǂwidth() {
-		return this.ǂmaxLeftWidth - this.ǂminLeft;
+		return this.ǂmaxLeft - this.ǂminLeft + 1;
 	}
 
 	get ǂheight() {
-		return this.ǂmaxTopHeight - this.ǂminTop;
+		return this.ǂmaxTop - this.ǂminTop + 1;
 	}
 
 	ǂput(image, left, top) {
@@ -30,9 +30,9 @@ export default class {
 					let currentTop = top + pixelTop;
 					this.ǂpixels[`${currentLeft}|${currentTop}`] = true;
 					this.ǂminLeft = Math.min(currentLeft, this.ǂminLeft);
-					this.ǂmaxLeftWidth = Math.max(currentLeft + 1, this.ǂmaxLeftWidth);
+					this.ǂmaxLeft = Math.max(currentLeft, this.ǂmaxLeft);
 					this.ǂminTop = Math.min(currentTop, this.ǂminTop);
-					this.ǂmaxTopHeight = Math.max(currentTop + 1, this.ǂmaxTopHeight);
+					this.ǂmaxTop = Math.max(currentTop, this.ǂmaxTop);
 				}
 			}
 		}
@@ -55,22 +55,31 @@ export default class {
 				}
 			}
 		}
-		let offsetLeft = Math.floor(image.width / 2);
-		let offsetTop = Math.floor(image.height / 2);
-		return InfinityInsideOutRectangeIterator(
-			this.ǂaspect,
-			[this.ǂcenterLeft - offsetLeft, this.ǂcenterTop - offsetTop],
-			([left, top]) => {
-				return this.ǂfits(pixels, left, top);
-			},
-		);
+		if (pixels.length > 0) {
+			let [minPixelLeft, minPixelTop] = pixels.reduce(([minPixelLeft, minPixelTop], [pixelLeft, pixelTop]) =>
+				[Math.min(pixelLeft, minPixelLeft), Math.min(pixelTop, minPixelTop)]
+			);
+			let [maxPixelLeft, maxPixelTop] = pixels.reduce(([maxPixelLeft, maxPixelTop], [pixelLeft, pixelTop]) =>
+				[Math.max(pixelLeft, maxPixelLeft), Math.max(pixelTop, maxPixelTop)]
+			);
+			pixels = pixels.map(([pixelLeft, pixelTop]) =>
+				[pixelLeft - minPixelLeft, pixelTop - minPixelTop]
+			);
+			let [left, top] = InfinityInsideOutRectangeIterator(
+				this.ǂaspect,
+				[this.ǂcenterLeft - Math.floor((maxPixelLeft - minPixelLeft) / 2), this.ǂcenterTop - Math.floor((maxPixelTop - minPixelTop) / 2)],
+				([left, top]) => this.ǂfits(pixels, left, top),
+			);
+			return [left - minPixelLeft, top - minPixelTop];
+		}
+		return [0, 0];
 	}
 
 	ǂclear() {
 		this.ǂpixels = {};
-		this.ǂminLeft = 0;
-		this.ǂmaxLeftWidth = 0;
-		this.ǂminTop = 0;
-		this.ǂmaxTopHeight = 0;
+		this.ǂminLeft = 1;
+		this.ǂmaxLeft = 0;
+		this.ǂminTop = 1;
+		this.ǂmaxTop = 0;
 	}
 }
