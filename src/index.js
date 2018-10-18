@@ -66,7 +66,8 @@ export default function(words, cloudWidth, cloudHeight, {
 					this.ǂrotationRad,
 				);
 			}
-			ǂ_getImage(lineWidth) {
+			ǂ_getImage(relativeLineWidth) {
+				let lineWidth = relativeLineWidth * this.ǂfontSize;
 				let canvas = createCanvas();
 				canvas.width = Math.round(getBoundingBoxWidth(
 					lineWidth + this.ǂfontSize * 2 + this.ǂtextWidth,
@@ -87,7 +88,7 @@ export default function(words, cloudWidth, cloudHeight, {
 				ctx.fillText(this.ǂtext, 0, 0);
 				if (lineWidth > 0) {
 					ctx.miterLimit = 1;
-					ctx.lineWidth = lineWidth * this.ǂfontSize;
+					ctx.lineWidth = lineWidth;
 					ctx.strokeText(this.ǂtext, 0, 0);
 				}
 				return ctx.getImageData(0, 0, canvas.width, canvas.height);
