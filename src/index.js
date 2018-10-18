@@ -11,7 +11,6 @@ import getFont from './getFont';
 import PixelGrid from './PixelGrid';
 
 let renderingFontSizeBase = 4;
-let renderingFontSizeInterval = 2;
 
 export default function(words, cloudWidth, cloudHeight, {
 	text: defaultText = '',
@@ -185,7 +184,7 @@ export default function(words, cloudWidth, cloudHeight, {
 				if (word.ǂfontSize < renderingFontSizeBase) {
 					do {
 						words.forEach(word => {
-							word.ǂscale(renderingFontSizeInterval);
+							word.ǂscale(2);
 						});
 					} while (word.ǂfontSize < renderingFontSizeBase);
 					sortedWords
