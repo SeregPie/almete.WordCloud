@@ -89,18 +89,17 @@
 						</v-flex>
 						<v-flex>
 							<v-input
-								label="rotation"
 								hide-details
+								label="rotation"
 							></v-input>
 							<v-btn-toggle
-								v-model="rotationItemIndex"
+								v-model="rotationIndex"
 								mandatory
 							>
 								<v-btn
 									v-for="(item, itemIndex) in rotationItems"
 									:key="itemIndex"
 									:value="itemIndex"
-									color="primary"
 									flat
 								>
 									<vue-svg
@@ -121,13 +120,15 @@
 								"
 							>
 								<v-input
-									label="spacing"
 									hide-details
+									label="spacing"
 								></v-input>
-								<v-chip small>{{ Math.round(spacing * 100) }}%</v-chip>
+								<v-chip
+									small
+								>{{ Math.round(spacing * 100) }}%</v-chip>
 							</div>
 							<v-slider
-								v-model="spacingValueIndex"
+								v-model="spacingIndex"
 								:max="spacingValues.length - 1"
 								:min="0"
 								class="mx-2 my-0"
@@ -144,13 +145,15 @@
 								"
 							>
 								<v-input
-									label="font size ratio"
 									hide-details
+									label="font size ratio"
 								></v-input>
-								<v-chip small>{{ Math.round(fontSizeRatio * 100) }}%</v-chip>
+								<v-chip
+									small
+								>{{ Math.round(fontSizeRatio * 100) }}%</v-chip>
 							</div>
 							<v-slider
-								v-model="fontSizeRatioValueIndex"
+								v-model="fontSizeRatioIndex"
 								:max="fontSizeRatioValues.length - 1"
 								:min="0"
 								class="mx-2 my-0"

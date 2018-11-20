@@ -191,11 +191,11 @@
 				drawer: true,
 				fontFamily: chance.pickone(fontFamilyValues),
 				fontFamilyValues: fontFamilyValues,
-				fontSizeRatioValueIndex: 0,
+				fontSizeRatioIndex: 0,
 				fontSizeRatioValues: fontSizeRatioValues,
-				rotationItemIndex: chance.integer({min: 0, max: rotationItems.length - 1}),
+				rotationIndex: chance.integer({min: 0, max: rotationItems.length - 1}),
 				rotationItems: rotationItems,
-				spacingValueIndex: 1,
+				spacingIndex: 1,
 				spacingValues: spacingValues,
 				wordsText: generateWordsText(),
 			};
@@ -258,16 +258,19 @@
 			},
 
 			fontSizeRatio: function() {
-				return this.fontSizeRatioValues[this.fontSizeRatioValueIndex];
+				return this.fontSizeRatioValues[this.fontSizeRatioIndex];
 			},
 
 			rotation: function() {
-				var item = this.rotationItems[this.rotationItemIndex];
-				return item.value;
+				return this.rotationItem.value;
+			},
+
+			rotationItem: function() {
+				return this.rotationItems[this.rotationIndex];
 			},
 
 			spacing: function() {
-				return this.spacingValues[this.spacingValueIndex];
+				return this.spacingValues[this.spacingIndex];
 			},
 
 			words: function() {
@@ -300,13 +303,13 @@
 		},
 
 		methods: {
-			regenerateWordsText: function() {
-				this.wordsText = generateWordsText();
-			},
-
 			onCanvasContainerResize: function(event) {
 				this.canvasWidth = event.w;
 				this.canvasHeight = event.h;
+			},
+
+			regenerateWordsText: function() {
+				this.wordsText = generateWordsText();
 			},
 		},
 	});

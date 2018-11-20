@@ -13,19 +13,19 @@ import PixelGrid from './PixelGrid';
 let renderingFontSizeBase = 4;
 
 export default function(words, cloudWidth, cloudHeight, {
-	text: defaultText = '',
-	weight: defaultWeight = 1,
+	createCanvas = function() {
+		return document.createElement('canvas');
+	},
 	fontFamily: defaultFontFamily = 'serif',
+	fontSizeRatio = 0,
 	fontStyle: defaultFontStyle = 'normal',
 	fontVariant: defaultFontVariant= 'normal',
 	fontWeight: defaultFontWeight = 'normal',
 	rotation: defaultRotation = 0,
 	rotationUnit: defaultRotationUnit = 'turn',
 	spacing = 0,
-	fontSizeRatio = 0,
-	createCanvas = function() {
-		return document.createElement('canvas');
-	},
+	text: defaultText = '',
+	weight: defaultWeight = 1,
 } = {}) {
 	if (cloudWidth > 0 && cloudHeight > 0) {
 		let Word = class {
@@ -113,17 +113,15 @@ export default function(words, cloudWidth, cloudHeight, {
 		};
 		words = words
 			.map(({
-				text = defaultText,
-				weight = defaultWeight,
 				fontFamily = defaultFontFamily,
 				fontStyle = defaultFontStyle,
 				fontVariant = defaultFontVariant,
 				fontWeight = defaultFontWeight,
 				rotation = defaultRotation,
 				rotationUnit = defaultRotationUnit,
+				text = defaultText,
+				weight = defaultWeight,
 			}) => Object.assign(new Word(), {
-				ǂtext: text,
-				ǂweight: weight,
 				ǂfontFamily: fontFamily,
 				ǂfontStyle: fontStyle,
 				ǂfontVariant: fontVariant,
@@ -149,6 +147,8 @@ export default function(words, cloudWidth, cloudHeight, {
 					}
 					return rotation;
 				})(),
+				ǂtext: text,
+				ǂweight: weight,
 			}))
 			.filter(({ǂtextWidth}) => ǂtextWidth > 0);
 		if (words.length > 0) {
@@ -211,22 +211,22 @@ export default function(words, cloudWidth, cloudHeight, {
 				});
 			}
 			return words.map(word => ({
-				text: word.ǂtext,
-				weight: word.ǂweight,
+				font: word.ǂfont,
 				fontFamily: word.ǂfontFamily,
 				fontSize: word.ǂfontSize,
 				fontStyle: word.ǂfontStyle,
 				fontVariant: word.ǂfontVariant,
 				fontWeight: word.ǂfontWeight,
-				font: word.ǂfont,
-				textWidth: word.ǂtextWidth,
+				height: word.ǂheight,
+				left: word.ǂleft,
 				rotationDeg: word.ǂrotationDeg,
 				rotationRad: word.ǂrotationRad,
 				rotationTurn: word.ǂrotationTurn,
-				width: word.ǂwidth,
-				height: word.ǂheight,
-				left: word.ǂleft,
+				text: word.ǂtext,
+				textWidth: word.ǂtextWidth,
 				top: word.ǂtop,
+				weight: word.ǂweight,
+				width: word.ǂwidth,
 			}));
 		}
 	}

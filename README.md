@@ -2,19 +2,19 @@
 
 ```
 almete.WordCloud(words, cloudWidth, cloudHeight, {
-  text = '',
-  weight = 1,
+  createCanvas = function() {
+    return document.createElement('canvas');
+  },
   fontFamily = 'serif',
+  fontSizeRatio = 0,
   fontStyle = 'normal',
   fontVariant = 'normal',
   fontWeight = 'normal',
   rotation = 0,
   rotationUnit = 'turn',
   spacing = 0,
-  fontSizeRatio = 0,
-  createCanvas = function() {
-    return document.createElement('canvas');
-  },
+  text = '',
+  weight = 1,
 })
 ```
 
@@ -25,48 +25,44 @@ Generates a cloud out of the words.
 | `words` | An array of the words to place into the cloud. A word is an object which is resolved to `{text, weight, rotation, rotationUnit, fontFamily, fontStyle, fontVariant, fontWeight}`. |
 | `cloudWidth` | The width of the cloud, in pixels. |
 | `cloudHeight` | The height of the cloud, in pixels. |
-| `text` | The default text for each word. |
-| `weight` | The default weight for each word. |
+| `createCanvas` | Creates a new `Canvas` instance. |
 | `fontFamily` | The default font family for each word. |
+| `fontSizeRatio` | The font size ratio between the words. For example, if the value is `5`, then the largest word will be 5 times larger than the smallest one. The value `5` has the same effect as the value `1/5`. |
 | `fontStyle` | The default font style for each word. |
 | `fontVariant` | The default font variant for each word. |
 | `fontWeight` | The default font weight for each word. |
 | `rotation` | The default rotation for each word. |
 | `rotationUnit` | The default rotation unit for each word. Possible values are `'turn'`, `'deg'` and `'rad'`. |
 | `spacing` | The spacing between the words. The value is relative to the font size. |
-| `fontSizeRatio` | The font size ratio between the words. For example, if the value is `5`, then the largest word will be 5 times larger than the smallest one. The value `5` has the same effect as the value `1/5`. |
-| `createCanvas` | Creates a new `Canvas` instance. |
+| `text` | The default text for each word. |
+| `weight` | The default weight for each word. |
 
 Returns bounded words as an array of objects.
 
 ```
 [{
-  text,
-  weight,
+  font,
   fontFamily,
   fontSize,
   fontStyle,
   fontVariant,
   fontWeight,
-  font,
-  textWidth,
+  height,
+  left,
   rotationDeg,
   rotationRad,
   rotationTurn,
-  width,
-  height,
-  left,
+  text,
+  textWidth,
   top,
+  weight,
+  width,
 }]
 ```
 
 ## demo
 
 [Try it out!](https://seregpie.github.io/almete.WordCloud/)
-
-## dependencies
-
-*no dependencies*
 
 ## setup
 
