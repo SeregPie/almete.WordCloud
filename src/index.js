@@ -52,6 +52,12 @@ export default function(words, cloudWidth, cloudHeight, {
 			get ǂrotationTurn() {
 				return Math_radToTurn(this.ǂrotationRad);
 			}
+			get ǂcenterLeft() {
+				return this.ǂleft + this.ǂwidth / 2;
+			}
+			get ǂcenterTop() {
+				return this.ǂtop + this.ǂheight / 2;
+			}
 			get ǂwidth() {
 				return getBoundingBoxWidth(
 					this.ǂtextWidth,
@@ -211,6 +217,8 @@ export default function(words, cloudWidth, cloudHeight, {
 				});
 			}
 			return words.map(word => ({
+				centerLeft: word.ǂcenterLeft,
+				centerTop: word.ǂcenterTop,
 				font: word.ǂfont,
 				fontFamily: word.ǂfontFamily,
 				fontSize: word.ǂfontSize,

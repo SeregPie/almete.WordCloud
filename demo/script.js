@@ -243,7 +243,7 @@
 									canvas.height = canvasHeight;
 									boundedWords.forEach(function(boundedWord) {
 										ctx.save();
-										ctx.translate(boundedWord.left + boundedWord.width / 2, boundedWord.top + boundedWord.height / 2);
+										ctx.translate(boundedWord.centerLeft, boundedWord.centerTop);
 										ctx.rotate(boundedWord.rotationRad);
 										ctx.font = boundedWord.font;
 										ctx.textAlign = 'center';
