@@ -27,7 +27,7 @@ export default function(words, cloudWidth, cloudHeight, {
 	text: defaultText = '',
 	weight: defaultWeight = 1,
 } = {}) {
-	if (cloudWidth > 0 && cloudHeight > 0) {
+	if (cloudWidth && cloudHeight) {
 		let Word = class {
 			constructor() {
 				this.ǂfontSize = 1;
@@ -156,8 +156,8 @@ export default function(words, cloudWidth, cloudHeight, {
 				ǂtext: text,
 				ǂweight: weight,
 			}))
-			.filter(({ǂtextWidth}) => ǂtextWidth > 0);
-		if (words.length > 0) {
+			.filter(({ǂtextWidth}) => ǂtextWidth);
+		if (words.length) {
 			let sortedWords = words
 				.slice()
 				.sort((word, otherWord) => otherWord.ǂweight - word.ǂweight);
@@ -206,7 +206,7 @@ export default function(words, cloudWidth, cloudHeight, {
 				return word;
 			});
 			lastWord.ǂput(grid);
-			if (grid.ǂwidth > 0 && grid.ǂheight > 0) {
+			if (grid.ǂwidth && grid.ǂheight) {
 				let scaling = Math.min(cloudWidth / grid.ǂwidth, cloudHeight / grid.ǂheight);
 				words.forEach(word => {
 					word.ǂleft -= grid.ǂcenterLeft;

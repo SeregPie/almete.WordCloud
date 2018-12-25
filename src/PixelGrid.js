@@ -55,7 +55,7 @@ export default class {
 				}
 			}
 		}
-		if (pixels.length > 0) {
+		if (pixels.length) {
 			let [minPixelLeft, minPixelTop] = pixels.reduce(([minPixelLeft, minPixelTop], [pixelLeft, pixelTop]) =>
 				[Math.min(pixelLeft, minPixelLeft), Math.min(pixelTop, minPixelTop)]
 			);
