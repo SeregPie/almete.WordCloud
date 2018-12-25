@@ -62,16 +62,18 @@ export default class {
 			let [maxPixelLeft, maxPixelTop] = pixels.reduce(([maxPixelLeft, maxPixelTop], [pixelLeft, pixelTop]) =>
 				[Math.max(pixelLeft, maxPixelLeft), Math.max(pixelTop, maxPixelTop)]
 			);
-			pixels = pixels.map(([pixelLeft, pixelTop]) =>
+			let trimmedPixels = pixels.map(([pixelLeft, pixelTop]) =>
 				[pixelLeft - minPixelLeft, pixelTop - minPixelTop]
 			);
+			let trimmedImageWidth = maxPixelLeft - minPixelLeft + 1;
+			let trimmedImageHeight = maxPixelTop - minPixelTop + 1;
 			let [left, top] = InfinityInsideOutRectangeIterator(
 				this.ǂaspect,
 				[
-					Math.floor((this.ǂminLeft + this.ǂmaxLeft + minPixelLeft - maxPixelLeft) / 2),
-					Math.floor((this.ǂminTop + this.ǂmaxTop + minPixelTop - maxPixelTop) / 2),
+					this.ǂcenterLeft - Math.floor(trimmedImageWidth / 2),
+					this.ǂcenterTop - Math.floor(trimmedImageHeight / 2),
 				],
-				([left, top]) => this.ǂfits(pixels, left, top),
+				([left, top]) => this.ǂfits(trimmedPixels, left, top),
 			);
 			return [left - minPixelLeft, top - minPixelTop];
 		}
