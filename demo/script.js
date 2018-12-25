@@ -206,6 +206,7 @@
 				var outerToken;
 				return function() {
 					var innerToken = outerToken = {};
+					var devicePixelRatio = window.devicePixelRatio || 1;
 					var $refs = this.$refs;
 					var canvas = $refs.canvas;
 					var canvasHeight = this.canvasHeight;
@@ -239,8 +240,11 @@
 										gap: gap,
 										rotationUnit: 'turn',
 									});
-									canvas.width = canvasWidth;
-									canvas.height = canvasHeight;
+									canvas.style.width = canvasWidth+'px';
+									canvas.style.height = canvasHeight+'px';
+									canvas.width = devicePixelRatio * canvasWidth;
+									canvas.height = devicePixelRatio * canvasHeight;
+									ctx.scale(devicePixelRatio, devicePixelRatio);
 									boundedWords.forEach(function(boundedWord) {
 										ctx.save();
 										ctx.translate(boundedWord.centerLeft, boundedWord.centerTop);
