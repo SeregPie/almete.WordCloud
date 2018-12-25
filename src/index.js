@@ -30,91 +30,91 @@ export default function(words, cloudWidth, cloudHeight, {
 	if (cloudWidth && cloudHeight) {
 		let Word = class {
 			constructor() {
-				this.ǂfontSize = 1;
-				this.ǂleft = 0;
-				this.ǂtop = 0;
+				this._fontSize = 1;
+				this._left = 0;
+				this._top = 0;
 			}
-			get ǂfont() {
+			get _font() {
 				return getFont(
-					this.ǂfontStyle,
-					this.ǂfontVariant,
-					this.ǂfontWeight,
-					this.ǂfontSize,
-					this.ǂfontFamily,
+					this._fontStyle,
+					this._fontVariant,
+					this._fontWeight,
+					this._fontSize,
+					this._fontFamily,
 				);
 			}
-			get ǂtextWidth() {
-				return this.ǂrelativeTextWidth * this.ǂfontSize;
+			get _textWidth() {
+				return this._relativeTextWidth * this._fontSize;
 			}
-			get ǂrotationDeg() {
-				return Math_radToDeg(this.ǂrotationRad);
+			get _rotationDeg() {
+				return Math_radToDeg(this._rotationRad);
 			}
-			get ǂrotationTurn() {
-				return Math_radToTurn(this.ǂrotationRad);
+			get _rotationTurn() {
+				return Math_radToTurn(this._rotationRad);
 			}
-			get ǂcenterLeft() {
-				return this.ǂleft + this.ǂwidth / 2;
+			get _centerLeft() {
+				return this._left + this._width / 2;
 			}
-			get ǂcenterTop() {
-				return this.ǂtop + this.ǂheight / 2;
+			get _centerTop() {
+				return this._top + this._height / 2;
 			}
-			get ǂwidth() {
+			get _width() {
 				return getBoundingBoxWidth(
-					this.ǂtextWidth,
-					this.ǂfontSize,
-					this.ǂrotationRad,
+					this._textWidth,
+					this._fontSize,
+					this._rotationRad,
 				);
 			}
-			get ǂheight() {
+			get _height() {
 				return getBoundingBoxHeight(
-					this.ǂtextWidth,
-					this.ǂfontSize,
-					this.ǂrotationRad,
+					this._textWidth,
+					this._fontSize,
+					this._rotationRad,
 				);
 			}
-			ǂ_getImage(relativeLineWidth) {
-				let lineWidth = relativeLineWidth * this.ǂfontSize;
+			__getImage(relativeLineWidth) {
+				let lineWidth = relativeLineWidth * this._fontSize;
 				let canvas = createCanvas();
 				canvas.width = Math.round(getBoundingBoxWidth(
-					lineWidth + this.ǂfontSize * 2 + this.ǂtextWidth,
-					lineWidth + this.ǂfontSize * 3,
-					this.ǂrotationRad,
+					lineWidth + this._fontSize * 2 + this._textWidth,
+					lineWidth + this._fontSize * 3,
+					this._rotationRad,
 				));
 				canvas.height = Math.round(getBoundingBoxHeight(
-					lineWidth + this.ǂfontSize * 2 + this.ǂtextWidth,
-					lineWidth + this.ǂfontSize * 3,
-					this.ǂrotationRad,
+					lineWidth + this._fontSize * 2 + this._textWidth,
+					lineWidth + this._fontSize * 3,
+					this._rotationRad,
 				));
 				let ctx = canvas.getContext('2d');
 				ctx.translate(canvas.width / 2, canvas.height / 2);
-				ctx.rotate(this.ǂrotationRad);
-				ctx.font = this.ǂfont;
+				ctx.rotate(this._rotationRad);
+				ctx.font = this._font;
 				ctx.textAlign = 'center';
 				ctx.textBaseline = 'middle';
-				ctx.fillText(this.ǂtext, 0, 0);
+				ctx.fillText(this._text, 0, 0);
 				if (lineWidth > 0) {
 					ctx.miterLimit = 1;
 					ctx.lineWidth = lineWidth;
-					ctx.strokeText(this.ǂtext, 0, 0);
+					ctx.strokeText(this._text, 0, 0);
 				}
 				return ctx.getImageData(0, 0, canvas.width, canvas.height);
 			}
-			ǂfindFit(grid) {
-				let image = this.ǂ_getImage(gap * 2);
-				let [imageLeft, imageTop] = grid.ǂfindFit(image);
-				this.ǂleft = imageLeft + (image.width - this.ǂwidth) / 2;
-				this.ǂtop = imageTop + (image.height - this.ǂheight) / 2;
+			_findFit(grid) {
+				let image = this.__getImage(gap * 2);
+				let [imageLeft, imageTop] = grid._findFit(image);
+				this._left = imageLeft + (image.width - this._width) / 2;
+				this._top = imageTop + (image.height - this._height) / 2;
 			}
-			ǂput(grid) {
-				let image = this.ǂ_getImage(0);
-				let imageLeft = Math.round(this.ǂleft - (image.width - this.ǂwidth) / 2);
-				let imageTop = Math.round(this.ǂtop - (image.height - this.ǂheight) / 2);
-				grid.ǂput(image, imageLeft, imageTop);
+			_put(grid) {
+				let image = this.__getImage(0);
+				let imageLeft = Math.round(this._left - (image.width - this._width) / 2);
+				let imageTop = Math.round(this._top - (image.height - this._height) / 2);
+				grid._put(image, imageLeft, imageTop);
 			}
-			ǂscale(scaling) {
-				this.ǂfontSize *= scaling;
-				this.ǂleft *= scaling;
-				this.ǂtop *= scaling;
+			_scale(scaling) {
+				this._fontSize *= scaling;
+				this._left *= scaling;
+				this._top *= scaling;
 			}
 		};
 		words = words
@@ -128,11 +128,11 @@ export default function(words, cloudWidth, cloudHeight, {
 				text = defaultText,
 				weight = defaultWeight,
 			}) => Object.assign(new Word(), {
-				ǂfontFamily: fontFamily,
-				ǂfontStyle: fontStyle,
-				ǂfontVariant: fontVariant,
-				ǂfontWeight: fontWeight,
-				ǂrelativeTextWidth: (() => {
+				_fontFamily: fontFamily,
+				_fontStyle: fontStyle,
+				_fontVariant: fontVariant,
+				_fontWeight: fontWeight,
+				_relativeTextWidth: (() => {
 					let canvas = createCanvas();
 					let ctx = canvas.getContext('2d');
 					ctx.font = getFont(
@@ -144,7 +144,7 @@ export default function(words, cloudWidth, cloudHeight, {
 					);
 					return ctx.measureText(text).width;
 				})(),
-				ǂrotationRad: (() => {
+				_rotationRad: (() => {
 					switch (rotationUnit) {
 						case 'deg':
 							return Math_degToRad(rotation);
@@ -153,18 +153,18 @@ export default function(words, cloudWidth, cloudHeight, {
 					}
 					return rotation;
 				})(),
-				ǂtext: text,
-				ǂweight: weight,
+				_text: text,
+				_weight: weight,
 			}))
-			.filter(({ǂtextWidth}) => ǂtextWidth);
+			.filter(({_textWidth}) => _textWidth);
 		if (words.length) {
 			let sortedWords = words
 				.slice()
-				.sort((word, otherWord) => otherWord.ǂweight - word.ǂweight);
+				.sort((word, otherWord) => otherWord._weight - word._weight);
 			let firstWord = sortedWords[0];
 			let lastWord = Array_last(sortedWords);
-			let maxWeight = firstWord.ǂweight;
-			let minWeight = lastWord.ǂweight;
+			let maxWeight = firstWord._weight;
+			let minWeight = lastWord._weight;
 			if (minWeight < maxWeight) {
 				fontSizeRatio = Math.abs(fontSizeRatio);
 				fontSizeRatio = (() => {
@@ -183,58 +183,58 @@ export default function(words, cloudWidth, cloudHeight, {
 					return 1 + maxWeight - minWeight;
 				})();
 				words.forEach(word => {
-					word.ǂfontSize = Math_mapLinear(word.ǂweight, minWeight, maxWeight, 1 / fontSizeRatio, 1) * renderingFontSizeBase;
+					word._fontSize = Math_mapLinear(word._weight, minWeight, maxWeight, 1 / fontSizeRatio, 1) * renderingFontSizeBase;
 				});
 			}
 			let grid = new PixelGrid([cloudWidth, cloudHeight]);
 			sortedWords.reduce((previousWord, word, index) => {
-				if (word.ǂfontSize < renderingFontSizeBase) {
+				if (word._fontSize < renderingFontSizeBase) {
 					do {
 						words.forEach(word => {
-							word.ǂscale(2);
+							word._scale(2);
 						});
-					} while (word.ǂfontSize < renderingFontSizeBase);
+					} while (word._fontSize < renderingFontSizeBase);
 					sortedWords
 						.slice(0, index)
 						.forEach(previousWord => {
-							previousWord.ǂput(grid);
+							previousWord._put(grid);
 						});
 				} else {
-					previousWord.ǂput(grid);
+					previousWord._put(grid);
 				}
-				word.ǂfindFit(grid);
+				word._findFit(grid);
 				return word;
 			});
-			lastWord.ǂput(grid);
-			if (grid.ǂwidth && grid.ǂheight) {
-				let scaling = Math.min(cloudWidth / grid.ǂwidth, cloudHeight / grid.ǂheight);
+			lastWord._put(grid);
+			if (grid._width && grid._height) {
+				let scaling = Math.min(cloudWidth / grid._width, cloudHeight / grid._height);
 				words.forEach(word => {
-					word.ǂleft -= grid.ǂcenterLeft;
-					word.ǂtop -= grid.ǂcenterTop;
-					word.ǂscale(scaling);
-					word.ǂleft += cloudWidth / 2;
-					word.ǂtop += cloudHeight / 2;
+					word._left -= grid._centerLeft;
+					word._top -= grid._centerTop;
+					word._scale(scaling);
+					word._left += cloudWidth / 2;
+					word._top += cloudHeight / 2;
 				});
 			}
 			return words.map(word => ({
-				centerLeft: word.ǂcenterLeft,
-				centerTop: word.ǂcenterTop,
-				font: word.ǂfont,
-				fontFamily: word.ǂfontFamily,
-				fontSize: word.ǂfontSize,
-				fontStyle: word.ǂfontStyle,
-				fontVariant: word.ǂfontVariant,
-				fontWeight: word.ǂfontWeight,
-				height: word.ǂheight,
-				left: word.ǂleft,
-				rotationDeg: word.ǂrotationDeg,
-				rotationRad: word.ǂrotationRad,
-				rotationTurn: word.ǂrotationTurn,
-				text: word.ǂtext,
-				textWidth: word.ǂtextWidth,
-				top: word.ǂtop,
-				weight: word.ǂweight,
-				width: word.ǂwidth,
+				centerLeft: word._centerLeft,
+				centerTop: word._centerTop,
+				font: word._font,
+				fontFamily: word._fontFamily,
+				fontSize: word._fontSize,
+				fontStyle: word._fontStyle,
+				fontVariant: word._fontVariant,
+				fontWeight: word._fontWeight,
+				height: word._height,
+				left: word._left,
+				rotationDeg: word._rotationDeg,
+				rotationRad: word._rotationRad,
+				rotationTurn: word._rotationTurn,
+				text: word._text,
+				textWidth: word._textWidth,
+				top: word._top,
+				weight: word._weight,
+				width: word._width,
 			}));
 		}
 	}

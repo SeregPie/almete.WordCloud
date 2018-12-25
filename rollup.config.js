@@ -15,6 +15,6 @@ export default {
 	plugins: [
 		resolve(),
 		buble(),
-		uglify({mangle: {properties: {regex: /^ǂ/}}}),
+		uglify({mangle: {properties: {regex: /^_/}}}),
 	],
 };

@@ -2,51 +2,51 @@ import InfinityInsideOutRectangeIterator from './InfinityInsideOutRectangeIterat
 
 export default class {
 	constructor(aspect) {
-		this.ǂaspect = aspect;
-		this.ǂclear();
+		this._aspect = aspect;
+		this._clear();
 	}
 
-	get ǂcenterLeft() {
-		return Math.floor((this.ǂminLeft + this.ǂmaxLeft) / 2);
+	get _centerLeft() {
+		return Math.floor((this._minLeft + this._maxLeft) / 2);
 	}
 
-	get ǂcenterTop() {
-		return Math.floor((this.ǂminTop + this.ǂmaxTop) / 2);
+	get _centerTop() {
+		return Math.floor((this._minTop + this._maxTop) / 2);
 	}
 
-	get ǂwidth() {
-		return this.ǂmaxLeft - this.ǂminLeft + 1;
+	get _width() {
+		return this._maxLeft - this._minLeft + 1;
 	}
 
-	get ǂheight() {
-		return this.ǂmaxTop - this.ǂminTop + 1;
+	get _height() {
+		return this._maxTop - this._minTop + 1;
 	}
 
-	ǂput(image, left, top) {
+	_put(image, left, top) {
 		for (let pixelLeft = 0; pixelLeft < image.width; pixelLeft++) {
 			for (let pixelTop = 0; pixelTop < image.height; pixelTop++) {
 				if (image.data[(image.width * pixelTop + pixelLeft) * 4 + 3]) {
 					let currentLeft = left + pixelLeft;
 					let currentTop = top + pixelTop;
-					this.ǂpixels[`${currentLeft}|${currentTop}`] = true;
-					this.ǂminLeft = Math.min(currentLeft, this.ǂminLeft);
-					this.ǂminTop = Math.min(currentTop, this.ǂminTop);
-					this.ǂmaxLeft = Math.max(currentLeft, this.ǂmaxLeft);
-					this.ǂmaxTop = Math.max(currentTop, this.ǂmaxTop);
+					this._pixels[`${currentLeft}|${currentTop}`] = true;
+					this._minLeft = Math.min(currentLeft, this._minLeft);
+					this._minTop = Math.min(currentTop, this._minTop);
+					this._maxLeft = Math.max(currentLeft, this._maxLeft);
+					this._maxTop = Math.max(currentTop, this._maxTop);
 				}
 			}
 		}
 	}
 
-	ǂfits(pixels, left, top) {
+	_fits(pixels, left, top) {
 		return pixels.every(([pixelLeft, pixelTop]) => {
 			let currentLeft = left + pixelLeft;
 			let currentTop = top + pixelTop;
-			return !this.ǂpixels[`${currentLeft}|${currentTop}`];
+			return !this._pixels[`${currentLeft}|${currentTop}`];
 		});
 	}
 
-	ǂfindFit(image) {
+	_findFit(image) {
 		let pixels = [];
 		for (let pixelLeft = 0; pixelLeft < image.width; pixelLeft++) {
 			for (let pixelTop = 0; pixelTop < image.height; pixelTop++) {
@@ -68,23 +68,23 @@ export default class {
 			let trimmedImageWidth = maxPixelLeft - minPixelLeft + 1;
 			let trimmedImageHeight = maxPixelTop - minPixelTop + 1;
 			let [left, top] = InfinityInsideOutRectangeIterator(
-				this.ǂaspect,
+				this._aspect,
 				[
-					this.ǂcenterLeft - Math.floor(trimmedImageWidth / 2),
-					this.ǂcenterTop - Math.floor(trimmedImageHeight / 2),
+					this._centerLeft - Math.floor(trimmedImageWidth / 2),
+					this._centerTop - Math.floor(trimmedImageHeight / 2),
 				],
-				([left, top]) => this.ǂfits(trimmedPixels, left, top),
+				([left, top]) => this._fits(trimmedPixels, left, top),
 			);
 			return [left - minPixelLeft, top - minPixelTop];
 		}
 		return [0, 0];
 	}
 
-	ǂclear() {
-		this.ǂpixels = {};
-		this.ǂminLeft = 1;
-		this.ǂminTop = 1;
-		this.ǂmaxLeft = 0;
-		this.ǂmaxTop = 0;
+	_clear() {
+		this._pixels = {};
+		this._minLeft = 1;
+		this._minTop = 1;
+		this._maxLeft = 0;
+		this._maxTop = 0;
 	}
 }
