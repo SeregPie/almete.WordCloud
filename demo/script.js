@@ -24,6 +24,7 @@
 		'Shadows Into Light',
 	];
 	var fontSizeRatioValues = [0, 1/20, 1/5, 1/2, 1];
+	var gapValues = [0, 1/4, 1/2, 1, 2];
 	var rotationItems = [
 		{
 			value: function() {
@@ -151,7 +152,6 @@
 			})(),
 		}
 	];
-	var spacingValues = [0, 1/4, 1/2, 1, 2];
 	var generateWordsText = function() {
 		var words = [];
 		var i;
@@ -193,10 +193,10 @@
 				fontFamilyValues: fontFamilyValues,
 				fontSizeRatioIndex: 0,
 				fontSizeRatioValues: fontSizeRatioValues,
+				gapIndex: 1,
+				gapValues: gapValues,
 				rotationIndex: chance.integer({min: 0, max: rotationItems.length - 1}),
 				rotationItems: rotationItems,
-				spacingIndex: 1,
-				spacingValues: spacingValues,
 				wordsText: generateWordsText(),
 			};
 		},
@@ -212,7 +212,7 @@
 					var canvasWidth = this.canvasWidth;
 					var fontFamily = this.fontFamily;
 					var fontSizeRatio = this.fontSizeRatio;
-					var spacing = this.spacing;
+					var gap = this.gap;
 					var words = this.words;
 					(new Promise(function(resolve) {
 						setTimeout(resolve, 1000);
@@ -236,8 +236,8 @@
 									var boundedWords = almete.WordCloud(words, canvasWidth, canvasHeight, {
 										fontFamily: fontFamily,
 										fontSizeRatio: fontSizeRatio,
+										gap: gap,
 										rotationUnit: 'turn',
-										spacing: spacing,
 									});
 									canvas.width = canvasWidth;
 									canvas.height = canvasHeight;
@@ -269,8 +269,8 @@
 				return this.rotationItems[this.rotationIndex];
 			},
 
-			spacing: function() {
-				return this.spacingValues[this.spacingIndex];
+			gap: function() {
+				return this.gapValues[this.gapIndex];
 			},
 
 			words: function() {

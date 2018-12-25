@@ -21,9 +21,9 @@ export default function(words, cloudWidth, cloudHeight, {
 	fontStyle: defaultFontStyle = 'normal',
 	fontVariant: defaultFontVariant= 'normal',
 	fontWeight: defaultFontWeight = 'normal',
+	gap = 0,
 	rotation: defaultRotation = 0,
 	rotationUnit: defaultRotationUnit = 'turn',
-	spacing = 0,
 	text: defaultText = '',
 	weight: defaultWeight = 1,
 } = {}) {
@@ -100,7 +100,7 @@ export default function(words, cloudWidth, cloudHeight, {
 				return ctx.getImageData(0, 0, canvas.width, canvas.height);
 			}
 			ǂfindFit(grid) {
-				let image = this.ǂ_getImage(spacing * 2);
+				let image = this.ǂ_getImage(gap * 2);
 				let [imageLeft, imageTop] = grid.ǂfindFit(image);
 				this.ǂleft = imageLeft + (image.width - this.ǂwidth) / 2;
 				this.ǂtop = imageTop + (image.height - this.ǂheight) / 2;

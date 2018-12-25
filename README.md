@@ -10,9 +10,9 @@ almete.WordCloud(words, cloudWidth, cloudHeight, {
   fontStyle = 'normal',
   fontVariant = 'normal',
   fontWeight = 'normal',
+  gap = 0,
   rotation = 0,
   rotationUnit = 'turn',
-  spacing = 0,
   text = '',
   weight = 1,
 })
@@ -31,9 +31,9 @@ Generates a cloud out of the words.
 | `fontStyle` | The default font style for each word. |
 | `fontVariant` | The default font variant for each word. |
 | `fontWeight` | The default font weight for each word. |
+| `gap` | The gap between the words. The value is relative to the font size. |
 | `rotation` | The default rotation for each word. |
 | `rotationUnit` | The default rotation unit for each word. Possible values are `'turn'`, `'deg'` and `'rad'`. |
-| `spacing` | The spacing between the words. The value is relative to the font size. |
 | `text` | The default text for each word. |
 | `weight` | The default weight for each word. |
 
