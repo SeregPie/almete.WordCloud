@@ -194,6 +194,7 @@ export default function(words, cloudWidth, cloudHeight, {
 							word._scale(2);
 						});
 					} while (word._fontSize < renderingFontSizeBase);
+					grid._clear();
 					sortedWords
 						.slice(0, index)
 						.forEach(previousWord => {
