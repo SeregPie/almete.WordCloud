@@ -1,6 +1,6 @@
 {
 	"name": "almete.wordcloud",
-	"version": "18.10.18",
+	"version": "19.0.0",
 	"description": "Generates a cloud out of the words.",
 	"keywords": [
 		"algorithm",
