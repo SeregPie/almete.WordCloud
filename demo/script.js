@@ -265,16 +265,16 @@
 				return this.fontSizeRatioValues[this.fontSizeRatioIndex];
 			},
 
+			gap: function() {
+				return this.gapValues[this.gapIndex];
+			},
+
 			rotation: function() {
 				return this.rotationItem.value;
 			},
 
 			rotationItem: function() {
 				return this.rotationItems[this.rotationIndex];
-			},
-
-			gap: function() {
-				return this.gapValues[this.gapIndex];
 			},
 
 			words: function() {
