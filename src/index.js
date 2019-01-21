@@ -10,7 +10,7 @@ import getBoundingBoxWidth from './getBoundingBoxWidth';
 import getFont from './getFont';
 import PixelGrid from './PixelGrid';
 
-let renderingFontSizeBase = 4;
+let baseFontSize = 4;
 
 export default function(words, cloudWidth, cloudHeight, {
 	createCanvas = function() {
@@ -183,17 +183,17 @@ export default function(words, cloudWidth, cloudHeight, {
 					return 1 + maxWeight - minWeight;
 				})();
 				words.forEach(word => {
-					word._fontSize = Math_mapLinear(word._weight, minWeight, maxWeight, 1 / fontSizeRatio, 1) * renderingFontSizeBase;
+					word._fontSize = Math_mapLinear(word._weight, minWeight, maxWeight, 1 / fontSizeRatio, 1) * baseFontSize;
 				});
 			}
 			let grid = new PixelGrid([cloudWidth, cloudHeight]);
 			sortedWords.reduce((previousWord, word, index) => {
-				if (word._fontSize < renderingFontSizeBase) {
+				if (word._fontSize < baseFontSize) {
 					do {
 						words.forEach(word => {
 							word._scale(2);
 						});
-					} while (word._fontSize < renderingFontSizeBase);
+					} while (word._fontSize < baseFontSize);
 					grid._clear();
 					sortedWords
 						.slice(0, index)
