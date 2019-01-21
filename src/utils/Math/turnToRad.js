@@ -1,3 +1,5 @@
+let c = Math.PI * 2;
+
 export default function(n) {
-	return n * Math.PI * 2;
+	return n * c;
 }
