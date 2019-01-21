@@ -99,18 +99,6 @@ export default function(words, cloudWidth, cloudHeight, {
 				}
 				return ctx.getImageData(0, 0, canvas.width, canvas.height);
 			}
-			_findFit(grid) {
-				let image = this.__getImage(gap * 2);
-				let [imageLeft, imageTop] = grid._findFit(image);
-				this._left = imageLeft + (image.width - this._width) / 2;
-				this._top = imageTop + (image.height - this._height) / 2;
-			}
-			_put(grid) {
-				let image = this.__getImage(0);
-				let imageLeft = Math.round(this._left - (image.width - this._width) / 2);
-				let imageTop = Math.round(this._top - (image.height - this._height) / 2);
-				grid._put(image, imageLeft, imageTop);
-			}
 		};
 		words = words
 			.map(({
@@ -195,6 +183,18 @@ export default function(words, cloudWidth, cloudHeight, {
 				});
 			}
 			let grid = new PixelGrid([cloudWidth, cloudHeight]);
+			let grid_findFit = (word => {
+				let image = word.__getImage(gap * 2);
+				let [imageLeft, imageTop] = grid._findFit(image);
+				word._left = imageLeft + (image.width - word._width) / 2;
+				word._top = imageTop + (image.height - word._height) / 2;
+			});
+			let grid_put = (word => {
+				let image = word.__getImage(0);
+				let imageLeft = Math.round(word._left - (image.width - word._width) / 2);
+				let imageTop = Math.round(word._top - (image.height - word._height) / 2);
+				grid._put(image, imageLeft, imageTop);
+			});
 			sortedWords.reduce((previousWord, word, index) => {
 				if (word._fontSize < baseFontSize) {
 					do {
@@ -204,15 +204,15 @@ export default function(words, cloudWidth, cloudHeight, {
 					sortedWords
 						.slice(0, index)
 						.forEach(previousWord => {
-							previousWord._put(grid);
+							grid_put(previousWord);
 						});
 				} else {
-					previousWord._put(grid);
+					grid_put(previousWord);
 				}
-				word._findFit(grid);
+				grid_findFit(word);
 				return word;
 			});
-			lastWord._put(grid);
+			grid_put(lastWord);
 			if (grid._width && grid._height) {
 				words_shift(-grid._centerLeft, -grid._centerTop);
 				words_scale(Math.min(cloudWidth / grid._width, cloudHeight / grid._height));
