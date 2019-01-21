@@ -159,6 +159,12 @@ export default function(words, cloudWidth, cloudHeight, {
 				word._top *= scaling;
 			});
 		});
+		let words_shift = ((shiftingLeft, shiftingTop) => {
+			words.forEach(word => {
+				word._left += shiftingLeft;
+				word._top += shiftingTop;
+			});
+		});
 		if (words.length) {
 			let sortedWords = words
 				.slice()
@@ -208,15 +214,9 @@ export default function(words, cloudWidth, cloudHeight, {
 			});
 			lastWord._put(grid);
 			if (grid._width && grid._height) {
-				words.forEach(word => {
-					word._left -= grid._centerLeft;
-					word._top -= grid._centerTop;
-				});
+				words_shift(-grid._centerLeft, -grid._centerTop);
 				words_scale(Math.min(cloudWidth / grid._width, cloudHeight / grid._height));
-				words.forEach(word => {
-					word._left += cloudWidth / 2;
-					word._top += cloudHeight / 2;
-				});
+				words_shift(cloudWidth / 2, cloudHeight / 2);
 			}
 			return words.map(word => ({
 				centerLeft: word._centerLeft,
