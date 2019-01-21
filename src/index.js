@@ -111,11 +111,6 @@ export default function(words, cloudWidth, cloudHeight, {
 				let imageTop = Math.round(this._top - (image.height - this._height) / 2);
 				grid._put(image, imageLeft, imageTop);
 			}
-			_scale(scaling) {
-				this._fontSize *= scaling;
-				this._left *= scaling;
-				this._top *= scaling;
-			}
 		};
 		words = words
 			.map(({
@@ -157,6 +152,13 @@ export default function(words, cloudWidth, cloudHeight, {
 				_weight: weight,
 			}))
 			.filter(({_textWidth}) => _textWidth);
+		let words_scale = (scaling => {
+			words.forEach(word => {
+				word._fontSize *= scaling;
+				word._left *= scaling;
+				word._top *= scaling;
+			});
+		});
 		if (words.length) {
 			let sortedWords = words
 				.slice()
@@ -190,9 +192,7 @@ export default function(words, cloudWidth, cloudHeight, {
 			sortedWords.reduce((previousWord, word, index) => {
 				if (word._fontSize < baseFontSize) {
 					do {
-						words.forEach(word => {
-							word._scale(2);
-						});
+						words_scale(2);
 					} while (word._fontSize < baseFontSize);
 					grid._clear();
 					sortedWords
@@ -208,11 +208,12 @@ export default function(words, cloudWidth, cloudHeight, {
 			});
 			lastWord._put(grid);
 			if (grid._width && grid._height) {
-				let scaling = Math.min(cloudWidth / grid._width, cloudHeight / grid._height);
 				words.forEach(word => {
 					word._left -= grid._centerLeft;
 					word._top -= grid._centerTop;
-					word._scale(scaling);
+				});
+				words_scale(Math.min(cloudWidth / grid._width, cloudHeight / grid._height));
+				words.forEach(word => {
 					word._left += cloudWidth / 2;
 					word._top += cloudHeight / 2;
 				});
