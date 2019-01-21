@@ -1,4 +1,4 @@
-import {uglify} from 'rollup-plugin-uglify';
+import {terser} from 'rollup-plugin-terser';
 import buble from 'rollup-plugin-buble';
 import path from 'path';
 
@@ -13,6 +13,6 @@ export default {
 	},
 	plugins: [
 		buble(),
-		uglify({mangle: {properties: {regex: /^_/}}}),
+		terser({mangle: {properties: {regex: /^_/}}}),
 	],
 };
