@@ -1,9 +1,9 @@
-import Array_last from '/utils/Array/last';
-import Math_degToRad from '/utils/Math/degToRad';
-import Math_mapLinear from '/utils/Math/mapLinear';
-import Math_radToDeg from '/utils/Math/radToDeg';
-import Math_radToTurn from '/utils/Math/radToTurn';
-import Math_turnToRad from '/utils/Math/turnToRad';
+import Array_last from './utils/Array/last';
+import Math_degToRad from './utils/Math/degToRad';
+import Math_mapLinear from './utils/Math/mapLinear';
+import Math_radToDeg from './utils/Math/radToDeg';
+import Math_radToTurn from './utils/Math/radToTurn';
+import Math_turnToRad from './utils/Math/turnToRad';
 
 import getBoundingBoxHeight from './getBoundingBoxHeight';
 import getBoundingBoxWidth from './getBoundingBoxWidth';

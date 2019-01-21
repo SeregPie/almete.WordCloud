@@ -1,7 +1,6 @@
 import {uglify} from 'rollup-plugin-uglify';
 import buble from 'rollup-plugin-buble';
 import path from 'path';
-import resolve from '@seregpie/rollup-plugin-resolve';
 
 import {main} from './package.json';
 
@@ -13,7 +12,6 @@ export default {
 		name: path.basename(main, path.extname(main)),
 	},
 	plugins: [
-		resolve(),
 		buble(),
 		uglify({mangle: {properties: {regex: /^_/}}}),
 	],
